@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAFZApp - Diagram Capaian Tasmi'</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* ============================================================
+           📦 SALIN SEMUA CSS YANG SAMA DENGAN INDEX.HTML
+           ============================================================ */
+        /* --- SALINAN CSS --- */
+        /* ... (salin semua kode CSS dari file utama sebelumnya) ... */
+
+        /* CSS tambahan untuk halaman diagram */
+        .chart-section {
+            background: var(--putih);
+            border-radius: var(--radius);
+            padding: 40px 44px;
+            margin: 50px 0 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(201, 168, 76, 0.12);
+        }
+
+        .chart-section h3 {
+            font-size: 1.8rem;
+            color: var(--hijau-tua);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .chart-section h3 i {
+            color: var(--emas);
+            margin-right: 10px;
+        }
+
+        .chart-section .chart-subtitle {
+            text-align: center;
+            color: #4a5e58;
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            max-width: 100%;
+        }
+
+        .chart-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .chart-controls select,
+        .chart-controls button {
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            background: var(--putih);
+            color: var(--hijau-tua);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .chart-controls button {
+            background: var(--hijau-tua);
+            color: var(--emas-muda);
+            border: none;
+        }
+
+        .chart-controls button:hover {
+            background: #0f3d24;
+        }
+
+        /* ============================================================ */
+    </style>
+</head>
+<body>
+    <!-- ===== GLOW ORNAMENT (SALIN DARI KODE SEBELUMNYA) ===== -->
+    <div class="ornament ornament-1"></div>
+    <div class="ornament ornament-2"></div>
+
+    <div class="container">
+
+        <!-- ===== NAVBAR ===== -->
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <i class="fas fa-quran"></i>
+                HAFZ<span>App</span>
+            </a>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Menu</a>
+                <!-- Link ke halaman diagram (aktif) -->
+                <a href="diagram.html" class="active">Diagram</a>
+                <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
+                <a href="#" class="cta-nav"><i class="fas fa-rocket"></i> Login</a>
+            </div>
+        </nav>
+
+        <!-- ===== HERO ===== -->
+        <section class="hero">
+            <div class="hero-text">
+                <div class="arabic-tagline">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+                <h1>
+                    <span class="highlight">Diagram</span> Capaian Tasmi'
+                </h1>
+                <p>
+                    Visualisasi capaian tasmi' per lembaga berdasarkan data dari Google Sheets.
+                </p>
+            </div>
+        </section>
+
+        <!-- ===== DIAGRAM SECTION ===== -->
+        <div class="section-title" id="diagram">
+            <h2><i class="fas fa-chart-bar"></i> Perkembangan Tahfizh</h2>
+            <p class="subtitle">Visualisasi capaian tasmi' per lembaga</p>
+        </div>
+
+        <div class="chart-section fade-up">
+            <h3><i class="fas fa-chart-line"></i> Grafik Capaian Tasmi'</h3>
+            <p class="chart-subtitle">Data diambil dari Google Sheets — otomatis terupdate</p>
+
+            <div class="chart-wrapper">
+                <canvas id="tasmiChart"></canvas>
+            </div>
+
+            <div class="chart-controls">
+                <select id="chartLembagaSelect">
+                    <option value="">-- Pilih Lembaga --</option>
+                </select>
+                <button id="chartRefreshBtn"><i class="fas fa-sync-alt"></i> Refresh Data</button>
+            </div>
+        </div>
+
+        <!-- ===== CONTACT / DEPARTMENT INFO ===== -->
+        <div class="highlight-box fade-up" id="contact">
+            <div class="text">
+                <h3><i class="fas fa-link"></i> DEPARTEMEN TAHFIZH</h3>
+                <p>
+                    <strong>PONPES ABU HURAIRAH MATARAM</strong><br>
+                    Jl. Majapahit No.54B, Kekalik Jaya,<br>
+                    Kec. Sekarbela, Kota Mataram,<br>
+                    Nusa Tenggara Barat. 83115
+                    <br><br>
+                    E-Mail      : departemen.tahfizh2026@gmail.com<br>
+                    Admin      : 082340530283 (Chat Only)<br>
+                    Jam Kerja : 08:00 - 13:45 WITA
+                </p>
+            </div>
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.553056798127!2d116.09877731484864!3d-8.591937192124524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcdbf58c7f4e239%3A0x48a746765b76db3e!2sPonpes%20Abu%20Hurairah%20Mataram!5e0!3m2!1sid!2sid!4v1728020456789!5m2!1sid!2sid" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Peta Lokasi Ponpes Abu Hurairah Mataram">
+                </iframe>
+                <div class="map-label">
+                    <i class="fas fa-map-pin"></i> Ponpes Abu Hurairah Mataram
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <div class="footer-logo">
+                <i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Menu</a>
+                <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
+                <a href="#" class="kontak-link" data-target="kontakModal">Kontak</a>
+            </div>
+            <div style="font-size:0.8rem;opacity:0.6;">
+                © 2026 · Departemen Tahfizh
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ===== FLOATING WHATSAPP BUTTON ===== -->
+    <!-- ... (salin dari kode sebelumnya) ... -->
+
+    <!-- ===== MODALS ===== -->
+    <!-- ... (salin modal Tentang dan Kontak dari kode sebelumnya) ... -->
+
+    <!-- ============================================================
+         🚀 JAVASCRIPT KHUSUS DIAGRAM
+         ============================================================ -->
+    <script>
+        // ============================================================
+        // 🔧 KONFIGURASI - GANTI DENGAN ID SPREADSHEET ANDA
+        // ============================================================
+        const SPREADSHEET_ID = '2PACX-...'; // Ganti dengan ID Anda
+
+        // 📊 KONFIGURASI DIAGRAM
+        const CHART_SPREADSHEET_ID = SPREADSHEET_ID; // Ganti jika spreadsheet berbeda
+        const CHART_SHEET_NAME = 'Capaian'; // Nama sheet untuk data capaian
+        const CHART_SHEET_URL = `https://docs.google.com/spreadsheets/d/e/${CHART_SPREADSHEET_ID}/pub?gid=0&single=true&output=csv`;
+
+        // Kolom-kolom yang akan ditampilkan di diagram
+        const CHART_COLUMNS = [
+            { key: 'tasmi_1_juz_muqorror', label: 'Tasmi 1 Juz (MuqorroR)' },
+            { key: 'tasmi_1_juz_luar', label: 'Tasmi 1 Juz (Luar)' },
+            { key: 'tasmi_setengah_juz', label: 'Tasmi 1/2 Juz' },
+            { key: 'tasmi_3_juz', label: 'Tasmi 3 Juz' },
+            { key: 'tasmi_5_juz', label: 'Tasmi 5 Juz' },
+            { key: 'sertifikat_penggabungan', label: 'Sertifikat Penggabungan' },
+            { key: 'setoran_10_20_30', label: 'Setoran 10, 20, 30 Juz' },
+            { key: 'tasmi_30_juz', label: 'Tasmi 30 Juz Sekali Duduk' }
+        ];
+
+        // ============================================================
+        // 📌 FUNGSI MODAL (salin dari kode sebelumnya)
+        // ============================================================
+        // ...
+
+        // ============================================================
+        // 📊 DIAGRAM - AMBIL DATA CAPAIAN DARI GOOGLE SHEETS
+        // ============================================================
+        let tasmiChart = null;
+        let chartData = [];
+        let chartLembagaList = [];
+
+        function findHeaderIndex(headers, possibleNames) {
+            for (const name of possibleNames) {
+                const idx = headers.findIndex(h => h.toLowerCase().trim() === name.toLowerCase().trim());
+                if (idx !== -1) return idx;
+            }
+            return -1;
+        }
+
+        async function loadChartData() {
+            try {
+                console.log('🔄 Mencoba mengambil data capaian dari:', CHART_SHEET_URL);
+                
+                const response = await fetch(CHART_SHEET_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const csvText = await response.text();
+                const lines = csvText.split('\n').filter(line => line.trim() !== '');
+                console.log('📊 Jumlah baris capaian:', lines.length);
+                
+                if (lines.length < 2) {
+                    console.warn('Data capaian kosong atau belum tersedia.');
+                    return;
+                }
+
+                let headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+                console.log('📋 Header capaian:', headers);
+
+                const lembagaIndex = findHeaderIndex(headers, ['LEMBAGA', 'Lembaga', 'lembaga']);
+
+                const columnIndices = [];
+                const columnLabels = [];
+
+                for (const col of CHART_COLUMNS) {
+                    const possibleNames = [
+                        col.label,
+                        col.label.toUpperCase(),
+                        col.label.toLowerCase(),
+                        col.key,
+                        col.key.replace(/_/g, ' '),
+                        col.key.replace(/_/g, ' ').toUpperCase(),
+                        col.key.replace(/_/g, ' ').toLowerCase()
+                    ];
+                    
+                    const idx = findHeaderIndex(headers, possibleNames);
+                    if (idx !== -1) {
+                        columnIndices.push(idx);
+                        columnLabels.push(col.label);
+                    } else {
+                        console.warn(`Kolom "${col.label}" tidak ditemukan di data.`);
+                    }
+                }
+
+                if (lembagaIndex === -1 || columnIndices.length === 0) {
+                    console.warn('Kolom yang diperlukan tidak ditemukan di data.');
+                    return;
+                }
+
+                chartData = [];
+                chartLembagaList = [];
+
+                for (let i = 1; i < lines.length; i++) {
+                    const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                    const lembaga = cols[lembagaIndex] || '';
+                    if (!lembaga) continue;
+
+                    const values = columnIndices.map(idx => {
+                        const val = parseFloat(cols[idx]);
+                        return isNaN(val) ? 0 : val;
+                    });
+
+                    chartData.push({ lembaga, values });
+                    chartLembagaList.push(lembaga);
+                }
+
+                console.log(`📊 Data capaian: ${chartData.length} lembaga, ${columnLabels.length} jenis capaian`);
+
+                updateLembagaDropdown();
+                if (chartData.length > 0) {
+                    renderChart(chartData[0], columnLabels);
+                }
+
+            } catch (error) {
+                console.error('❌ Error loading chart data:', error);
+            }
+        }
+
+        function updateLembagaDropdown() {
+            const select = document.getElementById('chartLembagaSelect');
+            select.innerHTML = '<option value="">-- Pilih Lembaga --</option>';
+            
+            chartLembagaList.forEach((lembaga, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = lembaga;
+                select.appendChild(option);
+            });
+        }
+
+        function renderChart(data, columnLabels) {
+            const ctx = document.getElementById('tasmiChart').getContext('2d');
+            
+            if (tasmiChart) {
+                tasmiChart.destroy();
+            }
+
+            const colors = [
+                'rgba(26, 77, 46, 0.85)', 'rgba(45, 106, 79, 0.85)',
+                'rgba(201, 168, 76, 0.85)', 'rgba(232, 212, 139, 0.85)',
+                'rgba(26, 77, 46, 0.6)', 'rgba(45, 106, 79, 0.6)',
+                'rgba(201, 168, 76, 0.6)', 'rgba(232, 212, 139, 0.6)'
+            ];
+
+            const borderColors = [
+                'rgba(26, 77, 46, 1)', 'rgba(45, 106, 79, 1)',
+                'rgba(201, 168, 76, 1)', 'rgba(232, 212, 139, 1)',
+                'rgba(26, 77, 46, 1)', 'rgba(45, 106, 79, 1)',
+                'rgba(201, 168, 76, 1)', 'rgba(232, 212, 139, 1)'
+            ];
+
+            tasmiChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: columnLabels,
+                    datasets: [{
+                        label: `${data.lembaga} - Capaian Tasmi'`,
+                        data: data.values,
+                        backgroundColor: colors.slice(0, data.values.length),
+                        borderColor: borderColors.slice(0, data.values.length),
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: { color: '#1a4d2e', font: { size: 12, weight: '600' } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#1a4d2e', font: { size: 11 } },
+                            grid: { color: 'rgba(201, 168, 76, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#1a4d2e', font: { size: 10 }, maxRotation: 45, minRotation: 0 },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Event listener untuk dropdown
+        document.getElementById('chartLembagaSelect').addEventListener('change', function() {
+            const index = parseInt(this.value);
+            if (isNaN(index) || index < 0 || index >= chartData.length) return;
+            if (tasmiChart) {
+                renderChart(chartData[index], tasmiChart.data.labels);
+            }
+        });
+
+        document.getElementById('chartRefreshBtn').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
+            this.disabled = true;
+            loadChartData().then(() => {
+                this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
+                this.disabled = false;
+            });
+        });
+
+        // ============================================================
+        // 💬 WHATSAPP FLOATING BUTTON (salin dari kode sebelumnya)
+        // ============================================================
+        // ...
+
+        // ============================================================
+        // 🚀 LOAD DATA SAAT HALAMAN DIMUAT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', loadChartData);
+        console.log('🌙 HAFZApp - Halaman Diagram — Barakallah!');
+    </script>
+</body>
+</html>
