@@ -573,8 +573,8 @@
         // ============================================================
         // 🔧 KONFIGURASI
         // ============================================================
-        const SPREADSHEET_ID = '2PACX-1vTDHkB2pp5sNZs9pE2kyeGSScm8o-HrMg7AK1jnoqI-3M2nF-ZLcKlQlmmaWrsLimnyJR3ZjlHMKE5B';
-        const CHART_SHEET_NAME = 'Capaian';
+        const SPREADSHEET_ID = '2PACX-1vQtcUnWuW83ACf_wEccbl-HUapE0h1dkcNXo4Tec41qVGJeOPDjysL46gVXtu8jqCFAgK01cKipJPp2';
+        const CHART_SHEET_NAME = 'Sertifikat';
         const CHART_SHEET_URL = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_ID}/pub?gid=0&single=true&output=csv`;
 
         // Kolom-kolom yang akan ditampilkan
@@ -590,19 +590,60 @@
         ];
 
         // ============================================================
-        // 📌 FUNGSI MODAL (salin dari index.html)
+        // 📌 MODAL
         // ============================================================
-        // ... (copy fungsi modal dari index.html)
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        }
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) { modal.classList.remove('active'); document.body.style.overflow = ''; }
+        }
+
+        document.querySelectorAll('.tentang-link').forEach(link => {
+            link.addEventListener('click', e => { e.preventDefault(); openModal('tentangModal'); });
+        });
+        document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
+        document.getElementById('tentangModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('tentangModal'); });
+
+        document.querySelectorAll('.kontak-link').forEach(link => {
+            link.addEventListener('click', e => { e.preventDefault(); openModal('kontakModal'); });
+        });
+        document.getElementById('kontakModalClose').addEventListener('click', () => closeModal('kontakModal'));
+        document.getElementById('kontakModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('kontakModal'); });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                if (document.getElementById('tentangModal').classList.contains('active')) closeModal('tentangModal');
+                if (document.getElementById('kontakModal').classList.contains('active')) closeModal('kontakModal');
+            }
+        });
 
         // ============================================================
-        // 📱 MOBILE MENU (salin dari index.html)
+        // 📱 MOBILE MENU
         // ============================================================
-        // ... (copy mobile menu dari index.html)
+        const toggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        toggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            toggle.querySelector('i').className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                toggle.querySelector('i').className = 'fas fa-bars';
+            });
+        });
 
         // ============================================================
-        // 📜 SCROLL ANIMATION (salin dari index.html)
+        // 📜 SCROLL ANIMATION
         // ============================================================
-        // ... (copy scroll animation dari index.html)
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
 
         // ============================================================
         // 📊 DIAGRAM
@@ -719,10 +760,16 @@
         });
 
         // ============================================================
-        // 💬 WHATSAPP FLOATING (salin dari index.html)
+        // 💬 WHATSAPP FLOATING
         // ============================================================
-        // ... (copy whatsapp floating dari index.html)
-
+        const waButton = document.getElementById('waButton');
+        const waBubble = document.getElementById('waBubble');
+        setTimeout(() => waBubble.classList.add('show'), 3000);
+        waButton.addEventListener('click', () => waBubble.classList.remove('show'));
+        let bubbleTimeout;
+        waButton.addEventListener('mouseenter', () => { clearTimeout(bubbleTimeout); waBubble.classList.add('show'); });
+        waButton.addEventListener('mouseleave', () => { bubbleTimeout = setTimeout(() => waBubble.classList.remove('show'), 3000); });
+     
         // ============================================================
         // 🚀 START
         // ============================================================
