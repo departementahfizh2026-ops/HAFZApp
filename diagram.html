@@ -537,4 +537,72 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins:
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: { color: '#1a4d2e', font: { size: 12, weight: '600' } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `${ctx.label}: ${ctx.raw}`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#1a4d2e', font: { size: 11 } },
+                            grid: { color: 'rgba(201,168,76,0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#1a4d2e', font: { size: 10 }, maxRotation: 45 },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ============================================================
+        // 🎯 EVENT LISTENERS
+        // ============================================================
+        document.getElementById('chartLembagaSelect').addEventListener('change', function() {
+            const index = parseInt(this.value);
+            if (isNaN(index) || index < 0 || index >= chartData.length) return;
+            if (tasmiChart) renderChart(chartData[index], tasmiChart.data.labels);
+        });
+
+        document.getElementById('chartRefreshBtn').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
+            this.disabled = true;
+            const loading = document.getElementById('chartLoading');
+            if (loading) loading.style.display = 'block';
+            loadChartData().then(() => {
+                this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
+                this.disabled = false;
+            });
+        });
+
+        // ============================================================
+        // 💬 WHATSAPP
+        // ============================================================
+        const waButton = document.getElementById('waButton');
+        const waBubble = document.getElementById('waBubble');
+        setTimeout(() => waBubble.classList.add('show'), 3000);
+        waButton.addEventListener('click', () => waBubble.classList.remove('show'));
+
+        // ============================================================
+        // 🚀 START
+        // ============================================================
+        console.log('🌙 HAFZApp - Halaman Diagram — Barakallah!');
+        console.log('📊 Script dimuat, siap mengambil data...');
+        
+        document.addEventListener('DOMContentLoaded', loadChartData);
+        
+        // Jalankan juga jika DOMContentLoaded sudah lewat
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            setTimeout(loadChartData, 100);
+        }
+    </script>
+</body>
+</html>
