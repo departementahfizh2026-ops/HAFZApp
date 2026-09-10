@@ -88,7 +88,7 @@
         /* ===== SUMMARY CARDS ===== */
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
             margin: 30px 0;
         }
@@ -125,14 +125,14 @@
             font-size: 1.5rem;
         }
         .summary-card .number {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             font-weight: 900;
             color: var(--hijau-tua);
             line-height: 1;
             margin-bottom: 6px;
         }
         .summary-card .label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #4a5e58;
             font-weight: 600;
             line-height: 1.4;
@@ -165,18 +165,18 @@
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.9rem;
-            min-width: 800px;
+            font-size: 0.85rem;
+            min-width: 900px;
         }
         .data-table thead {
             background: linear-gradient(135deg, var(--hijau-tua), #0f3d24);
             color: var(--emas-muda);
         }
         .data-table th {
-            padding: 12px 10px;
+            padding: 12px 8px;
             text-align: center;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 0.3px;
             line-height: 1.3;
             border-bottom: 2px solid var(--emas);
@@ -189,7 +189,7 @@
             border-top-right-radius: 12px;
         }
         .data-table td {
-            padding: 10px;
+            padding: 10px 8px;
             text-align: center;
             color: #2d3d3a;
             border-bottom: 1px solid rgba(201,168,76,0.1);
@@ -203,25 +203,28 @@
         .data-table tbody tr:hover {
             background: rgba(201,168,76,0.05);
         }
-        .data-table tbody tr:last-child td:first-child {
-            border-bottom-left-radius: 12px;
-        }
-        .data-table tbody tr:last-child td:last-child {
-            border-bottom-right-radius: 12px;
-        }
         .data-table td.nilai-besar {
             background: rgba(26,77,46,0.05);
             color: var(--hijau-tua);
             font-weight: 800;
+        }
+        .data-table td.kolom-santri {
+            background: rgba(201,168,76,0.08);
+            color: var(--emas);
+            font-weight: 800;
+        }
+        .data-table td.kolom-kosong {
+            background: rgba(0,0,0,0.02);
+            color: #bbb;
         }
         .data-table tfoot {
             background: var(--cream);
             font-weight: 800;
         }
         .data-table tfoot td {
-            padding: 14px 10px;
+            padding: 14px 8px;
             color: var(--hijau-tua);
-            font-size: 1rem;
+            font-size: 0.95rem;
             border-top: 2px solid var(--emas);
             border-bottom: none;
         }
@@ -366,7 +369,7 @@
             .nav-links.open { display: flex; }
             .navbar { flex-wrap: wrap; padding: 12px 20px; }
             .hero-text h1 { font-size: 2.4rem; }
-            .section-title h2 { font-size: 1.8rem; }
+            .section-title h2 { font-size: 1.6rem; }
             .summary-grid { grid-template-columns: 1fr 1fr; }
             .summary-card .number { font-size: 1.8rem; }
             .pie-wrapper { padding: 24px 16px; }
@@ -418,12 +421,8 @@
             <p class="subtitle">Rekapitulasi capaian sertifikat tasmi' dari seluruh lembaga</p>
         </div>
 
-        <!-- Summary Cards -->
-        <div class="summary-grid fade-up" id="summaryCards">
-            <!-- Diisi otomatis oleh JavaScript -->
-        </div>
+        <div class="summary-grid fade-up" id="summaryCards"></div>
 
-        <!-- Pie Chart -->
         <div class="pie-wrapper fade-up">
             <h3><i class="fas fa-chart-pie"></i> Proporsi Capaian Sertifikat</h3>
             <p class="pie-subtitle">Distribusi total capaian per kategori sertifikat</p>
@@ -432,19 +431,12 @@
             </div>
         </div>
 
-        <!-- Table Detail -->
         <div class="table-wrapper fade-up">
             <h3><i class="fas fa-table"></i> Detail Capaian per Lembaga</h3>
             <table class="data-table" id="detailTable">
-                <thead id="tableHead">
-                    <!-- Diisi otomatis -->
-                </thead>
-                <tbody id="tableBody">
-                    <!-- Diisi otomatis -->
-                </tbody>
-                <tfoot id="tableFoot">
-                    <!-- Diisi otomatis -->
-                </tfoot>
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+                <tfoot id="tableFoot"></tfoot>
             </table>
         </div>
 
@@ -454,7 +446,7 @@
             <p class="subtitle">Visualisasi capaian tasmi' per lembaga</p>
         </div>
 
-        <div class="chart-section fade-up" style="background: var(--putih); border-radius: var(--radius); padding: 40px 44px; margin: 30px 0; box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.12);">
+        <div style="background: var(--putih); border-radius: var(--radius); padding: 40px 44px; margin: 30px 0; box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.12);">
             <h3 style="font-size: 1.8rem; color: var(--hijau-tua); font-weight: 800; text-align: center; margin-bottom: 8px;"><i class="fas fa-chart-line" style="color: var(--emas); margin-right: 10px;"></i> Grafik Capaian Tasmi'</h3>
             <p style="text-align: center; color: #4a5e58; font-size: 1rem; margin-bottom: 30px;">Data diambil dari Google Sheets — otomatis terupdate</p>
             <div style="position: relative; height: 450px; max-width: 100%;">
@@ -553,14 +545,72 @@
             { label: 'Tasmi 30 Juz Sekali Duduk', keywords: ['tasmi 30', 'sekali duduk'] }
         ];
 
-        // Kolom untuk laporan sertifikat (5 kategori)
+        // Kolom untuk laporan sertifikat
         const LAPORAN_COLUMNS = [
+            { key: 'jumlahSantri', label: 'Jumlah Santri', short: 'Jumlah Santri', icon: 'fa-users', keywords: ['jumlah santri'], isNonSertifikat: true },
             { key: 'tasmi1', label: 'Tasmi 1 Juz Sesuai Muqorror', short: 'Tasmi 1 Juz', icon: 'fa-certificate', keywords: ['tasmi 1 juz', 'muqorror'] },
             { key: 'tasmi3', label: 'Tasmi 3 Juz', short: 'Tasmi 3 Juz', icon: 'fa-star', keywords: ['tasmi 3 juz'] },
             { key: 'tasmi5', label: 'Tasmi 5 Juz', short: 'Tasmi 5 Juz', icon: 'fa-star-half-alt', keywords: ['tasmi 5 juz'] },
             { key: 'setoran', label: 'Setoran 10, 20, 30 Juz', short: 'Setoran 10/20/30 Juz', icon: 'fa-layer-group', keywords: ['setoran'] },
             { key: 'tasmi30', label: 'Tasmi 30 Juz Sekali Duduk', short: 'Tasmi 30 Juz', icon: 'fa-trophy', keywords: ['tasmi 30', 'sekali duduk'] }
         ];
+
+        // ============================================================
+        // 🎯 PARSER CSV YANG BENAR (Mengatasi: \r\n, tanda kutip, kolom kosong)
+        // ============================================================
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            // Hapus \r di akhir
+            line = line.replace(/\r$/, '');
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                const nextChar = line[i + 1];
+                
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        // Escaped quote
+                        current += '"';
+                        i++;
+                    } else {
+                        // Toggle quote mode
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    // Pemisah kolom
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current.trim());
+            return result;
+        }
+
+        // ============================================================
+        // 🔢 PARSER ANGKA YANG TOLERAN
+        // ============================================================
+        function parseNumber(str) {
+            if (str === null || str === undefined || str === '') return 0;
+            
+            // Bersihkan karakter khusus
+            const cleaned = str.toString()
+                .replace(/["'`]/g, '')           // hapus semua jenis kutip
+                .replace(/\u00A0/g, '')          // hapus non-breaking space
+                .replace(/\s/g, '')              // hapus semua spasi
+                .replace(/^[-–—]+$/, '')         // hapus jika cuma tanda strip
+                .replace(/,/g, '.')              // ganti koma desimal jadi titik
+                .trim();
+            
+            if (cleaned === '' || cleaned === '-') return 0;
+            
+            const num = parseFloat(cleaned);
+            return isNaN(num) ? 0 : num;
+        }
 
         // ============================================================
         // 📌 MODAL
@@ -628,8 +678,6 @@
         let tasmiChart = null;
         let pieChart = null;
         let chartData = [];
-        let rawHeaders = [];
-        let rawLines = [];
 
         // ============================================================
         // 📊 LOAD DATA
@@ -643,16 +691,19 @@
                 if (!response.ok) throw new Error(`HTTP error ${response.status}`);
                 
                 const csvText = await response.text();
-                const lines = csvText.split('\n').filter(line => line.trim() !== '');
+                // Pisah baris dengan \r\n atau \n
+                const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+                
+                console.log('📊 Jumlah baris:', lines.length);
                 
                 if (lines.length < 2) {
                     if (loading) loading.innerHTML = '<p style="color:#e67e22;">Data kosong.</p>';
                     return;
                 }
 
-                rawLines = lines;
-                const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-                rawHeaders = headers;
+                // 🔧 Gunakan parser CSV yang benar
+                const headers = parseCSVLine(lines[0]);
+                console.log('📋 Headers:', headers);
 
                 // ===== Proses untuk Chart Batang =====
                 const lembagaIndex = findColumnByKeywords(headers, ['lembaga']);
@@ -670,13 +721,10 @@
                 if (lembagaIndex !== -1 && columnIndices.length > 0) {
                     chartData = [];
                     for (let i = 1; i < lines.length; i++) {
-                        const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                        const cols = parseCSVLine(lines[i]);
                         const lembaga = cols[lembagaIndex] || '';
                         if (!lembaga) continue;
-                        const values = columnIndices.map(idx => {
-                            const val = parseFloat(cols[idx]);
-                            return isNaN(val) ? 0 : val;
-                        });
+                        const values = columnIndices.map(idx => parseNumber(cols[idx]));
                         chartData.push({ lembaga, values });
                     }
 
@@ -705,7 +753,7 @@
         }
 
         // ============================================================
-        // 📊 RENDER LAPORAN SERTIFIKAT (Kartu + Tabel + Pie Chart)
+        // 📊 RENDER LAPORAN SERTIFIKAT
         // ============================================================
         function renderLaporan(headers, lines) {
             const lembagaIndex = findColumnByKeywords(headers, ['lembaga']);
@@ -719,17 +767,17 @@
 
             // Ambil data per lembaga
             const lembagaData = [];
-            const totals = { tasmi1: 0, tasmi3: 0, tasmi5: 0, setoran: 0, tasmi30: 0 };
+            const totals = {};
+            LAPORAN_COLUMNS.forEach(col => totals[col.key] = 0);
 
             for (let i = 1; i < lines.length; i++) {
-                const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                const cols = parseCSVLine(lines[i]);
                 const lembaga = cols[lembagaIndex] || '';
                 if (!lembaga) continue;
 
                 const row = { lembaga };
                 laporanCols.forEach(col => {
-                    const val = col.index !== -1 ? parseFloat(cols[col.index]) : 0;
-                    const num = isNaN(val) ? 0 : val;
+                    const num = col.index !== -1 ? parseNumber(cols[col.index]) : 0;
                     row[col.key] = num;
                     totals[col.key] += num;
                 });
@@ -739,8 +787,6 @@
             // ===== RENDER SUMMARY CARDS =====
             const summaryContainer = document.getElementById('summaryCards');
             summaryContainer.innerHTML = '';
-            const totalSemua = Object.values(totals).reduce((a, b) => a + b, 0);
-
             LAPORAN_COLUMNS.forEach(col => {
                 const card = document.createElement('div');
                 card.className = 'summary-card';
@@ -771,26 +817,31 @@
                 bodyHtml += `<tr><td>${row.lembaga}</td>`;
                 LAPORAN_COLUMNS.forEach(col => {
                     const val = row[col.key];
-                    totalBaris += val;
-                    bodyHtml += `<td class="${val > 0 ? 'nilai-besar' : ''}">${val}</td>`;
+                    if (!col.isNonSertifikat) totalBaris += val;
+                    const cls = col.isNonSertifikat ? 'kolom-santri' : (val > 0 ? 'nilai-besar' : 'kolom-kosong');
+                    bodyHtml += `<td class="${cls}">${val}</td>`;
                 });
                 bodyHtml += `<td class="nilai-besar">${totalBaris}</td></tr>`;
             });
             tbody.innerHTML = bodyHtml;
 
+            // ===== RENDER FOOTER TOTAL =====
             let footHtml = '<tr><td>TOTAL</td>';
+            let totalSertifikatFooter = 0;
             LAPORAN_COLUMNS.forEach(col => {
                 footHtml += `<td>${totals[col.key]}</td>`;
+                if (!col.isNonSertifikat) totalSertifikatFooter += totals[col.key];
             });
-            footHtml += `<td>${totalSemua}</td></tr>`;
+            footHtml += `<td>${totalSertifikatFooter}</td></tr>`;
             tfoot.innerHTML = footHtml;
 
             // ===== RENDER PIE CHART =====
             const pieCtx = document.getElementById('pieChart').getContext('2d');
             if (pieChart) pieChart.destroy();
 
-            const pieLabels = LAPORAN_COLUMNS.map(col => col.short);
-            const pieValues = LAPORAN_COLUMNS.map(col => totals[col.key]);
+            const laporanColumnsFiltered = LAPORAN_COLUMNS.filter(col => !col.isNonSertifikat);
+            const pieLabels = laporanColumnsFiltered.map(col => col.short);
+            const pieValues = laporanColumnsFiltered.map(col => totals[col.key]);
             const pieColors = [
                 'rgba(26, 77, 46, 0.85)',
                 'rgba(45, 106, 79, 0.85)',
