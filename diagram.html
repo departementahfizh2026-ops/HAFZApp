@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HAFZApp - Diagram Capaian Tasmi'</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js">></script>
+    <!-- 🔧 GANTI CDN Chart.js ke cdnjs agar tidak diblokir browser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     <style>
         /* ===== SALIN SEMUA CSS DARI INDEX.HTML DI SINI ===== */
-        /* (copy semua kode CSS dari index.html mulai dari :root hingga akhir) */
-         :root {
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
             --hijau-tua: #1a4d2e;
             --hijau-muda: #2d6a4f;
             --emas: #c9a84c;
@@ -40,38 +41,24 @@
             background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, 30px 30px, 30px 30px;
             background-position: 0 0, 0 0, 30px 30px, 30px 30px, 0 0, 0 0;
         }
-
-        /* ===== GLOW ORNAMENT ===== */
         .ornament {
             background: radial-gradient(circle at 30% 30%, var(--emas-glow), transparent 70%);
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            pointer-events: none;
-            z-index: 0;
+            position: fixed; border-radius: 50%; filter: blur(80px);
+            pointer-events: none; z-index: 0;
         }
         .ornament-1 { width: 500px; height: 500px; top: -100px; right: -100px; opacity: 0.3; }
         .ornament-2 { width: 400px; height: 400px; bottom: -50px; left: -100px; opacity: 0.2; }
-
-        /* ===== CONTAINER ===== */
         .container { max-width: 1200px; margin: 0 auto; padding: 20px 24px 60px; position: relative; z-index: 1; }
-
-        /* ===== NAVBAR ===== */
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 28px;
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(16px);
-            border-radius: 60px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(201,168,76,0.2);
-            margin: 12px 0 30px;
-            position: sticky; top: 12px; z-index: 99;
+            padding: 16px 28px; background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(16px); border-radius: 60px;
+            box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.2);
+            margin: 12px 0 30px; position: sticky; top: 12px; z-index: 99;
         }
         .navbar .logo {
             display: flex; align-items: center; gap: 12px;
-            font-size: 1.5rem; font-weight: 800; color: var(--hijau-tua);
-            text-decoration: none;
+            font-size: 1.5rem; font-weight: 800; color: var(--hijau-tua); text-decoration: none;
         }
         .navbar .logo i { color: var(--emas); font-size: 2rem; }
         .navbar .logo span { color: var(--emas); }
@@ -81,16 +68,10 @@
             padding: 8px 18px; border-radius: 40px; transition: 0.3s;
             font-size: 0.9rem; cursor: pointer;
         }
-        .nav-links a:hover, .nav-links a.active {
-            background: var(--hijau-tua); color: var(--emas-muda);
-        }
-        .nav-links .cta-nav {
-            background: var(--emas); color: var(--hijau-tua); font-weight: 700;
-        }
+        .nav-links a:hover, .nav-links a.active { background: var(--hijau-tua); color: var(--emas-muda); }
+        .nav-links .cta-nav { background: var(--emas); color: var(--hijau-tua); font-weight: 700; }
         .nav-links .cta-nav:hover { background: var(--hijau-tua); color: var(--emas); transform: scale(1.03); }
         .menu-toggle { display: none; font-size: 1.8rem; background: none; border: none; color: var(--hijau-tua); cursor: pointer; padding: 4px 12px; }
-
-        /* ===== HERO ===== */
         .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 0 20px; }
         .hero-text { max-width: 750px; }
         .hero-text h1 { font-size: 3.4rem; font-weight: 900; line-height: 1.15; color: var(--hijau-tua); }
@@ -105,60 +86,10 @@
             letter-spacing: 2px; opacity: 0.85;
         }
         .hero-text p { font-size: 1.15rem; color: #2d3d3a; max-width: 600px; margin: 16px auto 28px; }
-        .hero-buttons { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
-
-        .btn {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 14px 34px; border-radius: 60px;
-            font-weight: 700; font-size: 1rem; border: none; cursor: pointer; transition: 0.3s;
-            text-decoration: none;
-        }
-        .btn-primary { background: var(--hijau-tua); color: var(--emas-muda); box-shadow: 0 6px 20px rgba(26,77,46,0.3); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(26,77,46,0.4); background: #0f3d24; }
-        .btn-gold { background: var(--emas); color: var(--hijau-tua); box-shadow: 0 6px 20px rgba(201,168,76,0.35); }
-        .btn-gold:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 30px rgba(201,168,76,0.45); }
-
-        /* ===== MENU ===== */
         .section-title { text-align: center; margin: 60px 0 40px; }
         .section-title h2 { font-size: 2.4rem; color: var(--hijau-tua); font-weight: 800; }
         .section-title h2 i { color: var(--emas); margin-right: 10px; }
         .section-title .subtitle { color: #4a5e58; font-size: 1.1rem; margin-top: 4px; }
-
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
-        .menu-card {
-            background: rgba(255,255,255,0.92); backdrop-filter: blur(4px);
-            border-radius: var(--radius); padding: 28px 22px 32px;
-            box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.12);
-            transition: 0.35s cubic-bezier(0.22,1,0.36,1); position: relative; overflow: hidden;
-        }
-        .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(26,77,46,0.12); border-color: var(--emas); }
-        .menu-card .card-icon {
-            font-size: 2.6rem; color: var(--emas); margin-bottom: 12px;
-            display: inline-block; background: var(--cream); padding: 12px; border-radius: 16px; line-height: 1;
-        }
-        .menu-card h3 { font-size: 1.25rem; color: var(--hijau-tua); margin-bottom: 6px; }
-        .menu-card .card-desc { color: #3d5550; font-size: 0.95rem; margin: 8px 0 16px; }
-        .menu-card .sub-menu-list { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
-        .menu-card .sub-menu-list li { width: 100%; }
-        .menu-card .card-badge {
-            position: absolute; top: 16px; right: 16px;
-            background: var(--emas); color: var(--hijau-tua);
-            font-size: 0.6rem; font-weight: 800; padding: 2px 14px;
-            border-radius: 30px; letter-spacing: 0.5px; text-transform: uppercase;
-        }
-        .menu-card .card-badge.hijau { background: var(--hijau-tua); color: var(--emas-muda); }
-
-        .sub-menu-btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: var(--hijau-tua); color: var(--emas-muda);
-            padding: 8px 18px; border-radius: 30px;
-            font-size: 0.78rem; font-weight: 700; text-decoration: none; transition: 0.3s;
-            width: 100%; justify-content: center; border: none; cursor: pointer; font-family: inherit;
-        }
-        .sub-menu-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,77,46,0.3); background: #0f3d24; }
-        .sub-menu-btn i { font-size: 0.7rem; }
-
-        /* ===== HIGHLIGHT BOX ===== */
         .highlight-box {
             background: linear-gradient(135deg, var(--hijau-tua), #0f3d24);
             border-radius: var(--radius); padding: 40px 44px; margin: 50px 0 20px;
@@ -170,8 +101,6 @@
         .highlight-box .text h3 i { color: var(--emas); margin-right: 10px; }
         .highlight-box .text p { opacity: 0.9; font-size: 1rem; line-height: 1.8; }
         .highlight-box .text strong { color: var(--emas); font-weight: 700; }
-
-        /* ===== MAP ===== */
         .map-container {
             position: relative; width: 100%; border-radius: 16px; overflow: hidden;
             box-shadow: 0 8px 30px rgba(0,0,0,0.3); aspect-ratio: 4/3; background: rgba(0,0,0,0.2);
@@ -184,8 +113,6 @@
             backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1);
         }
         .map-label i { color: var(--emas); margin-right: 6px; }
-
-        /* ===== FOOTER ===== */
         .footer {
             margin-top: 60px; padding: 30px 0 20px;
             border-top: 2px solid rgba(201,168,76,0.15);
@@ -195,15 +122,8 @@
         .footer .footer-logo { font-weight: 700; color: var(--hijau-tua); font-size: 1.1rem; }
         .footer .footer-logo i { color: var(--emas); }
         .footer .footer-links { display: flex; gap: 20px; }
-        .footer .footer-links a { color: var(--hijau-tua); text-decoration: none; font-weight: 500; transition: 0.2s; cursor: pointer; }
+        .footer .footer-links a { color: var(--hijau-tua); text-decoration: none; font-weight: 500; cursor: pointer; }
         .footer .footer-links a:hover { color: var(--emas); }
-
-        /* ===== LOADING ===== */
-        .loading-spinner { text-align: center; padding: 60px 20px; color: var(--hijau-tua); }
-        .loading-spinner i { font-size: 3rem; color: var(--emas); animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* ===== FLOATING WHATSAPP ===== */
         .whatsapp-float {
             position: fixed; bottom: 28px; right: 28px; z-index: 999;
             display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
@@ -232,35 +152,27 @@
         }
         @keyframes pulse-wa { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         @keyframes blink-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        /* ===== MODAL ===== */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); z-index: 1000;
             justify-content: center; align-items: center; padding: 20px;
-            animation: fadeInOverlay 0.3s ease;
         }
         .modal-overlay.active { display: flex; }
         .modal-content {
             background: var(--putih); border-radius: var(--radius);
             max-width: 750px; width: 100%; max-height: 90vh; overflow-y: auto;
             padding: 40px 44px; box-shadow: 0 30px 80px rgba(0,0,0,0.4);
-            border: 1px solid rgba(201,168,76,0.2);
-            animation: slideUpModal 0.4s cubic-bezier(0.22,1,0.36,1); position: relative;
+            border: 1px solid rgba(201,168,76,0.2); position: relative;
         }
-        .modal-content::-webkit-scrollbar { width: 6px; }
-        .modal-content::-webkit-scrollbar-track { background: var(--cream); border-radius: 10px; }
-        .modal-content::-webkit-scrollbar-thumb { background: var(--emas); border-radius: 10px; }
         .modal-close {
-            position: sticky; top: 0; float: right;
-            background: none; border: none; font-size: 2rem; color: var(--hijau-tua);
-            cursor: pointer; transition: 0.3s; padding: 0 8px; line-height: 1; z-index: 2; margin-top: -8px;
+            position: sticky; top: 0; float: right; background: none; border: none;
+            font-size: 2rem; color: var(--hijau-tua); cursor: pointer; padding: 0 8px;
+            line-height: 1; z-index: 2; margin-top: -8px;
         }
         .modal-close:hover { color: var(--emas); transform: rotate(90deg); }
         .modal-content h2 { font-size: 2rem; color: var(--hijau-tua); margin-bottom: 6px; display: flex; align-items: center; gap: 12px; }
         .modal-content h2 i { color: var(--emas); font-size: 1.8rem; }
         .modal-content .sub-title { color: var(--hijau-muda); font-size: 0.95rem; border-bottom: 2px solid rgba(201,168,76,0.2); padding-bottom: 16px; margin-bottom: 20px; }
-        .modal-content .sub-title i { color: var(--emas); margin-right: 6px; }
         .modal-content p { color: #2d3d3a; margin-bottom: 16px; font-size: 0.98rem; line-height: 1.8; }
         .modal-content .visi-misi {
             background: var(--cream); border-radius: 14px; padding: 20px 24px;
@@ -272,7 +184,6 @@
         .modal-content .visi-misi ul { list-style: none; padding: 0; margin: 6px 0 0; }
         .modal-content .visi-misi ul li { padding: 4px 0 4px 24px; position: relative; font-size: 0.95rem; color: #2d3d3a; }
         .modal-content .visi-misi ul li::before { content: '▸'; position: absolute; left: 0; color: var(--emas); font-weight: 700; }
-
         .contact-item {
             display: flex; align-items: flex-start; gap: 14px;
             padding: 12px 0; border-bottom: 1px solid rgba(201,168,76,0.1);
@@ -286,21 +197,31 @@
         .contact-item .info { flex: 1; }
         .contact-item .info .label { font-weight: 600; color: var(--hijau-tua); font-size: 0.9rem; }
         .contact-item .info .value { color: #2d3d3a; font-size: 0.95rem; word-break: break-all; }
-        .contact-item .info .value a { color: var(--hijau-tua); text-decoration: none; transition: 0.2s; }
+        .contact-item .info .value a { color: var(--hijau-tua); text-decoration: none; }
         .contact-item .info .value a:hover { color: var(--emas); }
         .contact-item .info .note { font-size: 0.75rem; color: #999; font-style: italic; }
-
-        @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUpModal {
-            from { opacity: 0; transform: translateY(40px) scale(0.96); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        .chart-section {
+            background: var(--putih); border-radius: var(--radius);
+            padding: 40px 44px; margin: 50px 0 20px;
+            box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.12);
         }
-
-        /* ===== RESPONSIVE ===== */
+        .chart-section h3 { font-size: 1.8rem; color: var(--hijau-tua); font-weight: 800; text-align: center; margin-bottom: 8px; }
+        .chart-section h3 i { color: var(--emas); margin-right: 10px; }
+        .chart-section .chart-subtitle { text-align: center; color: #4a5e58; font-size: 1rem; margin-bottom: 30px; }
+        .chart-wrapper { position: relative; height: 450px; max-width: 100%; }
+        .chart-controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px; }
+        .chart-controls select, .chart-controls button {
+            padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(201,168,76,0.3);
+            background: var(--putih); color: var(--hijau-tua); font-size: 0.9rem; cursor: pointer; transition: 0.3s;
+        }
+        .chart-controls button { background: var(--hijau-tua); color: var(--emas-muda); border: none; }
+        .chart-controls button:hover { background: #0f3d24; }
+        .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
         @media (max-width: 992px) {
             .highlight-box { grid-template-columns: 1fr; gap: 30px; padding: 30px 28px; text-align: center; }
-            .highlight-box .text { text-align: center; }
             .map-container { aspect-ratio: 4/3; max-width: 100%; margin: 0 auto; }
+            .chart-wrapper { height: 350px; }
         }
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
@@ -314,81 +235,19 @@
             .navbar .logo { font-size: 1.2rem; }
             .navbar .logo i { font-size: 1.6rem; }
             .hero-text h1 { font-size: 2.4rem; }
-            .hero-text .arabic-tagline { font-size: 1.2rem; }
             .section-title h2 { font-size: 1.8rem; }
             .highlight-box { padding: 24px 18px; gap: 20px; }
             .highlight-box .text h3 { font-size: 1.4rem; }
-            .menu-grid { grid-template-columns: 1fr 1fr; }
             .footer { flex-direction: column; text-align: center; }
+            .chart-wrapper { height: 300px; }
         }
         @media (max-width: 480px) {
-            .menu-grid { grid-template-columns: 1fr; }
             .container { padding: 12px 14px 40px; }
             .hero-text h1 { font-size: 1.9rem; }
-            .btn { padding: 12px 24px; font-size: 0.9rem; width: 100%; justify-content: center; }
-            .hero-buttons { flex-direction: column; width: 100%; }
             .navbar .logo { font-size: 1rem; }
             .navbar .logo i { font-size: 1.4rem; }
-            .map-container { aspect-ratio: 4/3; }
+            .chart-wrapper { height: 250px; }
         }
-        .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
-        .fade-up.visible { opacity: 1; transform: translateY(0); }
-        /* ============================================================ */
-        /* CSS tambahan untuk diagram */
-        .chart-section {
-            background: var(--putih);
-            border-radius: var(--radius);
-            padding: 40px 44px;
-            margin: 50px 0 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(201, 168, 76, 0.12);
-        }
-        .chart-section h3 {
-            font-size: 1.8rem;
-            color: var(--hijau-tua);
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 8px;
-        }
-        .chart-section h3 i { color: var(--emas); margin-right: 10px; }
-        .chart-section .chart-subtitle {
-            text-align: center;
-            color: #4a5e58;
-            font-size: 1rem;
-            margin-bottom: 30px;
-        }
-        .chart-wrapper {
-            position: relative;
-            height: 400px;
-            max-width: 100%;
-        }
-        .chart-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .chart-controls select,
-        .chart-controls button {
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: 1px solid rgba(201, 168, 76, 0.3);
-            background: var(--putih);
-            color: var(--hijau-tua);
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .chart-controls button {
-            background: var(--hijau-tua);
-            color: var(--emas-muda);
-            border: none;
-        }
-        .chart-controls button:hover { background: #0f3d24; }
-        @media (max-width: 992px) { .chart-wrapper { height: 300px; } }
-        @media (max-width: 768px) { .chart-wrapper { height: 250px; } }
-        @media (max-width: 480px) { .chart-wrapper { height: 200px; } }
     </style>
 </head>
 <body>
@@ -403,12 +262,12 @@
                 <i class="fas fa-quran"></i>
                 HAFZ<span>App</span>
             </a>
-            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+            <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
             </button>
             <div class="nav-links" id="navLinks">
                 <a href="index.html">Menu</a>
-                <a href="diagram.html" class="active">Capaian Tasmi'</a>
+                <a href="diagram.html" class="active">Diagram</a>
                 <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
                 <a href="#" class="cta-nav"><i class="fas fa-rocket"></i> Login</a>
             </div>
@@ -418,16 +277,12 @@
         <section class="hero">
             <div class="hero-text">
                 <div class="arabic-tagline">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-                <h1>
-                    <span class="highlight">Diagram</span> Capaian Tasmi'
-                </h1>
-                <p>
-                    Visualisasi capaian tasmi' per lembaga berdasarkan data dari Google Sheets.
-                </p>
+                <h1><span class="highlight">Diagram</span> Capaian Tasmi'</h1>
+                <p>Visualisasi capaian tasmi' per lembaga berdasarkan data dari Google Sheets.</p>
             </div>
         </section>
 
-        <!-- ===== DIAGRAM SECTION ===== -->
+        <!-- ===== CHART ===== -->
         <div class="section-title" id="diagram">
             <h2><i class="fas fa-chart-bar"></i> Perkembangan Tahfizh</h2>
             <p class="subtitle">Visualisasi capaian tasmi' per lembaga</p>
@@ -461,64 +316,43 @@
                 </p>
             </div>
             <div class="map-container">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.553056798127!2d116.09877731484864!3d-8.591937192124524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcdbf58c7f4e239%3A0x48a746765b76db3e!2sPonpes%20Abu%20Hurairah%20Mataram!5e0!3m2!1sid!2sid!4v1728020456789!5m2!1sid!2sid" 
-                    allowfullscreen="" 
-                    loading="lazy" 
-                    referrerpolicy="no-referrer-when-downgrade"
-                    title="Peta Lokasi Ponpes Abu Hurairah Mataram">
-                </iframe>
-                <div class="map-label">
-                    <i class="fas fa-map-pin"></i> Ponpes Abu Hurairah Mataram
-                </div>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.553056798127!2d116.09877731484864!3d-8.591937192124524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcdbf58c7f4e239%3A0x48a746765b76db3e!2sPonpes%20Abu%20Hurairah%20Mataram!5e0!3m2!1sid!2sid!4v1728020456789!5m2!1sid!2sid" allowfullscreen="" loading="lazy"></iframe>
+                <div class="map-label"><i class="fas fa-map-pin"></i> Ponpes Abu Hurairah Mataram</div>
             </div>
         </div>
 
         <!-- ===== FOOTER ===== -->
         <footer class="footer">
-            <div class="footer-logo">
-                <i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span>
-            </div>
+            <div class="footer-logo"><i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span></div>
             <div class="footer-links">
                 <a href="index.html">Menu</a>
                 <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
                 <a href="#" class="kontak-link" data-target="kontakModal">Kontak</a>
             </div>
-            <div style="font-size:0.8rem;opacity:0.6;">
-                © 2026 · Departemen Tahfizh
-            </div>
+            <div style="font-size:0.8rem;opacity:0.6;">© 2026 · Departemen Tahfizh</div>
         </footer>
 
     </div>
 
-    <!-- ===== FLOATING WHATSAPP ===== -->
+    <!-- ===== WHATSAPP ===== -->
     <div class="whatsapp-float">
         <div class="bubble" id="waBubble"><i class="fab fa-whatsapp"></i> Chat Admin</div>
-        <a href="https://wa.me/6282340530283?text=Assalamu%27alaikum%20Warahmatullahi%20Wabarakatuh%0A%0ASaya%20ingin%20bertanya%20terkait%20..." 
-           target="_blank" 
-           class="whatsapp-btn" 
-           id="waButton"
-           aria-label="Chat via WhatsApp">
+        <a href="https://wa.me/6282340530283?text=Assalamu%27alaikum" target="_blank" class="whatsapp-btn" id="waButton">
             <i class="fab fa-whatsapp"></i>
             <span class="notification-dot"></span>
         </a>
     </div>
 
-    <!-- ===== MODAL TENTANG ===== -->
+    <!-- ===== MODALS ===== -->
     <div class="modal-overlay" id="tentangModal">
         <div class="modal-content">
             <button class="modal-close" id="tentangModalClose">&times;</button>
             <h2><i class="fas fa-info-circle"></i> Tentang Departemen Tahfizh</h2>
             <div class="sub-title"><i class="fas fa-university"></i> Ponpes Abu Hurairah Mataram</div>
-            <p>
-                Departemen Tahfizh memiliki peran strategis dalam merencanakan, mengoordinasikan, melaksanakan, serta mengevaluasi seluruh program pembinaan hafalan Al-Qur'an di lingkungan lembaga. Berbagai program yang diselenggarakan tidak hanya berfokus pada pencapaian target hafalan, tetapi juga pada peningkatan kualitas bacaan (tahsin), kedisiplinan muroja'ah, pembinaan karakter, peningkatan kompetensi guru tahfizh, serta penguatan sistem administrasi dan pelaporan.
-            </p>
-            <p>
-                Selama satu tahun pelaksanaan program, Departemen Tahfizh telah melaksanakan berbagai kegiatan yang melibatkan guru, koordinator, serta santri pada setiap satuan pendidikan. Pelaksanaan program tersebut memerlukan proses monitoring dan evaluasi secara berkelanjutan agar tujuan yang telah ditetapkan dapat tercapai secara optimal serta menjadi dasar dalam penyusunan program kerja pada tahun berikutnya.
-            </p>
+            <p>Departemen Tahfizh memiliki peran strategis dalam merencanakan, mengoordinasikan, melaksanakan, serta mengevaluasi seluruh program pembinaan hafalan Al-Qur'an di lingkungan lembaga.</p>
             <div class="visi-misi">
                 <h4><i class="fas fa-eye"></i> Visi</h4>
-                <p>Menjadi fasilitator pengelolaan, pemberdayaan, dan pengembangan kompetensi guru dalam mengajar, dan potensi santri Ponpes Abu Hurairah Mataram dalam membaca, menghafal, memahami serta mengamalkan isi Al-Qur'an.</p>
+                <p>Menjadi fasilitator pengelolaan, pemberdayaan, dan pengembangan kompetensi guru dalam mengajar, dan potensi santri Ponpes Abu Hurairah Mataram.</p>
                 <h4 style="margin-top:16px;"><i class="fas fa-tasks"></i> Misi</h4>
                 <ul>
                     <li>Merancang program kegiatan tahfizh Al-Qur'an secara teratur.</li>
@@ -529,95 +363,58 @@
         </div>
     </div>
 
-    <!-- ===== MODAL KONTAK ===== -->
     <div class="modal-overlay" id="kontakModal">
         <div class="modal-content">
             <button class="modal-close" id="kontakModalClose">&times;</button>
-            <h2><i class="fas fa-phone-alt"></i> Kontak Departemen Tahfizh</h2>
-            <div class="sub-title"><i class="fas fa-university"></i> Ponpes Abu Hurairah Mataram</div>
+            <h2><i class="fas fa-phone-alt"></i> Kontak</h2>
             <div class="contact-item">
                 <div class="icon"><i class="fas fa-envelope"></i></div>
-                <div class="info">
-                    <div class="label">E-mail</div>
-                    <div class="value"><a href="mailto:departemen.tahfizh2026@gmail.com">departemen.tahfizh2026@gmail.com</a></div>
-                </div>
+                <div class="info"><div class="label">E-mail</div><div class="value"><a href="mailto:departemen.tahfizh2026@gmail.com">departemen.tahfizh2026@gmail.com</a></div></div>
             </div>
             <div class="contact-item">
                 <div class="icon"><i class="fas fa-user-tie"></i></div>
-                <div class="info">
-                    <div class="label">Kepala Departemen</div>
-                    <div class="value"><a href="https://wa.me/6281904550557" target="_blank">0819-0455-0557</a> <span class="note">Chat Only</span></div>
-                </div>
-            </div>
-            <div class="contact-item">
-                <div class="icon"><i class="fas fa-user-cog"></i></div>
-                <div class="info">
-                    <div class="label">Wakil Kepala Departemen</div>
-                    <div class="value"><a href="https://wa.me/6287872237385" target="_blank">0878-7223-7385</a> <span class="note">Chat Only</span></div>
-                </div>
-            </div>
-            <div class="contact-item">
-                <div class="icon"><i class="fas fa-user-circle"></i></div>
-                <div class="info">
-                    <div class="label">Admin</div>
-                    <div class="value"><a href="https://wa.me/6282340530283" target="_blank">0823-4053-0283</a> <span class="note">Chat Only</span></div>
-                </div>
+                <div class="info"><div class="label">Admin</div><div class="value"><a href="https://wa.me/6282340530283">0823-4053-0283</a> <span class="note">Chat Only</span></div></div>
             </div>
         </div>
     </div>
 
-    <!-- ============================================================
-         JAVASCRIPT DIAGRAM
-         ============================================================ -->
     <script>
         // ============================================================
         // 🔧 KONFIGURASI
         // ============================================================
-        const SPREADSHEET_ID = '2PACX-1vQtcUnWuW83ACf_wEccbl-HUapE0h1dkcNXo4Tec41qVGJeOPDjysL46gVXtu8jqCFAgK01cKipJPp2';
-        const CHART_SHEET_NAME = 'Sertifikat';
-        const CHART_SHEET_URL = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_ID}/pub?gid=0&single=true&output=csv`;
+        const CHART_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQtcUnWuW83ACf_wEccbl-HUapE0h1dkcNXo4Tec41qVGJeOPDjysL46gVXtu8jqCFAgK01cKipJPp2/pub?gid=0&single=true&output=csv';
 
-        // Kolom-kolom yang akan ditampilkan
-        const CHART_COLUMNS = [
-            { key: 'tasmi_1_juz_muqorror', label: 'Tasmi 1 Juz (Sesuai Muqorror)' },
-            { key: 'tasmi_1_juz_luar', label: 'Tasmi 1 Juz (Diluar Luar)' },
-            { key: 'tasmi_setengah_juz', label: 'Tasmi 1/2 Juz' },
-            { key: 'tasmi_3_juz', label: 'Tasmi 3 Juz' },
-            { key: 'tasmi_5_juz', label: 'Tasmi 5 Juz' },
-            { key: 'sertifikat_penggabungan', label: 'Sertifikat Penggabungan' },
-            { key: 'setoran_10_20_30', label: 'Setoran 10, 20, 30 Juz' },
-            { key: 'tasmi_30_juz', label: 'Tasmi 30 Juz Sekali Duduk' }
-        ];
+// Nama sheet (hanya untuk informasi/referensi, tidak digunakan di URL karena sudah dipublikasikan)
+const CHART_SHEET_NAME = 'Sertifikat';
+
+// Kolom & keyword pencarian (case insensitive, toleran terhadap tanda baca)
+const CHART_COLUMNS = [
+    { label: 'Tasmi 1 Juz Muqorror', keywords: ['tasmi 1 juz', 'muqorror'] },
+    { label: 'Tasmi 1 Juz Luar Muqorror', keywords: ['tasmi 1 juz', 'luar'] },
+    { label: 'Tasmi 1/2 Juz', keywords: ['tasmi', '1/2'] },
+    { label: 'Tasmi 3 Juz', keywords: ['tasmi 3 juz'] },
+    { label: 'Tasmi 5 Juz', keywords: ['tasmi 5 juz'] },
+    { label: 'Sertifikat Penggabungan', keywords: ['sertifikat', 'penggabungan'] },
+    { label: 'Setoran 10, 20, 30 Juz', keywords: ['setoran'] },
+    { label: 'Tasmi 30 Juz Sekali Duduk', keywords: ['tasmi 30', 'sekali duduk'] }
+];
 
         // ============================================================
         // 📌 MODAL
         // ============================================================
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
-        }
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) { modal.classList.remove('active'); document.body.style.overflow = ''; }
-        }
+        function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; } }
+        function closeModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('active'); document.body.style.overflow = ''; } }
 
-        document.querySelectorAll('.tentang-link').forEach(link => {
-            link.addEventListener('click', e => { e.preventDefault(); openModal('tentangModal'); });
-        });
+        document.querySelectorAll('.tentang-link').forEach(l => l.addEventListener('click', e => { e.preventDefault(); openModal('tentangModal'); }));
         document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
         document.getElementById('tentangModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('tentangModal'); });
 
-        document.querySelectorAll('.kontak-link').forEach(link => {
-            link.addEventListener('click', e => { e.preventDefault(); openModal('kontakModal'); });
-        });
+        document.querySelectorAll('.kontak-link').forEach(l => l.addEventListener('click', e => { e.preventDefault(); openModal('kontakModal'); }));
         document.getElementById('kontakModalClose').addEventListener('click', () => closeModal('kontakModal'));
         document.getElementById('kontakModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('kontakModal'); });
 
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') {
-                if (document.getElementById('tentangModal').classList.contains('active')) closeModal('tentangModal');
-                if (document.getElementById('kontakModal').classList.contains('active')) closeModal('kontakModal');
-            }
+            if (e.key === 'Escape') { closeModal('tentangModal'); closeModal('kontakModal'); }
         });
 
         // ============================================================
@@ -629,152 +426,36 @@
             navLinks.classList.toggle('open');
             toggle.querySelector('i').className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
         });
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('open');
-                toggle.querySelector('i').className = 'fas fa-bars';
-            });
-        });
 
         // ============================================================
         // 📜 SCROLL ANIMATION
         // ============================================================
         const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.15 });
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-
         // ============================================================
-        // 📊 DIAGRAM
+        // 📊 FUNGSI PENCARIAN HEADER FLEKSIBEL
         // ============================================================
-        let tasmiChart = null;
-        let chartData = [];
-        let chartLembagaList = [];
+        function normalizeHeader(str) {
+            return str.toLowerCase()
+                .replace(/['"`’‘“”]/g, '')  // hapus semua jenis tanda kutip
+                .replace(/[^a-z0-9/\s,]/g, '') // hapus karakter aneh, sisakan huruf/angka/spasi/slash/koma
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
 
-        function findHeaderIndex(headers, possibleNames) {
-            for (const name of possibleNames) {
-                const idx = headers.findIndex(h => h.toLowerCase().trim() === name.toLowerCase().trim());
-                if (idx !== -1) return idx;
+        function findColumnByKeywords(headers, keywords) {
+            for (let i = 0; i < headers.length; i++) {
+                const h = normalizeHeader(headers[i]);
+                const semuaAda = keywords.every(kw => h.includes(kw.toLowerCase()));
+                if (semuaAda) return i;
             }
             return -1;
         }
 
-        async function loadChartData() {
-            try {
-                console.log('🔄 Mengambil data capaian dari:', CHART_SHEET_URL);
-                const response = await fetch(CHART_SHEET_URL);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const csvText = await response.text();
-                const lines = csvText.split('\n').filter(line => line.trim() !== '');
-                if (lines.length < 2) { console.warn('Data capaian kosong.'); return; }
-
-                let headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-                const lembagaIndex = findHeaderIndex(headers, ['LEMBAGA', 'Lembaga', 'lembaga']);
-
-                const columnIndices = [];
-                const columnLabels = [];
-                for (const col of CHART_COLUMNS) {
-                    const possibleNames = [col.label, col.label.toUpperCase(), col.label.toLowerCase(), col.key, col.key.replace(/_/g, ' ')];
-                    const idx = findHeaderIndex(headers, possibleNames);
-                    if (idx !== -1) { columnIndices.push(idx); columnLabels.push(col.label); }
-                    else console.warn(`Kolom "${col.label}" tidak ditemukan.`);
-                }
-
-                if (lembagaIndex === -1 || columnIndices.length === 0) { console.warn('Kolom yang diperlukan tidak ditemukan.'); return; }
-
-                chartData = []; chartLembagaList = [];
-                for (let i = 1; i < lines.length; i++) {
-                    const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
-                    const lembaga = cols[lembagaIndex] || '';
-                    if (!lembaga) continue;
-                    const values = columnIndices.map(idx => { const val = parseFloat(cols[idx]); return isNaN(val) ? 0 : val; });
-                    chartData.push({ lembaga, values });
-                    chartLembagaList.push(lembaga);
-                }
-                console.log(`📊 Data capaian: ${chartData.length} lembaga, ${columnLabels.length} jenis`);
-
-                const select = document.getElementById('chartLembagaSelect');
-                select.innerHTML = '<option value="">-- Pilih Lembaga --</option>';
-                chartLembagaList.forEach((lembaga, index) => {
-                    const option = document.createElement('option');
-                    option.value = index;
-                    option.textContent = lembaga;
-                    select.appendChild(option);
-                });
-
-                if (chartData.length > 0) renderChart(chartData[0], columnLabels);
-            } catch (error) {
-                console.error('Error loading chart:', error);
-            }
-        }
-
-        function renderChart(data, columnLabels) {
-            const ctx = document.getElementById('tasmiChart').getContext('2d');
-            if (tasmiChart) tasmiChart.destroy();
-
-            const colors = ['rgba(26,77,46,0.85)', 'rgba(45,106,79,0.85)', 'rgba(201,168,76,0.85)', 'rgba(232,212,139,0.85)', 'rgba(26,77,46,0.6)', 'rgba(45,106,79,0.6)', 'rgba(201,168,76,0.6)', 'rgba(232,212,139,0.6)'];
-            const borderColors = ['rgba(26,77,46,1)', 'rgba(45,106,79,1)', 'rgba(201,168,76,1)', 'rgba(232,212,139,1)', 'rgba(26,77,46,1)', 'rgba(45,106,79,1)', 'rgba(201,168,76,1)', 'rgba(232,212,139,1)'];
-
-            tasmiChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: columnLabels,
-                    datasets: [{
-                        label: `${data.lembaga} - Capaian Tasmi'`,
-                        data: data.values,
-                        backgroundColor: colors.slice(0, data.values.length),
-                        borderColor: borderColors.slice(0, data.values.length),
-                        borderWidth: 2,
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: true, labels: { color: '#1a4d2e', font: { size: 12, weight: '600' } } },
-                        tooltip: { callbacks: { label: function(context) { return `${context.label}: ${context.raw}`; } } }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { color: '#1a4d2e', font: { size: 11 } }, grid: { color: 'rgba(201,168,76,0.1)' } },
-                        x: { ticks: { color: '#1a4d2e', font: { size: 10 }, maxRotation: 45 }, grid: { display: false } }
-                    }
-                }
-            });
-        }
-
-        document.getElementById('chartLembagaSelect').addEventListener('change', function() {
-            const index = parseInt(this.value);
-            if (isNaN(index) || index < 0 || index >= chartData.length) return;
-            if (tasmiChart) renderChart(chartData[index], tasmiChart.data.labels);
-        });
-
-        document.getElementById('chartRefreshBtn').addEventListener('click', function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
-            this.disabled = true;
-            loadChartData().then(() => {
-                this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
-                this.disabled = false;
-            });
-        });
-
         // ============================================================
-        // 💬 WHATSAPP FLOATING
+        // 📊 DIAGRAM
         // ============================================================
-        const waButton = document.getElementById('waButton');
-        const waBubble = document.getElementById('waBubble');
-        setTimeout(() => waBubble.classList.add('show'), 3000);
-        waButton.addEventListener('click', () => waBubble.classList.remove('show'));
-        let bubbleTimeout;
-        waButton.addEventListener('mouseenter', () => { clearTimeout(bubbleTimeout); waBubble.classList.add('show'); });
-        waButton.addEventListener('mouseleave', () => { bubbleTimeout = setTimeout(() => waBubble.classList.remove('show'), 3000); });
-     
-        // ============================================================
-        // 🚀 START
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', loadChartData);
-        console.log('🌙 HAFZApp - Halaman Diagram — Barakallah!');
-    </script>
-</body>
-</html>
+        let tasmiChart = null
