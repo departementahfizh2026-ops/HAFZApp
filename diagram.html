@@ -5,41 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HAFZApp - Diagram Capaian Tasmi'</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 🔧 GANTI CDN Chart.js ke cdnjs agar tidak diblokir browser -->
+    <!-- Chart.js dari cdnjs agar tidak diblokir browser -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     <style>
-        /* ===== SALIN SEMUA CSS DARI INDEX.HTML DI SINI ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --hijau-tua: #1a4d2e;
-            --hijau-muda: #2d6a4f;
-            --emas: #c9a84c;
-            --emas-muda: #e8d48b;
-            --emas-glow: #f4e3a7;
-            --cream: #faf6ed;
-            --putih: #ffffff;
-            --abu: #f0ebe3;
+            --hijau-tua: #1a4d2e; --hijau-muda: #2d6a4f; --emas: #c9a84c;
+            --emas-muda: #e8d48b; --emas-glow: #f4e3a7; --cream: #faf6ed;
+            --putih: #ffffff; --abu: #f0ebe3;
             --shadow: 0 10px 40px rgba(26, 77, 46, 0.15);
-            --radius: 20px;
-            --whatsapp: #25D366;
+            --radius: 20px; --whatsapp: #25D366;
         }
         html { scroll-behavior: smooth; }
         body {
             font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
-            background-color: var(--cream);
-            color: #1e2a2a;
-            line-height: 1.7;
+            background-color: var(--cream); color: #1e2a2a; line-height: 1.7;
             min-height: 100vh;
             background-image: 
-                linear-gradient(45deg, rgba(201, 168, 76, 0.03) 25%, transparent 25%),
-                linear-gradient(-45deg, rgba(201, 168, 76, 0.03) 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, rgba(201, 168, 76, 0.03) 75%),
-                linear-gradient(-45deg, transparent 75%, rgba(201, 168, 76, 0.03) 75%),
-                radial-gradient(circle at 20% 30%, rgba(26, 77, 46, 0.03) 1px, transparent 1px),
-                radial-gradient(circle at 70% 80%, rgba(26, 77, 46, 0.03) 1px, transparent 1px),
+                linear-gradient(45deg, rgba(201,168,76,0.03) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(201,168,76,0.03) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(201,168,76,0.03) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(201,168,76,0.03) 75%),
+                radial-gradient(circle at 20% 30%, rgba(26,77,46,0.03) 1px, transparent 1px),
+                radial-gradient(circle at 70% 80%, rgba(26,77,46,0.03) 1px, transparent 1px),
                 var(--cream);
             background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, 30px 30px, 30px 30px;
-            background-position: 0 0, 0 0, 30px 30px, 30px 30px, 0 0, 0 0;
         }
         .ornament {
             background: radial-gradient(circle at 30% 30%, var(--emas-glow), transparent 70%);
@@ -70,7 +60,6 @@
         }
         .nav-links a:hover, .nav-links a.active { background: var(--hijau-tua); color: var(--emas-muda); }
         .nav-links .cta-nav { background: var(--emas); color: var(--hijau-tua); font-weight: 700; }
-        .nav-links .cta-nav:hover { background: var(--hijau-tua); color: var(--emas); transform: scale(1.03); }
         .menu-toggle { display: none; font-size: 1.8rem; background: none; border: none; color: var(--hijau-tua); cursor: pointer; padding: 4px 12px; }
         .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 0 20px; }
         .hero-text { max-width: 750px; }
@@ -110,7 +99,6 @@
             position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
             background: rgba(0,0,0,0.7); color: white; padding: 6px 18px;
             border-radius: 30px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;
-            backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1);
         }
         .map-label i { color: var(--emas); margin-right: 6px; }
         .footer {
@@ -130,10 +118,8 @@
         }
         .whatsapp-float .bubble {
             background: rgba(0,0,0,0.75); color: white; padding: 8px 16px; border-radius: 12px;
-            font-size: 0.8rem; font-weight: 500; backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.1); opacity: 0; transform: translateX(20px);
+            font-size: 0.8rem; opacity: 0; transform: translateX(20px);
             transition: all 0.4s ease; pointer-events: none; white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .whatsapp-float .bubble.show { opacity: 1; transform: translateX(0); }
         .whatsapp-float .bubble i { color: var(--whatsapp); margin-right: 6px; }
@@ -142,16 +128,13 @@
             color: white; border: none; font-size: 2.2rem; cursor: pointer;
             box-shadow: 0 6px 30px rgba(37,211,102,0.4); transition: all 0.3s ease;
             display: flex; align-items: center; justify-content: center; text-decoration: none;
-            animation: pulse-wa 2.5s infinite; position: relative;
+            position: relative;
         }
-        .whatsapp-btn:hover { transform: scale(1.08); box-shadow: 0 8px 40px rgba(37,211,102,0.5); }
+        .whatsapp-btn:hover { transform: scale(1.08); }
         .whatsapp-btn .notification-dot {
             position: absolute; top: -2px; right: -2px; width: 16px; height: 16px;
             background: #ff3b30; border-radius: 50%; border: 2px solid white;
-            animation: blink-dot 1.5s infinite;
         }
-        @keyframes pulse-wa { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        @keyframes blink-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); z-index: 1000;
@@ -167,9 +150,7 @@
         .modal-close {
             position: sticky; top: 0; float: right; background: none; border: none;
             font-size: 2rem; color: var(--hijau-tua); cursor: pointer; padding: 0 8px;
-            line-height: 1; z-index: 2; margin-top: -8px;
         }
-        .modal-close:hover { color: var(--emas); transform: rotate(90deg); }
         .modal-content h2 { font-size: 2rem; color: var(--hijau-tua); margin-bottom: 6px; display: flex; align-items: center; gap: 12px; }
         .modal-content h2 i { color: var(--emas); font-size: 1.8rem; }
         .modal-content .sub-title { color: var(--hijau-muda); font-size: 0.95rem; border-bottom: 2px solid rgba(201,168,76,0.2); padding-bottom: 16px; margin-bottom: 20px; }
@@ -182,24 +163,8 @@
         .modal-content .visi-misi h4 i { color: var(--emas); }
         .modal-content .visi-misi p { margin-bottom: 6px; font-size: 0.95rem; }
         .modal-content .visi-misi ul { list-style: none; padding: 0; margin: 6px 0 0; }
-        .modal-content .visi-misi ul li { padding: 4px 0 4px 24px; position: relative; font-size: 0.95rem; color: #2d3d3a; }
+        .modal-content .visi-misi ul li { padding: 4px 0 4px 24px; position: relative; font-size: 0.95rem; }
         .modal-content .visi-misi ul li::before { content: '▸'; position: absolute; left: 0; color: var(--emas); font-weight: 700; }
-        .contact-item {
-            display: flex; align-items: flex-start; gap: 14px;
-            padding: 12px 0; border-bottom: 1px solid rgba(201,168,76,0.1);
-        }
-        .contact-item:last-child { border-bottom: none; }
-        .contact-item .icon {
-            width: 40px; height: 40px; background: var(--cream); border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-            color: var(--emas); font-size: 1.1rem;
-        }
-        .contact-item .info { flex: 1; }
-        .contact-item .info .label { font-weight: 600; color: var(--hijau-tua); font-size: 0.9rem; }
-        .contact-item .info .value { color: #2d3d3a; font-size: 0.95rem; word-break: break-all; }
-        .contact-item .info .value a { color: var(--hijau-tua); text-decoration: none; }
-        .contact-item .info .value a:hover { color: var(--emas); }
-        .contact-item .info .note { font-size: 0.75rem; color: #999; font-style: italic; }
         .chart-section {
             background: var(--putih); border-radius: var(--radius);
             padding: 40px 44px; margin: 50px 0 20px;
@@ -212,40 +177,36 @@
         .chart-controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px; }
         .chart-controls select, .chart-controls button {
             padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(201,168,76,0.3);
-            background: var(--putih); color: var(--hijau-tua); font-size: 0.9rem; cursor: pointer; transition: 0.3s;
+            background: var(--putih); color: var(--hijau-tua); font-size: 0.9rem; cursor: pointer;
         }
         .chart-controls button { background: var(--hijau-tua); color: var(--emas-muda); border: none; }
         .chart-controls button:hover { background: #0f3d24; }
+        .loading-message {
+            text-align: center; padding: 60px 20px; color: var(--hijau-tua);
+        }
+        .loading-message i { font-size: 3rem; color: var(--emas); animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
         .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
         .fade-up.visible { opacity: 1; transform: translateY(0); }
         @media (max-width: 992px) {
             .highlight-box { grid-template-columns: 1fr; gap: 30px; padding: 30px 28px; text-align: center; }
-            .map-container { aspect-ratio: 4/3; max-width: 100%; margin: 0 auto; }
             .chart-wrapper { height: 350px; }
         }
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
             .nav-links {
                 display: none; flex-direction: column; width: 100%; padding: 16px 0 8px;
-                gap: 6px; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
-                border-radius: 30px; margin-top: 12px;
+                gap: 6px; background: rgba(255,255,255,0.95); border-radius: 30px; margin-top: 12px;
             }
             .nav-links.open { display: flex; }
-            .navbar { flex-wrap: wrap; padding: 12px 20px; border-radius: 30px; }
-            .navbar .logo { font-size: 1.2rem; }
-            .navbar .logo i { font-size: 1.6rem; }
+            .navbar { flex-wrap: wrap; padding: 12px 20px; }
             .hero-text h1 { font-size: 2.4rem; }
             .section-title h2 { font-size: 1.8rem; }
-            .highlight-box { padding: 24px 18px; gap: 20px; }
-            .highlight-box .text h3 { font-size: 1.4rem; }
-            .footer { flex-direction: column; text-align: center; }
             .chart-wrapper { height: 300px; }
         }
         @media (max-width: 480px) {
             .container { padding: 12px 14px 40px; }
             .hero-text h1 { font-size: 1.9rem; }
-            .navbar .logo { font-size: 1rem; }
-            .navbar .logo i { font-size: 1.4rem; }
             .chart-wrapper { height: 250px; }
         }
     </style>
@@ -255,7 +216,6 @@
     <div class="ornament ornament-2"></div>
 
     <div class="container">
-
         <!-- ===== NAVBAR ===== -->
         <nav class="navbar">
             <a href="index.html" class="logo">
@@ -283,7 +243,7 @@
         </section>
 
         <!-- ===== CHART ===== -->
-        <div class="section-title" id="diagram">
+        <div class="section-title">
             <h2><i class="fas fa-chart-bar"></i> Perkembangan Tahfizh</h2>
             <p class="subtitle">Visualisasi capaian tasmi' per lembaga</p>
         </div>
@@ -293,6 +253,10 @@
             <p class="chart-subtitle">Data diambil dari Google Sheets — otomatis terupdate</p>
             <div class="chart-wrapper">
                 <canvas id="tasmiChart"></canvas>
+                <div id="chartLoading" class="loading-message">
+                    <i class="fas fa-spinner"></i>
+                    <p style="margin-top:12px;">Memuat data dari Google Sheets...</p>
+                </div>
             </div>
             <div class="chart-controls">
                 <select id="chartLembagaSelect"><option value="">-- Pilih Lembaga --</option></select>
@@ -301,7 +265,7 @@
         </div>
 
         <!-- ===== CONTACT ===== -->
-        <div class="highlight-box fade-up" id="contact">
+        <div class="highlight-box fade-up">
             <div class="text">
                 <h3><i class="fas fa-link"></i> DEPARTEMEN TAHFIZH</h3>
                 <p>
@@ -327,23 +291,21 @@
             <div class="footer-links">
                 <a href="index.html">Menu</a>
                 <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
-                <a href="#" class="kontak-link" data-target="kontakModal">Kontak</a>
             </div>
             <div style="font-size:0.8rem;opacity:0.6;">© 2026 · Departemen Tahfizh</div>
         </footer>
-
     </div>
 
     <!-- ===== WHATSAPP ===== -->
     <div class="whatsapp-float">
         <div class="bubble" id="waBubble"><i class="fab fa-whatsapp"></i> Chat Admin</div>
-        <a href="https://wa.me/6282340530283?text=Assalamu%27alaikum" target="_blank" class="whatsapp-btn" id="waButton">
+        <a href="https://wa.me/6282340530283" target="_blank" class="whatsapp-btn" id="waButton">
             <i class="fab fa-whatsapp"></i>
             <span class="notification-dot"></span>
         </a>
     </div>
 
-    <!-- ===== MODALS ===== -->
+    <!-- ===== MODAL TENTANG ===== -->
     <div class="modal-overlay" id="tentangModal">
         <div class="modal-content">
             <button class="modal-close" id="tentangModalClose">&times;</button>
@@ -363,58 +325,47 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="kontakModal">
-        <div class="modal-content">
-            <button class="modal-close" id="kontakModalClose">&times;</button>
-            <h2><i class="fas fa-phone-alt"></i> Kontak</h2>
-            <div class="contact-item">
-                <div class="icon"><i class="fas fa-envelope"></i></div>
-                <div class="info"><div class="label">E-mail</div><div class="value"><a href="mailto:departemen.tahfizh2026@gmail.com">departemen.tahfizh2026@gmail.com</a></div></div>
-            </div>
-            <div class="contact-item">
-                <div class="icon"><i class="fas fa-user-tie"></i></div>
-                <div class="info"><div class="label">Admin</div><div class="value"><a href="https://wa.me/6282340530283">0823-4053-0283</a> <span class="note">Chat Only</span></div></div>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ============================================================
         // 🔧 KONFIGURASI
         // ============================================================
-        const CHART_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQtcUnWuW83ACf_wEccbl-HUapE0h1dkcNXo4Tec41qVGJeOPDjysL46gVXtu8jqCFAgK01cKipJPp2/pub?gid=0&single=true&output=csv';
+        const CHART_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQtcUnWuW83ACf_wEccbl-HUapE0h1dkcNXo4Tec41qVGJeOPDjysL46gVXtu8jqCFAgK01cKipJPp2/pub?output=csv';
 
-// Nama sheet (hanya untuk informasi/referensi, tidak digunakan di URL karena sudah dipublikasikan)
-const CHART_SHEET_NAME = 'Sertifikat';
-
-// Kolom & keyword pencarian (case insensitive, toleran terhadap tanda baca)
-const CHART_COLUMNS = [
-    { label: 'Tasmi 1 Juz Muqorror', keywords: ['tasmi 1 juz', 'muqorror'] },
-    { label: 'Tasmi 1 Juz Luar Muqorror', keywords: ['tasmi 1 juz', 'luar'] },
-    { label: 'Tasmi 1/2 Juz', keywords: ['tasmi', '1/2'] },
-    { label: 'Tasmi 3 Juz', keywords: ['tasmi 3 juz'] },
-    { label: 'Tasmi 5 Juz', keywords: ['tasmi 5 juz'] },
-    { label: 'Sertifikat Penggabungan', keywords: ['sertifikat', 'penggabungan'] },
-    { label: 'Setoran 10, 20, 30 Juz', keywords: ['setoran'] },
-    { label: 'Tasmi 30 Juz Sekali Duduk', keywords: ['tasmi 30', 'sekali duduk'] }
-];
+        // Kolom & keyword pencarian
+        const CHART_COLUMNS = [
+            { label: 'Tasmi 1 Juz Muqorror', keywords: ['tasmi 1 juz', 'muqorror'] },
+            { label: 'Tasmi 1 Juz Luar Muqorror', keywords: ['tasmi 1 juz', 'luar'] },
+            { label: 'Tasmi 1/2 Juz', keywords: ['tasmi', '1/2'] },
+            { label: 'Tasmi 3 Juz', keywords: ['tasmi 3 juz'] },
+            { label: 'Tasmi 5 Juz', keywords: ['tasmi 5 juz'] },
+            { label: 'Sertifikat Penggabungan', keywords: ['sertifikat', 'penggabungan'] },
+            { label: 'Setoran 10, 20, 30 Juz', keywords: ['setoran'] },
+            { label: 'Tasmi 30 Juz Sekali Duduk', keywords: ['tasmi 30', 'sekali duduk'] }
+        ];
 
         // ============================================================
         // 📌 MODAL
         // ============================================================
-        function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; } }
-        function closeModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('active'); document.body.style.overflow = ''; } }
+        function openModal(id) { 
+            const m = document.getElementById(id); 
+            if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; } 
+        }
+        function closeModal(id) { 
+            const m = document.getElementById(id); 
+            if (m) { m.classList.remove('active'); document.body.style.overflow = ''; } 
+        }
 
-        document.querySelectorAll('.tentang-link').forEach(l => l.addEventListener('click', e => { e.preventDefault(); openModal('tentangModal'); }));
-        document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
-        document.getElementById('tentangModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('tentangModal'); });
-
-        document.querySelectorAll('.kontak-link').forEach(l => l.addEventListener('click', e => { e.preventDefault(); openModal('kontakModal'); }));
-        document.getElementById('kontakModalClose').addEventListener('click', () => closeModal('kontakModal'));
-        document.getElementById('kontakModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('kontakModal'); });
+        document.querySelectorAll('.tentang-link').forEach(l => {
+            l.addEventListener('click', e => { e.preventDefault(); openModal('tentangModal'); });
+        });
+        const tm = document.getElementById('tentangModal');
+        if (tm) {
+            document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
+            tm.addEventListener('click', e => { if (e.target === tm) closeModal('tentangModal'); });
+        }
 
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') { closeModal('tentangModal'); closeModal('kontakModal'); }
+            if (e.key === 'Escape') closeModal('tentangModal');
         });
 
         // ============================================================
@@ -436,12 +387,12 @@ const CHART_COLUMNS = [
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
         // ============================================================
-        // 📊 FUNGSI PENCARIAN HEADER FLEKSIBEL
+        // 🔍 NORMALISASI HEADER
         // ============================================================
         function normalizeHeader(str) {
             return str.toLowerCase()
-                .replace(/['"`’‘“”]/g, '')  // hapus semua jenis tanda kutip
-                .replace(/[^a-z0-9/\s,]/g, '') // hapus karakter aneh, sisakan huruf/angka/spasi/slash/koma
+                .replace(/['"`’‘“”]/g, '')
+                .replace(/[^a-z0-9/\s,]/g, '')
                 .replace(/\s+/g, ' ')
                 .trim();
         }
@@ -458,4 +409,132 @@ const CHART_COLUMNS = [
         // ============================================================
         // 📊 DIAGRAM
         // ============================================================
-        let tasmiChart = null
+        let tasmiChart = null;
+        let chartData = [];
+
+        async function loadChartData() {
+            const loading = document.getElementById('chartLoading');
+            console.log('🔄 Memuat data dari:', CHART_SHEET_URL);
+            
+            try {
+                const response = await fetch(CHART_SHEET_URL);
+                console.log('📡 Status:', response.status);
+                
+                if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+                
+                const csvText = await response.text();
+                console.log('📄 Cuplikan data:', csvText.substring(0, 200));
+                
+                const lines = csvText.split('\n').filter(line => line.trim() !== '');
+                console.log('📊 Jumlah baris:', lines.length);
+                
+                if (lines.length < 2) {
+                    console.warn('⚠️ Data kosong');
+                    if (loading) loading.innerHTML = '<p style="color:#e67e22;">Data kosong.</p>';
+                    return;
+                }
+
+                const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+                console.log('📋 Headers:', headers);
+
+                const lembagaIndex = findColumnByKeywords(headers, ['lembaga']);
+                console.log('🔍 Index LEMBAGA:', lembagaIndex);
+
+                const columnIndices = [];
+                const columnLabels = [];
+                
+                for (const col of CHART_COLUMNS) {
+                    const idx = findColumnByKeywords(headers, col.keywords);
+                    if (idx !== -1) {
+                        columnIndices.push(idx);
+                        columnLabels.push(col.label);
+                        console.log(`✅ "${col.label}" → index ${idx} ("${headers[idx]}")`);
+                    } else {
+                        console.warn(`❌ "${col.label}" tidak ditemukan`);
+                    }
+                }
+
+                if (lembagaIndex === -1 || columnIndices.length === 0) {
+                    console.error('❌ Kolom tidak lengkap');
+                    if (loading) loading.innerHTML = '<p style="color:#e74c3c;">Format data tidak sesuai.</p>';
+                    return;
+                }
+
+                chartData = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                    const lembaga = cols[lembagaIndex] || '';
+                    if (!lembaga) continue;
+                    
+                    const values = columnIndices.map(idx => {
+                        const val = parseFloat(cols[idx]);
+                        return isNaN(val) ? 0 : val;
+                    });
+                    
+                    chartData.push({ lembaga, values });
+                }
+                
+                console.log(`📊 Data: ${chartData.length} lembaga`);
+
+                // Update dropdown
+                const select = document.getElementById('chartLembagaSelect');
+                select.innerHTML = '<option value="">-- Pilih Lembaga --</option>';
+                chartData.forEach((d, i) => {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = d.lembaga;
+                    select.appendChild(opt);
+                });
+
+                // Sembunyikan loading, tampilkan chart
+                if (loading) loading.style.display = 'none';
+
+                // Render chart pertama
+                if (chartData.length > 0) {
+                    renderChart(chartData[0], columnLabels);
+                }
+                
+                console.log('✅ Diagram berhasil dimuat!');
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                if (loading) loading.innerHTML = `<p style="color:#e74c3c;">Error: ${error.message}</p>`;
+            }
+        }
+
+        function renderChart(data, columnLabels) {
+            const canvas = document.getElementById('tasmiChart');
+            const ctx = canvas.getContext('2d');
+            
+            if (tasmiChart) tasmiChart.destroy();
+
+            const colors = [
+                'rgba(26,77,46,0.85)', 'rgba(45,106,79,0.85)', 
+                'rgba(201,168,76,0.85)', 'rgba(232,212,139,0.85)',
+                'rgba(26,77,46,0.6)', 'rgba(45,106,79,0.6)', 
+                'rgba(201,168,76,0.6)', 'rgba(232,212,139,0.6)'
+            ];
+            const borderColors = [
+                'rgba(26,77,46,1)', 'rgba(45,106,79,1)', 
+                'rgba(201,168,76,1)', 'rgba(232,212,139,1)',
+                'rgba(26,77,46,1)', 'rgba(45,106,79,1)', 
+                'rgba(201,168,76,1)', 'rgba(232,212,139,1)'
+            ];
+
+            tasmiChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: columnLabels,
+                    datasets: [{
+                        label: `${data.lembaga} - Capaian Tasmi'`,
+                        data: data.values,
+                        backgroundColor: colors.slice(0, data.values.length),
+                        borderColor: borderColors.slice(0, data.values.length),
+                        borderWidth: 2,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins:
