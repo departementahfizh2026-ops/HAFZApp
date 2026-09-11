@@ -9,68 +9,47 @@
         /* ===== RESET & BASE ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --hijau-tua: #1a4d2e;
-            --hijau-muda: #2d6a4f;
-            --emas: #c9a84c;
-            --emas-muda: #e8d48b;
-            --emas-glow: #f4e3a7;
-            --cream: #faf6ed;
-            --putih: #ffffff;
-            --abu: #f0ebe3;
+            --hijau-tua: #1a4d2e; --hijau-muda: #2d6a4f; --emas: #c9a84c;
+            --emas-muda: #e8d48b; --emas-glow: #f4e3a7; --cream: #faf6ed;
+            --putih: #ffffff; --abu: #f0ebe3;
             --shadow: 0 10px 40px rgba(26, 77, 46, 0.15);
-            --radius: 20px;
-            --whatsapp: #25D366;
+            --radius: 20px; --whatsapp: #25D366;
         }
         html { scroll-behavior: smooth; }
         body {
             font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
-            background-color: var(--cream);
-            color: #1e2a2a;
-            line-height: 1.7;
+            background-color: var(--cream); color: #1e2a2a; line-height: 1.7;
             min-height: 100vh;
             background-image: 
-                linear-gradient(45deg, rgba(201, 168, 76, 0.03) 25%, transparent 25%),
-                linear-gradient(-45deg, rgba(201, 168, 76, 0.03) 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, rgba(201, 168, 76, 0.03) 75%),
-                linear-gradient(-45deg, transparent 75%, rgba(201, 168, 76, 0.03) 75%),
-                radial-gradient(circle at 20% 30%, rgba(26, 77, 46, 0.03) 1px, transparent 1px),
-                radial-gradient(circle at 70% 80%, rgba(26, 77, 46, 0.03) 1px, transparent 1px),
+                linear-gradient(45deg, rgba(201,168,76,0.03) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(201,168,76,0.03) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(201,168,76,0.03) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(201,168,76,0.03) 75%),
+                radial-gradient(circle at 20% 30%, rgba(26,77,46,0.03) 1px, transparent 1px),
+                radial-gradient(circle at 70% 80%, rgba(26,77,46,0.03) 1px, transparent 1px),
                 var(--cream);
             background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, 30px 30px, 30px 30px;
-            background-position: 0 0, 0 0, 30px 30px, 30px 30px, 0 0, 0 0;
         }
-
-        /* ===== GLOW ORNAMENT ===== */
         .ornament {
             background: radial-gradient(circle at 30% 30%, var(--emas-glow), transparent 70%);
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            pointer-events: none;
-            z-index: 0;
+            position: fixed; border-radius: 50%; filter: blur(80px);
+            pointer-events: none; z-index: 0;
         }
         .ornament-1 { width: 500px; height: 500px; top: -100px; right: -100px; opacity: 0.3; }
         .ornament-2 { width: 400px; height: 400px; bottom: -50px; left: -100px; opacity: 0.2; }
-
-        /* ===== CONTAINER ===== */
         .container { max-width: 1200px; margin: 0 auto; padding: 20px 24px 60px; position: relative; z-index: 1; }
 
-        /* ===== NAVBAR ===== */
+        /* ===== NAVBAR (dipakai via navbar.html) ===== */
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 28px;
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(16px);
-            border-radius: 60px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(201,168,76,0.2);
-            margin: 12px 0 30px;
-            position: sticky; top: 12px; z-index: 99;
+            padding: 16px 28px; background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(16px); border-radius: 60px;
+            box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.2);
+            margin: 12px 0 30px; position: sticky; top: 12px; z-index: 99;
         }
         .navbar .logo {
             display: flex; align-items: center; gap: 12px;
-            font-size: 1.5rem; font-weight: 800; color: var(--hijau-tua);
-            text-decoration: none;
+            font-size: 1.5rem; font-weight: 800; color: var(--hijau-tua); text-decoration: none;
         }
         .navbar .logo i { color: var(--emas); font-size: 2rem; }
         .navbar .logo span { color: var(--emas); }
@@ -80,13 +59,8 @@
             padding: 8px 18px; border-radius: 40px; transition: 0.3s;
             font-size: 0.9rem; cursor: pointer;
         }
-        .nav-links a:hover, .nav-links a.active {
-            background: var(--hijau-tua); color: var(--emas-muda);
-        }
-        .nav-links .cta-nav {
-            background: var(--emas); color: var(--hijau-tua); font-weight: 700;
-        }
-        .nav-links .cta-nav:hover { background: var(--hijau-tua); color: var(--emas); transform: scale(1.03); }
+        .nav-links a:hover, .nav-links a.active { background: var(--hijau-tua); color: var(--emas-muda); }
+        .nav-links .cta-nav { background: var(--emas); color: var(--hijau-tua); font-weight: 700; }
         .menu-toggle { display: none; font-size: 1.8rem; background: none; border: none; color: var(--hijau-tua); cursor: pointer; padding: 4px 12px; }
 
         /* ===== HERO ===== */
@@ -105,7 +79,6 @@
         }
         .hero-text p { font-size: 1.15rem; color: #2d3d3a; max-width: 600px; margin: 16px auto 28px; }
         .hero-buttons { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
-
         .btn {
             display: inline-flex; align-items: center; gap: 10px;
             padding: 14px 34px; border-radius: 60px;
@@ -114,15 +87,14 @@
         }
         .btn-primary { background: var(--hijau-tua); color: var(--emas-muda); box-shadow: 0 6px 20px rgba(26,77,46,0.3); }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(26,77,46,0.4); background: #0f3d24; }
-        .btn-gold { background: var(--emas); color: var(--hijau-tua); box-shadow: 0 6px 20px rgba(201,168,76,0.35); }
-        .btn-gold:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 30px rgba(201,168,76,0.45); }
 
-        /* ===== MENU ===== */
+        /* ===== SECTION TITLE ===== */
         .section-title { text-align: center; margin: 60px 0 40px; }
         .section-title h2 { font-size: 2.4rem; color: var(--hijau-tua); font-weight: 800; }
         .section-title h2 i { color: var(--emas); margin-right: 10px; }
         .section-title .subtitle { color: #4a5e58; font-size: 1.1rem; margin-top: 4px; }
 
+        /* ===== MENU CARD ===== */
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
         .menu-card {
             background: rgba(255,255,255,0.92); backdrop-filter: blur(4px);
@@ -146,7 +118,6 @@
             border-radius: 30px; letter-spacing: 0.5px; text-transform: uppercase;
         }
         .menu-card .card-badge.hijau { background: var(--hijau-tua); color: var(--emas-muda); }
-
         .sub-menu-btn {
             display: inline-flex; align-items: center; gap: 8px;
             background: var(--hijau-tua); color: var(--emas-muda);
@@ -169,18 +140,15 @@
         .highlight-box .text h3 i { color: var(--emas); margin-right: 10px; }
         .highlight-box .text p { opacity: 0.9; font-size: 1rem; line-height: 1.8; }
         .highlight-box .text strong { color: var(--emas); font-weight: 700; }
-
-        /* ===== MAP ===== */
         .map-container {
             position: relative; width: 100%; border-radius: 16px; overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3); aspect-ratio: 4/3; background: rgba(0,0,0,0.2);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3); aspect-ratio: 4/3;
         }
         .map-container iframe { width: 100%; height: 100%; border: none; }
         .map-label {
             position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
             background: rgba(0,0,0,0.7); color: white; padding: 6px 18px;
             border-radius: 30px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;
-            backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1);
         }
         .map-label i { color: var(--emas); margin-right: 6px; }
 
@@ -194,25 +162,18 @@
         .footer .footer-logo { font-weight: 700; color: var(--hijau-tua); font-size: 1.1rem; }
         .footer .footer-logo i { color: var(--emas); }
         .footer .footer-links { display: flex; gap: 20px; }
-        .footer .footer-links a { color: var(--hijau-tua); text-decoration: none; font-weight: 500; transition: 0.2s; cursor: pointer; }
+        .footer .footer-links a { color: var(--hijau-tua); text-decoration: none; font-weight: 500; cursor: pointer; }
         .footer .footer-links a:hover { color: var(--emas); }
 
-        /* ===== LOADING ===== */
-        .loading-spinner { text-align: center; padding: 60px 20px; color: var(--hijau-tua); }
-        .loading-spinner i { font-size: 3rem; color: var(--emas); animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* ===== FLOATING WHATSAPP ===== */
+        /* ===== WHATSAPP ===== */
         .whatsapp-float {
             position: fixed; bottom: 28px; right: 28px; z-index: 999;
             display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
         }
         .whatsapp-float .bubble {
             background: rgba(0,0,0,0.75); color: white; padding: 8px 16px; border-radius: 12px;
-            font-size: 0.8rem; font-weight: 500; backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.1); opacity: 0; transform: translateX(20px);
+            font-size: 0.8rem; opacity: 0; transform: translateX(20px);
             transition: all 0.4s ease; pointer-events: none; white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .whatsapp-float .bubble.show { opacity: 1; transform: translateX(0); }
         .whatsapp-float .bubble i { color: var(--whatsapp); margin-right: 6px; }
@@ -221,45 +182,34 @@
             color: white; border: none; font-size: 2.2rem; cursor: pointer;
             box-shadow: 0 6px 30px rgba(37,211,102,0.4); transition: all 0.3s ease;
             display: flex; align-items: center; justify-content: center; text-decoration: none;
-            animation: pulse-wa 2.5s infinite; position: relative;
+            position: relative;
         }
-        .whatsapp-btn:hover { transform: scale(1.08); box-shadow: 0 8px 40px rgba(37,211,102,0.5); }
+        .whatsapp-btn:hover { transform: scale(1.08); }
         .whatsapp-btn .notification-dot {
             position: absolute; top: -2px; right: -2px; width: 16px; height: 16px;
             background: #ff3b30; border-radius: 50%; border: 2px solid white;
-            animation: blink-dot 1.5s infinite;
         }
-        @keyframes pulse-wa { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        @keyframes blink-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         /* ===== MODAL ===== */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); z-index: 1000;
             justify-content: center; align-items: center; padding: 20px;
-            animation: fadeInOverlay 0.3s ease;
         }
         .modal-overlay.active { display: flex; }
         .modal-content {
             background: var(--putih); border-radius: var(--radius);
             max-width: 750px; width: 100%; max-height: 90vh; overflow-y: auto;
             padding: 40px 44px; box-shadow: 0 30px 80px rgba(0,0,0,0.4);
-            border: 1px solid rgba(201,168,76,0.2);
-            animation: slideUpModal 0.4s cubic-bezier(0.22,1,0.36,1); position: relative;
+            border: 1px solid rgba(201,168,76,0.2); position: relative;
         }
-        .modal-content::-webkit-scrollbar { width: 6px; }
-        .modal-content::-webkit-scrollbar-track { background: var(--cream); border-radius: 10px; }
-        .modal-content::-webkit-scrollbar-thumb { background: var(--emas); border-radius: 10px; }
         .modal-close {
-            position: sticky; top: 0; float: right;
-            background: none; border: none; font-size: 2rem; color: var(--hijau-tua);
-            cursor: pointer; transition: 0.3s; padding: 0 8px; line-height: 1; z-index: 2; margin-top: -8px;
+            position: sticky; top: 0; float: right; background: none; border: none;
+            font-size: 2rem; color: var(--hijau-tua); cursor: pointer; padding: 0 8px;
         }
-        .modal-close:hover { color: var(--emas); transform: rotate(90deg); }
         .modal-content h2 { font-size: 2rem; color: var(--hijau-tua); margin-bottom: 6px; display: flex; align-items: center; gap: 12px; }
         .modal-content h2 i { color: var(--emas); font-size: 1.8rem; }
         .modal-content .sub-title { color: var(--hijau-muda); font-size: 0.95rem; border-bottom: 2px solid rgba(201,168,76,0.2); padding-bottom: 16px; margin-bottom: 20px; }
-        .modal-content .sub-title i { color: var(--emas); margin-right: 6px; }
         .modal-content p { color: #2d3d3a; margin-bottom: 16px; font-size: 0.98rem; line-height: 1.8; }
         .modal-content .visi-misi {
             background: var(--cream); border-radius: 14px; padding: 20px 24px;
@@ -269,69 +219,40 @@
         .modal-content .visi-misi h4 i { color: var(--emas); }
         .modal-content .visi-misi p { margin-bottom: 6px; font-size: 0.95rem; }
         .modal-content .visi-misi ul { list-style: none; padding: 0; margin: 6px 0 0; }
-        .modal-content .visi-misi ul li { padding: 4px 0 4px 24px; position: relative; font-size: 0.95rem; color: #2d3d3a; }
+        .modal-content .visi-misi ul li { padding: 4px 0 4px 24px; position: relative; font-size: 0.95rem; }
         .modal-content .visi-misi ul li::before { content: '▸'; position: absolute; left: 0; color: var(--emas); font-weight: 700; }
 
-        .contact-item {
-            display: flex; align-items: flex-start; gap: 14px;
-            padding: 12px 0; border-bottom: 1px solid rgba(201,168,76,0.1);
-        }
-        .contact-item:last-child { border-bottom: none; }
-        .contact-item .icon {
-            width: 40px; height: 40px; background: var(--cream); border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-            color: var(--emas); font-size: 1.1rem;
-        }
-        .contact-item .info { flex: 1; }
-        .contact-item .info .label { font-weight: 600; color: var(--hijau-tua); font-size: 0.9rem; }
-        .contact-item .info .value { color: #2d3d3a; font-size: 0.95rem; word-break: break-all; }
-        .contact-item .info .value a { color: var(--hijau-tua); text-decoration: none; transition: 0.2s; }
-        .contact-item .info .value a:hover { color: var(--emas); }
-        .contact-item .info .note { font-size: 0.75rem; color: #999; font-style: italic; }
-
-        @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUpModal {
-            from { opacity: 0; transform: translateY(40px) scale(0.96); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
+        /* ===== LOADING ===== */
+        .loading-spinner { text-align: center; padding: 60px 20px; color: var(--hijau-tua); }
+        .loading-spinner i { font-size: 3rem; color: var(--emas); animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* ===== RESPONSIVE ===== */
+        .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
         @media (max-width: 992px) {
             .highlight-box { grid-template-columns: 1fr; gap: 30px; padding: 30px 28px; text-align: center; }
-            .highlight-box .text { text-align: center; }
-            .map-container { aspect-ratio: 4/3; max-width: 100%; margin: 0 auto; }
         }
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
             .nav-links {
                 display: none; flex-direction: column; width: 100%; padding: 16px 0 8px;
-                gap: 6px; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
-                border-radius: 30px; margin-top: 12px;
+                gap: 6px; background: rgba(255,255,255,0.95); border-radius: 30px; margin-top: 12px;
             }
             .nav-links.open { display: flex; }
-            .navbar { flex-wrap: wrap; padding: 12px 20px; border-radius: 30px; }
-            .navbar .logo { font-size: 1.2rem; }
-            .navbar .logo i { font-size: 1.6rem; }
+            .navbar { flex-wrap: wrap; padding: 12px 20px; }
             .hero-text h1 { font-size: 2.4rem; }
-            .hero-text .arabic-tagline { font-size: 1.2rem; }
             .section-title h2 { font-size: 1.8rem; }
-            .highlight-box { padding: 24px 18px; gap: 20px; }
-            .highlight-box .text h3 { font-size: 1.4rem; }
             .menu-grid { grid-template-columns: 1fr 1fr; }
             .footer { flex-direction: column; text-align: center; }
         }
         @media (max-width: 480px) {
-            .menu-grid { grid-template-columns: 1fr; }
             .container { padding: 12px 14px 40px; }
             .hero-text h1 { font-size: 1.9rem; }
             .btn { padding: 12px 24px; font-size: 0.9rem; width: 100%; justify-content: center; }
             .hero-buttons { flex-direction: column; width: 100%; }
-            .navbar .logo { font-size: 1rem; }
-            .navbar .logo i { font-size: 1.4rem; }
-            .map-container { aspect-ratio: 4/3; }
+            .menu-grid { grid-template-columns: 1fr; }
         }
-        .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
-        .fade-up.visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -340,8 +261,8 @@
 
     <div class="container">
 
-        <!-- Container untuk navbar yang akan diisi otomatis oleh JavaScript -->
-<div id="navbar-container"></div>
+        <!-- ===== NAVBAR (di-load dari navbar.html) ===== -->
+        <div id="navbar-container"></div>
 
         <!-- ===== HERO ===== -->
         <section class="hero">
@@ -377,7 +298,7 @@
         </div>
 
         <!-- ===== CONTACT ===== -->
-        <div class="highlight-box fade-up" id="contact">
+        <div class="highlight-box fade-up">
             <div class="text">
                 <h3><i class="fas fa-link"></i> DEPARTEMEN TAHFIZH</h3>
                 <p>
@@ -392,44 +313,26 @@
                 </p>
             </div>
             <div class="map-container">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.553056798127!2d116.09877731484864!3d-8.591937192124524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcdbf58c7f4e239%3A0x48a746765b76db3e!2sPonpes%20Abu%20Hurairah%20Mataram!5e0!3m2!1sid!2sid!4v1728020456789!5m2!1sid!2sid" 
-                    allowfullscreen="" 
-                    loading="lazy" 
-                    referrerpolicy="no-referrer-when-downgrade"
-                    title="Peta Lokasi Ponpes Abu Hurairah Mataram">
-                </iframe>
-                <div class="map-label">
-                    <i class="fas fa-map-pin"></i> Ponpes Abu Hurairah Mataram
-                </div>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.553056798127!2d116.09877731484864!3d-8.591937192124524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcdbf58c7f4e239%3A0x48a746765b76db3e!2sPonpes%20Abu%20Hurairah%20Mataram!5e0!3m2!1sid!2sid!4v1728020456789!5m2!1sid!2sid" allowfullscreen="" loading="lazy"></iframe>
+                <div class="map-label"><i class="fas fa-map-pin"></i> Ponpes Abu Hurairah Mataram</div>
             </div>
         </div>
 
         <!-- ===== FOOTER ===== -->
         <footer class="footer">
-            <div class="footer-logo">
-                <i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span>
-            </div>
+            <div class="footer-logo"><i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span></div>
             <div class="footer-links">
                 <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
                 <a href="diagram.html">Diagram</a>
-                <a href="#" class="kontak-link" data-target="kontakModal">Kontak</a>
             </div>
-            <div style="font-size:0.8rem;opacity:0.6;">
-                © 2026 · Departemen Tahfizh
-            </div>
+            <div style="font-size:0.8rem;opacity:0.6;">© 2026 · Departemen Tahfizh</div>
         </footer>
-
     </div>
 
-    <!-- ===== FLOATING WHATSAPP ===== -->
+    <!-- ===== WHATSAPP ===== -->
     <div class="whatsapp-float">
         <div class="bubble" id="waBubble"><i class="fab fa-whatsapp"></i> Chat Admin</div>
-        <a href="https://wa.me/6282340530283?text=Assalamu%27alaikum%20Warahmatullahi%20Wabarakatuh%0A%0ASaya%20ingin%20bertanya%20terkait%20..." 
-           target="_blank" 
-           class="whatsapp-btn" 
-           id="waButton"
-           aria-label="Chat via WhatsApp">
+        <a href="https://wa.me/6282340530283" target="_blank" class="whatsapp-btn" id="waButton">
             <i class="fab fa-whatsapp"></i>
             <span class="notification-dot"></span>
         </a>
@@ -441,15 +344,10 @@
             <button class="modal-close" id="tentangModalClose">&times;</button>
             <h2><i class="fas fa-info-circle"></i> Tentang Departemen Tahfizh</h2>
             <div class="sub-title"><i class="fas fa-university"></i> Ponpes Abu Hurairah Mataram</div>
-            <p>
-                Departemen Tahfizh memiliki peran strategis dalam merencanakan, mengoordinasikan, melaksanakan, serta mengevaluasi seluruh program pembinaan hafalan Al-Qur'an di lingkungan lembaga. Berbagai program yang diselenggarakan tidak hanya berfokus pada pencapaian target hafalan, tetapi juga pada peningkatan kualitas bacaan (tahsin), kedisiplinan muroja'ah, pembinaan karakter, peningkatan kompetensi guru tahfizh, serta penguatan sistem administrasi dan pelaporan.
-            </p>
-            <p>
-                Selama satu tahun pelaksanaan program, Departemen Tahfizh telah melaksanakan berbagai kegiatan yang melibatkan guru, koordinator, serta santri pada setiap satuan pendidikan. Pelaksanaan program tersebut memerlukan proses monitoring dan evaluasi secara berkelanjutan agar tujuan yang telah ditetapkan dapat tercapai secara optimal serta menjadi dasar dalam penyusunan program kerja pada tahun berikutnya.
-            </p>
+            <p>Departemen Tahfizh memiliki peran strategis dalam merencanakan, mengoordinasikan, melaksanakan, serta mengevaluasi seluruh program pembinaan hafalan Al-Qur'an di lingkungan lembaga.</p>
             <div class="visi-misi">
                 <h4><i class="fas fa-eye"></i> Visi</h4>
-                <p>Menjadi fasilitator pengelolaan, pemberdayaan, dan pengembangan kompetensi guru dalam mengajar, dan potensi santri Ponpes Abu Hurairah Mataram dalam membaca, menghafal, memahami serta mengamalkan isi Al-Qur'an.</p>
+                <p>Menjadi fasilitator pengelolaan, pemberdayaan, dan pengembangan kompetensi guru dalam mengajar, dan potensi santri Ponpes Abu Hurairah Mataram.</p>
                 <h4 style="margin-top:16px;"><i class="fas fa-tasks"></i> Misi</h4>
                 <ul>
                     <li>Merancang program kegiatan tahfizh Al-Qur'an secara teratur.</li>
@@ -460,132 +358,124 @@
         </div>
     </div>
 
-    <!-- ===== MODAL KONTAK ===== -->
-    <div class="modal-overlay" id="kontakModal">
-        <div class="modal-content">
-            <button class="modal-close" id="kontakModalClose">&times;</button>
-            <h2><i class="fas fa-phone-alt"></i> Kontak Departemen Tahfizh</h2>
-            <div class="sub-title"><i class="fas fa-university"></i> Ponpes Abu Hurairah Mataram</div>
-            <div class="contact-item">
-                <div class="icon"><i class="fas fa-envelope"></i></div>
-                <div class="info">
-                    <div class="label">E-mail</div>
-                    <div class="value"><a href="mailto:departemen.tahfizh2026@gmail.com">departemen.tahfizh2026@gmail.com</a></div>
-                </div>
-            </div>
-            <div class="contact-item">
-                <div class="icon"><i class="fas fa-user-tie"></i></div>
-                <div class="info">
-                    <div class="label">Kepala Departemen</div>
-                    <div class="value"><a href="https://wa.me/6281904550557" target="_blank">0819-0455-0557</a> <span class="note">Chat Only</span></div>
-                </div>
-            </div>
-            <div class="contact-item">
-                <div class="icon"><i class="fas fa-user-cog"></i></div>
-                <div class="info">
-                    <div class="label">Wakil Kepala Departemen</div>
-                    <div class="value"><a href="https://wa.me/6287872237385" target="_blank">0878-7223-7385</a> <span class="note">Chat Only</span></div>
-                </div>
-            </div>
-            <div class="contact-item">
-                <div class="icon"><i class="fas fa-user-circle"></i></div>
-                <div class="info">
-                    <div class="label">Admin</div>
-                    <div class="value"><a href="https://wa.me/6282340530283" target="_blank">0823-4053-0283</a> <span class="note">Chat Only</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================================
-         JAVASCRIPT
-         ============================================================ -->
     <script>
         // ============================================================
-        // 🔧 KONFIGURASI - GANTI DENGAN ID SPREADSHEET ANDA
+        // 📌 LOAD NAVBAR DARI FILE EKSTERNAL
         // ============================================================
-        const SPREADSHEET_ID = '2PACX-1vTDHkB2pp5sNZs9pE2kyeGSScm8o-HrMg7AK1jnoqI-3M2nF-ZLcKlQlmmaWrsLimnyJR3ZjlHMKE5B';
-        const SHEET_NAME = 'MainMenu';
-        const SHEET_URL = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_ID}/pub?gid=0&single=true&output=csv`;
+        async function loadNavbar() {
+            try {
+                const response = await fetch('navbar.html');
+                const html = await response.text();
+                document.getElementById('navbar-container').innerHTML = html;
+                
+                // Aktifkan kembali fungsi-fungsi setelah navbar dimuat
+                initNavbar();
+                console.log('✅ Navbar berhasil dimuat');
+            } catch (error) {
+                console.error('❌ Gagal memuat navbar:', error);
+                document.getElementById('navbar-container').innerHTML = 
+                    '<p style="text-align:center;color:#e74c3c;">Gagal memuat navbar</p>';
+            }
+        }
+
+        function initNavbar() {
+            const toggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (!toggle || !navLinks) return;
+            
+            // Mobile menu toggle
+            toggle.addEventListener('click', () => {
+                navLinks.classList.toggle('open');
+                const icon = toggle.querySelector('i');
+                icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+            });
+            
+            // Tandai menu aktif sesuai halaman saat ini
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Tutup menu saat link diklik (mobile)
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('open');
+                    const icon = toggle.querySelector('i');
+                    icon.className = 'fas fa-bars';
+                });
+            });
+            
+            // Re-attach event listener untuk tombol "Tentang"
+            document.querySelectorAll('.tentang-link').forEach(l => {
+                l.addEventListener('click', e => { 
+                    e.preventDefault(); 
+                    openModal('tentangModal'); 
+                });
+            });
+        }
 
         // ============================================================
         // 📌 MODAL
         // ============================================================
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function openModal(id) { 
+            const m = document.getElementById(id); 
+            if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; } 
         }
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) { modal.classList.remove('active'); document.body.style.overflow = ''; }
+        function closeModal(id) { 
+            const m = document.getElementById(id); 
+            if (m) { m.classList.remove('active'); document.body.style.overflow = ''; } 
         }
-
-        document.querySelectorAll('.tentang-link').forEach(link => {
-            link.addEventListener('click', e => { e.preventDefault(); openModal('tentangModal'); });
-        });
-        document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
-        document.getElementById('tentangModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('tentangModal'); });
-
-        document.querySelectorAll('.kontak-link').forEach(link => {
-            link.addEventListener('click', e => { e.preventDefault(); openModal('kontakModal'); });
-        });
-        document.getElementById('kontakModalClose').addEventListener('click', () => closeModal('kontakModal'));
-        document.getElementById('kontakModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('kontakModal'); });
-
+        const tm = document.getElementById('tentangModal');
+        if (tm) {
+            document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
+            tm.addEventListener('click', e => { if (e.target === tm) closeModal('tentangModal'); });
+        }
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') {
-                if (document.getElementById('tentangModal').classList.contains('active')) closeModal('tentangModal');
-                if (document.getElementById('kontakModal').classList.contains('active')) closeModal('kontakModal');
-            }
-        });
-
-        // ============================================================
-        // 📱 MOBILE MENU
-        // ============================================================
-        const toggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        toggle.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
-            toggle.querySelector('i').className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-        });
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('open');
-                toggle.querySelector('i').className = 'fas fa-bars';
-            });
+            if (e.key === 'Escape') closeModal('tentangModal');
         });
 
         // ============================================================
         // 📜 SCROLL ANIMATION
         // ============================================================
         const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.15 });
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
         // ============================================================
         // 📊 LOAD MENU DATA
         // ============================================================
+        const SPREADSHEET_ID = '2PACX-1vTDHkB2pp5sNZs9pE2kyeGSScm8o-HrMg7AK1jnoqI-3M2nF-ZLcKlQlmmaWrsLimnyJR3ZjlHMKE5B';
+        const SHEET_URL = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_ID}/pub?gid=0&single=true&output=csv`;
+
         async function loadMenuData() {
             const container = document.getElementById('menuContainer');
             try {
                 const response = await fetch(SHEET_URL);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                if (!response.ok) throw new Error(`HTTP error ${response.status}`);
                 const csvText = await response.text();
-                const lines = csvText.split('\n').filter(line => line.trim() !== '');
+                const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+                
                 if (lines.length < 2) {
-                    container.innerHTML = `<div style="text-align:center;padding:40px;color:#e67e22;"><i class="fas fa-exclamation-triangle" style="font-size:2rem;color:var(--emas);"></i><p style="margin-top:12px;">Data menu kosong.</p></div>`;
+                    container.innerHTML = '<p style="text-align:center;padding:40px;">Data menu kosong.</p>';
                     return;
                 }
-                let headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+
+                const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
                 const menuIndex = headers.findIndex(h => h.toLowerCase() === 'menu');
                 const subMenuIndex = headers.findIndex(h => h.toLowerCase() === 'sub_menu');
                 const linkIndex = headers.findIndex(h => h.toLowerCase() === 'link');
                 const urutanIndex = headers.findIndex(h => h.toLowerCase() === 'urutan');
+                
                 if (menuIndex === -1 || subMenuIndex === -1) {
-                    container.innerHTML = `<div style="text-align:center;padding:40px;color:#e74c3c;"><i class="fas fa-exclamation-triangle" style="font-size:2rem;"></i><p style="margin-top:12px;">Format data tidak sesuai.</p></div>`;
+                    container.innerHTML = '<p style="text-align:center;padding:40px;color:#e74c3c;">Format data menu tidak sesuai.</p>';
                     return;
                 }
+
                 const menuMap = new Map();
                 for (let i = 1; i < lines.length; i++) {
                     const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
@@ -597,12 +487,18 @@
                     if (!menuMap.has(menu)) menuMap.set(menu, { items: [], urutan: urutan });
                     menuMap.get(menu).items.push({ subMenu, link, urutan });
                 }
+                
                 if (menuMap.size === 0) {
-                    container.innerHTML = `<div style="text-align:center;padding:40px;color:#e67e22;"><i class="fas fa-info-circle" style="font-size:2rem;color:var(--emas);"></i><p style="margin-top:12px;">Tidak ada menu valid.</p></div>`;
+                    container.innerHTML = '<p style="text-align:center;padding:40px;">Tidak ada menu valid.</p>';
                     return;
                 }
-                const sortedMenus = Array.from(menuMap.entries()).sort((a, b) => (a[1].urutan || 999) - (b[1].urutan || 999));
-                sortedMenus.forEach(([menu, data]) => data.items.sort((a, b) => (a.urutan || 999) - (b.urutan || 999)));
+
+                const sortedMenus = Array.from(menuMap.entries())
+                    .sort((a, b) => (a[1].urutan || 999) - (b[1].urutan || 999));
+                sortedMenus.forEach(([menu, data]) => 
+                    data.items.sort((a, b) => (a.urutan || 999) - (b.urutan || 999))
+                );
+
                 let html = '<div class="menu-grid">';
                 const menuIcons = {
                     'Profil Guru Tahfizh': 'fa-chalkboard-teacher',
@@ -611,22 +507,31 @@
                     'Absen Kegiatan Departemen Tahfizh': 'fa-calendar-alt',
                     'Arsip Departemen Tahfizh': 'fa-archive'
                 };
+                
                 sortedMenus.forEach(([menu, data]) => {
                     const icon = menuIcons[menu] || 'fa-folder';
                     const badge = data.items.length > 0 ? data.items.length + ' Sub' : '';
-                    html += `<div class="menu-card"><span class="card-badge ${badge ? 'hijau' : ''}">${badge || 'Menu'}</span><div class="card-icon"><i class="fas ${icon}"></i></div><h3>${menu}</h3><p class="card-desc">Kelola ${menu.toLowerCase()}.</p><ul class="sub-menu-list">`;
+                    html += `<div class="menu-card">
+                        <span class="card-badge ${badge ? 'hijau' : ''}">${badge || 'Menu'}</span>
+                        <div class="card-icon"><i class="fas ${icon}"></i></div>
+                        <h3>${menu}</h3>
+                        <p class="card-desc">Kelola ${menu.toLowerCase()}.</p>
+                        <ul class="sub-menu-list">`;
                     data.items.forEach(item => {
                         const isLink = item.link && item.link !== '#';
                         if (isLink) {
-                            html += `<li><a href="${item.link}" target="_blank" class="sub-menu-btn"><i class="fas fa-external-link-alt"></i> ${item.subMenu}</a></li>`;
+                            html += `<li><a href="${item.link}" target="_blank" class="sub-menu-btn">
+                                <i class="fas fa-external-link-alt"></i> ${item.subMenu}</a></li>`;
                         } else {
-                            html += `<li><span class="sub-menu-btn" style="background:var(--abu);color:var(--hijau-tua);cursor:default;opacity:0.7;"><i class="fas fa-circle" style="font-size:0.4rem;color:var(--emas);"></i> ${item.subMenu}</span></li>`;
+                            html += `<li><span class="sub-menu-btn" style="background:var(--abu);color:var(--hijau-tua);cursor:default;opacity:0.7;">
+                                <i class="fas fa-circle" style="font-size:0.4rem;color:var(--emas);"></i> ${item.subMenu}</span></li>`;
                         }
                     });
-                    html += `</ul></div>`;
+                    html += '</ul></div>';
                 });
                 html += '</div>';
                 container.innerHTML = html;
+
                 document.querySelectorAll('.menu-card').forEach((card, index) => {
                     card.style.opacity = '0';
                     card.style.transform = 'translateY(30px)';
@@ -638,81 +543,26 @@
                 });
             } catch (error) {
                 console.error('Error loading menu:', error);
-                container.innerHTML = `<div style="text-align:center;padding:40px;color:#e74c3c;"><i class="fas fa-exclamation-triangle" style="font-size:2rem;"></i><p style="margin-top:12px;">Gagal memuat data. Error: ${error.message}</p></div>`;
+                container.innerHTML = `<p style="text-align:center;padding:40px;color:#e74c3c;">Gagal memuat data menu. Error: ${error.message}</p>`;
             }
         }
 
         // ============================================================
-        // 💬 WHATSAPP FLOATING
+        // 💬 WHATSAPP
         // ============================================================
         const waButton = document.getElementById('waButton');
         const waBubble = document.getElementById('waBubble');
         setTimeout(() => waBubble.classList.add('show'), 3000);
         waButton.addEventListener('click', () => waBubble.classList.remove('show'));
-        let bubbleTimeout;
-        waButton.addEventListener('mouseenter', () => { clearTimeout(bubbleTimeout); waBubble.classList.add('show'); });
-        waButton.addEventListener('mouseleave', () => { bubbleTimeout = setTimeout(() => waBubble.classList.remove('show'), 3000); });
 
         // ============================================================
         // 🚀 START
         // ============================================================
-        document.addEventListener('DOMContentLoaded', loadMenuData);
-        console.log('🌙 HAFZApp - Halaman Utama — Barakallah!');
-
-        <script>
-    // ============================================================
-    // 📌 LOAD NAVBAR DARI FILE EKSTERNAL
-    // ============================================================
-    fetch('navbar.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('navbar-container').innerHTML = html;
-            
-            // Aktifkan kembali fungsi-fungsi setelah navbar dimuat
-            
-            // 1. Mobile menu toggle
-            const toggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            if (toggle && navLinks) {
-                toggle.addEventListener('click', () => {
-                    navLinks.classList.toggle('open');
-                    const icon = toggle.querySelector('i');
-                    if (navLinks.classList.contains('open')) {
-                        icon.className = 'fas fa-times';
-                    } else {
-                        icon.className = 'fas fa-bars';
-                    }
-                });
-            }
-            
-            // 2. Tandai menu aktif sesuai halaman
-            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                const href = link.getAttribute('href');
-                if (href === currentPage) {
-                    link.classList.add('active');
-                }
-            });
-            
-            // 3. Tutup menu saat link diklik (untuk mobile)
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    const navLinks = document.getElementById('navLinks');
-                    const toggle = document.getElementById('menuToggle');
-                    if (navLinks && toggle) {
-                        navLinks.classList.remove('open');
-                        const icon = toggle.querySelector('i');
-                        icon.className = 'fas fa-bars';
-                    }
-                });
-            });
-            
-            console.log('✅ Navbar berhasil dimuat');
-        })
-        .catch(error => {
-            console.error('❌ Gagal memuat navbar:', error);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNavbar();
+            loadMenuData();
         });
-</script>
+        console.log('🌙 HAFZApp - Halaman Utama — Barakallah!');
     </script>
 </body>
 </html>
