@@ -400,7 +400,7 @@
             </button>
             <div class="nav-links" id="navLinks">
                 <a href="index.html">Menu</a>
-                <a href="diagram.html" class="active">Diagram</a>
+                <a href="diagram.html" class="active">Capaian Tasmi'</a>
                 <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
                 <a href="#" class="cta-nav"><i class="fas fa-rocket"></i> Login</a>
             </div>
@@ -786,19 +786,21 @@
 
             // ===== RENDER SUMMARY CARDS =====
             const summaryContainer = document.getElementById('summaryCards');
-            summaryContainer.innerHTML = '';
-            LAPORAN_COLUMNS.forEach(col => {
-                const card = document.createElement('div');
-                card.className = 'summary-card';
-                card.innerHTML = `
-                    <div class="icon"><i class="fas ${col.icon}"></i></div>
-                    <div class="number">${totals[col.key]}</div>
-                    <div class="label">${col.label}</div>
-                    <div class="total-note">Total dari ${lembagaData.length} lembaga</div>
-                `;
-                summaryContainer.appendChild(card);
-            });
-
+summaryContainer.innerHTML = '';
+LAPORAN_COLUMNS.forEach(col => {
+    // ✅ Lewati kolom non-sertifikat (Jumlah Santri) — tidak dibuat kartu
+    if (col.isNonSertifikat) return;
+    
+    const card = document.createElement('div');
+    card.className = 'summary-card';
+    card.innerHTML = `
+        <div class="icon"><i class="fas ${col.icon}"></i></div>
+        <div class="number">${totals[col.key]}</div>
+        <div class="label">${col.label}</div>
+        <div class="total-note">Total dari ${lembagaData.length} lembaga</div>
+    `;
+    summaryContainer.appendChild(card);
+});
             // ===== RENDER TABLE =====
             const thead = document.getElementById('tableHead');
             const tbody = document.getElementById('tableBody');
