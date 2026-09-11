@@ -340,22 +340,8 @@
 
     <div class="container">
 
-        <!-- ===== NAVBAR ===== -->
-        <nav class="navbar">
-            <a href="index.html" class="logo">
-                <i class="fas fa-quran"></i>
-                HAFZ<span>App</span>
-            </a>
-            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="nav-links" id="navLinks">
-                <a href="index.html" class="active">Menu</a>
-                <a href="diagram.html">Capaian Tasmi'</a>
-                <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
-                <a href="#" class="cta-nav"><i class="fas fa-rocket"></i> Login</a>
-            </div>
-        </nav>
+        <!-- Container untuk navbar yang akan diisi otomatis oleh JavaScript -->
+<div id="navbar-container"></div>
 
         <!-- ===== HERO ===== -->
         <section class="hero">
@@ -672,6 +658,61 @@
         // ============================================================
         document.addEventListener('DOMContentLoaded', loadMenuData);
         console.log('🌙 HAFZApp - Halaman Utama — Barakallah!');
+
+        <script>
+    // ============================================================
+    // 📌 LOAD NAVBAR DARI FILE EKSTERNAL
+    // ============================================================
+    fetch('navbar.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('navbar-container').innerHTML = html;
+            
+            // Aktifkan kembali fungsi-fungsi setelah navbar dimuat
+            
+            // 1. Mobile menu toggle
+            const toggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            if (toggle && navLinks) {
+                toggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('open');
+                    const icon = toggle.querySelector('i');
+                    if (navLinks.classList.contains('open')) {
+                        icon.className = 'fas fa-times';
+                    } else {
+                        icon.className = 'fas fa-bars';
+                    }
+                });
+            }
+            
+            // 2. Tandai menu aktif sesuai halaman
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // 3. Tutup menu saat link diklik (untuk mobile)
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    const navLinks = document.getElementById('navLinks');
+                    const toggle = document.getElementById('menuToggle');
+                    if (navLinks && toggle) {
+                        navLinks.classList.remove('open');
+                        const icon = toggle.querySelector('i');
+                        icon.className = 'fas fa-bars';
+                    }
+                });
+            });
+            
+            console.log('✅ Navbar berhasil dimuat');
+        })
+        .catch(error => {
+            console.error('❌ Gagal memuat navbar:', error);
+        });
+</script>
     </script>
 </body>
 </html>
