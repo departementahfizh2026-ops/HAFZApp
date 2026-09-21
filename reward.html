@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAFZApp - Data Reward Santri</title>
+    <title>HAFZApp - Data Reward & Realisasi Anggaran</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -158,6 +158,19 @@
         }
         .toolbar-btn.btn-export:hover {
             background: var(--emas-muda);
+        }
+        .toolbar-btn.btn-data-source {
+            background: var(--hijau-tua);
+            color: var(--emas-muda);
+            border-color: var(--hijau-tua);
+        }
+        .toolbar-btn.btn-data-source:hover {
+            background: #0f3d24;
+        }
+        .toolbar-btn.btn-data-source.active {
+            background: var(--emas);
+            color: var(--hijau-tua);
+            border-color: var(--emas);
         }
 
         /* ===== VIEW TOGGLE ===== */
@@ -327,6 +340,73 @@
             color: var(--hijau-tua);
         }
 
+        /* ===== ANGGARAN CARD ===== */
+        .anggaran-category {
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(201,168,76,0.2);
+        }
+        .anggaran-category-header {
+            background: linear-gradient(90deg, var(--hijau-tua), var(--hijau-muda));
+            color: var(--emas-muda);
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .anggaran-category-header .persen {
+            background: rgba(232, 212, 139, 0.2);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(232, 212, 139, 0.4);
+        }
+        .anggaran-category-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1px;
+            background: rgba(201,168,76,0.1);
+        }
+        .anggaran-cell {
+            background: var(--putih);
+            padding: 12px;
+            text-align: center;
+        }
+        .anggaran-cell .label {
+            font-size: 0.65rem;
+            color: #7a8a85;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+        .anggaran-cell .value {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--hijau-tua);
+        }
+        .anggaran-cell .value.realisasi {
+            color: #16a085;
+        }
+        .anggaran-cell .value.sisa {
+            color: #c0392b;
+        }
+        .anggaran-cell .value.sisa.aman {
+            color: #16a085;
+        }
+        .anggaran-cell .tanggal {
+            font-size: 0.7rem;
+            color: #999;
+            font-weight: 500;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
         /* ===== STATES ===== */
         .loading-state, .empty-state {
             text-align: center;
@@ -448,14 +528,14 @@
         <section class="hero">
             <div class="hero-text">
                 <div class="arabic-tagline">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-                <h1><span class="highlight">Data</span> Reward Santri</h1>
-                <p>Daftar penerima reward kegiatan tahfizh (Tasmi' 3 Juz, Tasmi' 5 Juz, Setoran 10,20,30 Juz, Tasmi' 30 Juz Sekali Duduk).</p>
+                <h1><span class="highlight" id="heroTitle">Data</span> <span id="heroSubtitle">Reward Santri</span></h1>
+                <p id="heroDesc">Daftar penerima reward kegiatan tahfizh dari seluruh lembaga — otomatis terupdate dari Google Sheets.</p>
             </div>
         </section>
 
         <div class="section-title">
-            <h2><i class="fas fa-trophy"></i> Daftar Reward</h2>
-            <p class="subtitle">Data yang dimuat merupakan data terupdate dari database Departemen Tahfizh</p>
+            <h2><i class="fas fa-trophy" id="sectionIcon"></i> <span id="sectionTitle">Daftar Reward</span></h2>
+            <p class="subtitle" id="sectionSubtitle">Data dari sheet DB2 — otomatis terupdate</p>
         </div>
 
         <div class="toolbar fade-up">
@@ -468,6 +548,13 @@
                 <button data-view="sheet"><i class="fas fa-table"></i> Tabel</button>
             </div>
             <div class="toolbar-buttons">
+                <!-- Button untuk ganti data source -->
+                <button class="toolbar-btn btn-data-source active" data-source="reward">
+                    <i class="fas fa-trophy"></i> Reward
+                </button>
+                <button class="toolbar-btn btn-data-source" data-source="anggaran">
+                    <i class="fas fa-coins"></i> Realisasi Anggaran
+                </button>
                 <button class="toolbar-btn" id="refreshBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
                 <button class="toolbar-btn btn-export" id="exportPdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
                 <button class="toolbar-btn btn-export" id="exportExcelBtn"><i class="fas fa-file-excel"></i> Excel</button>
@@ -532,10 +619,36 @@
 
     <script>
         // ============================================================
-        // 🔧 KONFIGURASI - SHEET DB2
+        // 🔧 KONFIGURASI SUMBER DATA
         // ============================================================
-        const DB2_GID = '901819437';
-        const DB2_URL = `https://docs.google.com/spreadsheets/d/e/2PACX-1vQtcUnWuW83ACf_wEccbl-HUapE0h1dkcNXo4Tec41qVGJeOPDjysL46gVXtu8jqCFAgK01cKipJPp2/pub?gid=${DB2_GID}&single=true&output=csv`;
+        const DATA_SOURCES = {
+            reward: {
+                name: 'Reward',
+                gid: '901819437',
+                title: 'Daftar Reward',
+                heroTitle: 'Data',
+                heroSubtitle: 'Reward Santri',
+                heroDesc: 'Daftar penerima reward kegiatan tahfizh dari seluruh lembaga — otomatis terupdate dari Google Sheets.',
+                sectionIcon: 'fa-trophy',
+                searchPlaceholder: 'Cari nama santri, lembaga, atau kegiatan...'
+            },
+            anggaran: {
+                name: 'Realisasi Anggaran',
+                gid: '1149542040',
+                title: 'Laporan Realisasi Anggaran',
+                heroTitle: 'Realisasi',
+                heroSubtitle: 'Anggaran',
+                heroDesc: 'Laporan anggaran dan realisasi pencairan dana kegiatan tahfizh per lembaga.',
+                sectionIcon: 'fa-coins',
+                searchPlaceholder: 'Cari nama lembaga...'
+            }
+        };
+        
+        const BASE_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQtcUnWuW83ACf_wEccbl-HUapE0h1dkcNXo4Tec41qVGJeOPDjysL46gVXtu8jqCFAgK01cKipJPp2/pub';
+        
+        function getCsvUrl(sourceKey) {
+            return `${BASE_URL}?gid=${DATA_SOURCES[sourceKey].gid}&single=true&output=csv`;
+        }
 
         // ============================================================
         // 📌 LOAD NAVBAR
@@ -631,124 +744,19 @@
         }
 
         // ============================================================
-        // 📊 DATA GLOBAL
+        // 📊 STATE GLOBAL
         // ============================================================
-        let rawData = [];
-        let groupedData = {};
+        let currentSource = 'reward';
         let currentView = 'lembaga';
         let searchQuery = '';
+        let rawData = [];           // untuk reward
+        let groupedData = {};       // untuk reward
+        let anggaranData = [];      // untuk anggaran
+        let anggaranHeaders = {};   // header info anggaran
 
         // ============================================================
-        // 📊 LOAD DATA
+        // 📊 FORMAT HELPERS
         // ============================================================
-        async function loadData() {
-            const container = document.getElementById('contentContainer');
-            container.innerHTML = `<div class="loading-state"><i class="fas fa-spinner"></i><p>Memuat data dari Google Sheets...</p></div>`;
-            
-            try {
-                console.log('🔄 Memuat dari:', DB2_URL);
-                const response = await fetch(DB2_URL);
-                if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-                const csvText = await response.text();
-                const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
-                
-                console.log('📊 Jumlah baris:', lines.length);
-                
-                if (lines.length < 2) {
-                    container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>Data kosong.</p></div>`;
-                    return;
-                }
-
-                const headers = parseCSVLine(lines[0]);
-                console.log('📋 Headers:', headers);
-                
-                const noIdx = headers.findIndex(h => h.toLowerCase().trim() === 'no');
-                const lembagaIdx = headers.findIndex(h => h.toLowerCase().trim() === 'lembaga');
-                const namaIdx = headers.findIndex(h => h.toLowerCase().includes('nama'));
-                const kegiatanIdx = headers.findIndex(h => h.toLowerCase().includes('kegiatan'));
-                const rewardIdx = headers.findIndex(h => h.toLowerCase().includes('reward'));
-                const keteranganIdx = headers.findIndex(h => h.toLowerCase().includes('keterangan'));
-
-                console.log(`📌 Index: NO=${noIdx}, LEMBAGA=${lembagaIdx}, NAMA=${namaIdx}, KEGIATAN=${kegiatanIdx}, REWARD=${rewardIdx}`);
-
-                rawData = [];
-                let currentLembaga = '';
-                let currentGroupLetter = '';
-                let counterPerLembaga = {};
-                
-                for (let i = 1; i < lines.length; i++) {
-                    const cols = parseCSVLine(lines[i]);
-                    if (cols.length === 0 || cols.every(c => !c)) continue;
-                    
-                    const no = cols[noIdx] || '';
-                    const lembaga = cols[lembagaIdx] || '';
-                    const nama = cols[namaIdx] || '';
-                    const kegiatan = cols[kegiatanIdx] || '';
-                    const reward = cols[rewardIdx] || '';
-                    const keterangan = cols[keteranganIdx] || '';
-                    
-                    const isGroupRow = no && /^[A-Z]$/.test(no.trim()) && lembaga;
-                    
-                    if (isGroupRow) {
-                        currentLembaga = lembaga.trim();
-                        currentGroupLetter = no.trim();
-                        counterPerLembaga[currentLembaga] = 0;
-                        rawData.push({
-                            type: 'group',
-                            groupLetter: currentGroupLetter,
-                            lembaga: currentLembaga,
-                            no: '', nama: '', kegiatan: '', reward: '', keterangan: ''
-                        });
-                    } else if (nama) {
-                        counterPerLembaga[currentLembaga] = (counterPerLembaga[currentLembaga] || 0) + 1;
-                        rawData.push({
-                            type: 'data',
-                            groupLetter: currentGroupLetter,
-                            lembaga: currentLembaga,
-                            no: counterPerLembaga[currentLembaga],
-                            nama: nama.trim(),
-                            kegiatan: kegiatan.trim(),
-                            reward: reward.trim(),
-                            keterangan: keterangan.trim()
-                        });
-                    }
-                }
-                
-                console.log('📊 Total baris diproses:', rawData.length);
-                
-                groupedData = {};
-                rawData.forEach(row => {
-                    const lembagaKey = row.lembaga;
-                    if (!lembagaKey) return;
-                    if (!groupedData[lembagaKey]) {
-                        groupedData[lembagaKey] = { letter: row.groupLetter, data: [] };
-                    }
-                    if (row.type === 'data') {
-                        groupedData[lembagaKey].data.push(row);
-                    }
-                });
-                
-                console.log('✅ Data dimuat:', Object.keys(groupedData).length, 'lembaga');
-                renderContent();
-                
-            } catch (error) {
-                console.error('❌ Error:', error);
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i><p>Gagal memuat data: ${error.message}</p></div>`;
-            }
-        }
-
-        // ============================================================
-        // 🎨 RENDER
-        // ============================================================
-        function renderContent() {
-            const container = document.getElementById('contentContainer');
-            if (currentView === 'lembaga') {
-                container.innerHTML = renderPerLembaga();
-            } else {
-                container.innerHTML = renderTableSheet();
-            }
-        }
-
         function formatRupiah(str) {
             if (!str) return '-';
             if (str.toString().toLowerCase().startsWith('rp')) return str;
@@ -763,9 +771,222 @@
         }
 
         // ============================================================
-        // 🎨 RENDER: PER LEMBAGA
+        // 📊 LOAD DATA (Reward)
         // ============================================================
-        function renderPerLembaga() {
+        async function loadRewardData() {
+            const url = getCsvUrl('reward');
+            console.log('🔄 Memuat reward dari:', url);
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+            const csvText = await response.text();
+            const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+            
+            if (lines.length < 2) throw new Error('Data reward kosong');
+
+            const headers = parseCSVLine(lines[0]);
+            const noIdx = headers.findIndex(h => h.toLowerCase().trim() === 'no');
+            const lembagaIdx = headers.findIndex(h => h.toLowerCase().trim() === 'lembaga');
+            const namaIdx = headers.findIndex(h => h.toLowerCase().includes('nama'));
+            const kegiatanIdx = headers.findIndex(h => h.toLowerCase().includes('kegiatan'));
+            const rewardIdx = headers.findIndex(h => h.toLowerCase().includes('reward'));
+            const keteranganIdx = headers.findIndex(h => h.toLowerCase().includes('keterangan'));
+
+            rawData = [];
+            let currentLembaga = '';
+            let currentGroupLetter = '';
+            let counterPerLembaga = {};
+            
+            for (let i = 1; i < lines.length; i++) {
+                const cols = parseCSVLine(lines[i]);
+                if (cols.length === 0 || cols.every(c => !c)) continue;
+                
+                const no = cols[noIdx] || '';
+                const lembaga = cols[lembagaIdx] || '';
+                const nama = cols[namaIdx] || '';
+                const kegiatan = cols[kegiatanIdx] || '';
+                const reward = cols[rewardIdx] || '';
+                const keterangan = cols[keteranganIdx] || '';
+                
+                const isGroupRow = no && /^[A-Z]$/.test(no.trim()) && lembaga;
+                
+                if (isGroupRow) {
+                    currentLembaga = lembaga.trim();
+                    currentGroupLetter = no.trim();
+                    counterPerLembaga[currentLembaga] = 0;
+                    rawData.push({ type: 'group', groupLetter: currentGroupLetter, lembaga: currentLembaga, no: '', nama: '', kegiatan: '', reward: '', keterangan: '' });
+                } else if (nama) {
+                    counterPerLembaga[currentLembaga] = (counterPerLembaga[currentLembaga] || 0) + 1;
+                    rawData.push({
+                        type: 'data', groupLetter: currentGroupLetter, lembaga: currentLembaga,
+                        no: counterPerLembaga[currentLembaga],
+                        nama: nama.trim(), kegiatan: kegiatan.trim(),
+                        reward: reward.trim(), keterangan: keterangan.trim()
+                    });
+                }
+            }
+            
+            groupedData = {};
+            rawData.forEach(row => {
+                const k = row.lembaga;
+                if (!k) return;
+                if (!groupedData[k]) groupedData[k] = { letter: row.groupLetter, data: [] };
+                if (row.type === 'data') groupedData[k].data.push(row);
+            });
+            
+            console.log('✅ Reward:', Object.keys(groupedData).length, 'lembaga');
+        }
+
+        // ============================================================
+        // 📊 LOAD DATA (Realisasi Anggaran)
+        // ============================================================
+        async function loadAnggaranData() {
+            const url = getCsvUrl('anggaran');
+            console.log('🔄 Memuat anggaran dari:', url);
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+            const csvText = await response.text();
+            const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+            
+            if (lines.length < 3) throw new Error('Data anggaran kosong');
+
+            // Baris 1 = kategori (merged, ada yang kosong)
+            // Baris 2 = sub-kolom (TANGGAL PENCAIRAN, ANGGARAN, REALISASI, SISA ANGGARAN)
+            const row1 = parseCSVLine(lines[0]);
+            const row2 = parseCSVLine(lines[1]);
+            
+            console.log('📋 Row1 (kategori):', row1);
+            console.log('📋 Row2 (sub-kolom):', row2);
+
+            // Bangun struktur header: kolom mana termasuk kategori apa
+            // Kolom 0 = NO, Kolom 1 = LEMBAGA
+            // Sisanya = 4 kolom per kategori (TANGGAL, ANGGARAN, REALISASI, SISA)
+            let currentKategori = '';
+            const categories = [];
+            let currentCat = null;
+            
+            for (let i = 2; i < row2.length; i++) {
+                if (row1[i] && row1[i].trim()) {
+                    // Mulai kategori baru
+                    currentKategori = row1[i].trim();
+                    currentCat = { name: currentKategori, startIdx: i, cols: [] };
+                    categories.push(currentCat);
+                }
+                if (currentCat) {
+                    currentCat.cols.push({
+                        index: i,
+                        subLabel: (row2[i] || '').trim()
+                    });
+                }
+            }
+            
+            console.log('📊 Kategori ditemukan:', categories.map(c => c.name));
+            
+            // Parse data (mulai baris 3)
+            anggaranData = [];
+            let currentLembaga = '';
+            let currentNo = '';
+            
+            for (let i = 2; i < lines.length; i++) {
+                const cols = parseCSVLine(lines[i]);
+                if (cols.length === 0 || cols.every(c => !c)) continue;
+                
+                const no = cols[0] || '';
+                const lembaga = cols[1] || '';
+                
+                // Baris grup lembaga (ada NO + LEMBAGA)
+                if (no && lembaga) {
+                    currentNo = no;
+                    currentLembaga = lembaga.trim();
+                    anggaranData.push({
+                        no: currentNo,
+                        lembaga: currentLembaga,
+                        isHeader: true,
+                        categories: []
+                    });
+                } else if (currentLembaga) {
+                    // Baris data tambahan (pencairan ke-2, ke-3, dst.)
+                    // Kumpulkan data dari semua kolom
+                    const categoryData = categories.map(cat => {
+                        const data = {};
+                        cat.cols.forEach(col => {
+                            data[col.subLabel] = cols[col.index] || '';
+                        });
+                        return { name: cat.name, data };
+                    });
+                    
+                    anggaranData.push({
+                        no: '',
+                        lembaga: '',
+                        isHeader: false,
+                        parentNo: currentNo,
+                        parentLembaga: currentLembaga,
+                        categories: categoryData
+                    });
+                }
+            }
+            
+            console.log('✅ Anggaran:', anggaranData.length, 'baris');
+            anggaranHeaders = { categories };
+        }
+
+        // ============================================================
+        // 📊 LOAD DATA berdasarkan sumber aktif
+        // ============================================================
+        async function loadActiveData() {
+            const container = document.getElementById('contentContainer');
+            container.innerHTML = `<div class="loading-state"><i class="fas fa-spinner"></i><p>Memuat data dari Google Sheets...</p></div>`;
+            
+            try {
+                if (currentSource === 'reward') {
+                    await loadRewardData();
+                } else {
+                    await loadAnggaranData();
+                }
+                updatePageText();
+                renderContent();
+            } catch (error) {
+                console.error('❌ Error:', error);
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i><p>Gagal memuat data: ${error.message}</p></div>`;
+            }
+        }
+
+        // ============================================================
+        // 📝 Update text halaman sesuai sumber
+        // ============================================================
+        function updatePageText() {
+            const src = DATA_SOURCES[currentSource];
+            document.getElementById('heroTitle').textContent = src.heroTitle;
+            document.getElementById('heroSubtitle').textContent = src.heroSubtitle;
+            document.getElementById('heroDesc').textContent = src.heroDesc;
+            document.getElementById('sectionIcon').className = 'fas ' + src.sectionIcon;
+            document.getElementById('sectionTitle').textContent = src.title;
+            document.getElementById('sectionSubtitle').textContent = 'Data dari sheet ' + src.name + ' — otomatis terupdate';
+            document.getElementById('searchInput').placeholder = src.searchPlaceholder;
+            
+            // Update active button
+            document.querySelectorAll('.btn-data-source').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.source === currentSource);
+            });
+        }
+
+        // ============================================================
+        // 🎨 RENDER
+        // ============================================================
+        function renderContent() {
+            const container = document.getElementById('contentContainer');
+            if (currentSource === 'reward') {
+                if (currentView === 'lembaga') container.innerHTML = renderRewardPerLembaga();
+                else container.innerHTML = renderRewardTableSheet();
+            } else {
+                if (currentView === 'lembaga') container.innerHTML = renderAnggaranPerLembaga();
+                else container.innerHTML = renderAnggaranTableSheet();
+            }
+        }
+
+        // ============================================================
+        // 🎨 RENDER REWARD: PER LEMBAGA
+        // ============================================================
+        function renderRewardPerLembaga() {
             let html = '';
             let hasData = false;
             
@@ -779,7 +1000,6 @@
                         (lembaga.toLowerCase().includes(q))
                     );
                 }
-                
                 if (filteredData.length === 0) return;
                 hasData = true;
                 
@@ -789,90 +1009,64 @@
                 html += `
                     <div class="lembaga-section fade-up visible">
                         <div class="lembaga-header">
-                            <h3>
-                                <span class="badge-letter">${info.letter}</span>
-                                ${lembaga}
-                            </h3>
+                            <h3><span class="badge-letter">${info.letter}</span> ${lembaga}</h3>
                             <div class="lembaga-total">
                                 <i class="fas fa-users"></i> ${jumlahPenerima} santri &nbsp;·&nbsp;
                                 <i class="fas fa-coins"></i> ${formatRupiah(totalReward.toString())}
                             </div>
                         </div>
                         <table class="lembaga-table">
-                            <thead>
-                                <tr>
-                                    <th style="width:50px;">NO</th>
-                                    <th>NAMA SANTRI</th>
-                                    <th style="width:180px;">KEGIATAN</th>
-                                    <th style="width:140px;">REWARD</th>
-                                    <th style="width:120px;">KETERANGAN</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
+                            <thead><tr>
+                                <th style="width:50px;">NO</th><th>NAMA SANTRI</th>
+                                <th style="width:180px;">KEGIATAN</th>
+                                <th style="width:140px;">REWARD</th>
+                                <th style="width:120px;">KETERANGAN</th>
+                            </tr></thead>
+                            <tbody>`;
                 
                 filteredData.forEach(row => {
-                    html += `
-                        <tr>
-                            <td>${row.no}</td>
-                            <td>${row.nama}</td>
-                            <td>${row.kegiatan || '-'}</td>
-                            <td class="reward-cell">${formatRupiah(row.reward)}</td>
-                            <td>${row.keterangan || '-'}</td>
-                        </tr>
-                    `;
+                    html += `<tr>
+                        <td>${row.no}</td><td>${row.nama}</td>
+                        <td>${row.kegiatan || '-'}</td>
+                        <td class="reward-cell">${formatRupiah(row.reward)}</td>
+                        <td>${row.keterangan || '-'}</td>
+                    </tr>`;
                 });
                 
                 html += `</tbody></table></div>`;
             });
             
-            if (!hasData) {
-                return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada data yang sesuai pencarian "${searchQuery}".</p></div>`;
-            }
-            
+            if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada data yang sesuai pencarian "${searchQuery}".</p></div>`;
             return html;
         }
 
         // ============================================================
-        // 🎨 RENDER: TABEL SHEET STYLE
+        // 🎨 RENDER REWARD: TABEL SHEET
         // ============================================================
-        function renderTableSheet() {
-            let html = `
-                <div class="table-container fade-up visible">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th style="width:60px;">NO</th>
-                                <th style="width:200px;">LEMBAGA</th>
-                                <th>NAMA SANTRI</th>
-                                <th style="width:180px;">KEGIATAN</th>
-                                <th style="width:140px;">REWARD</th>
-                                <th style="width:120px;">KETERANGAN</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
+        function renderRewardTableSheet() {
+            let html = `<div class="table-container fade-up visible"><table class="data-table">
+                <thead><tr>
+                    <th style="width:60px;">NO</th><th style="width:200px;">LEMBAGA</th>
+                    <th>NAMA SANTRI</th><th style="width:180px;">KEGIATAN</th>
+                    <th style="width:140px;">REWARD</th><th style="width:120px;">KETERANGAN</th>
+                </tr></thead><tbody>`;
             
             let hasData = false;
-            
             rawData.forEach(row => {
                 if (row.type === 'group') {
                     if (searchQuery) {
                         const q = searchQuery.toLowerCase();
-                        const groupHasMatch = groupedData[row.lembaga] && groupedData[row.lembaga].data.some(d =>
+                        const g = groupedData[row.lembaga];
+                        if (!g || !g.data.some(d =>
                             (d.nama && d.nama.toLowerCase().includes(q)) ||
                             (d.kegiatan && d.kegiatan.toLowerCase().includes(q))
-                        );
-                        if (!groupHasMatch) return;
+                        )) return;
                     }
-                    
                     hasData = true;
-                    html += `
-                        <tr class="row-group">
-                            <td style="text-align:center;font-weight:800;color:var(--emas);">${row.groupLetter}</td>
-                            <td colspan="5" style="font-weight:800;color:var(--hijau-tua);">${row.lembaga}</td>
-                        </tr>
-                    `;
+                    html += `<tr class="row-group">
+                        <td style="text-align:center;font-weight:800;color:var(--emas);">${row.groupLetter}</td>
+                        <td colspan="5" style="font-weight:800;color:var(--hijau-tua);">${row.lembaga}</td>
+                    </tr>`;
                 } else if (row.type === 'data') {
                     if (searchQuery) {
                         const q = searchQuery.toLowerCase();
@@ -882,27 +1076,177 @@
                             (row.lembaga && row.lembaga.toLowerCase().includes(q))
                         )) return;
                     }
-                    
                     hasData = true;
-                    html += `
-                        <tr>
-                            <td class="no-cell">${row.no}</td>
-                            <td></td>
-                            <td>${row.nama}</td>
-                            <td>${row.kegiatan || '-'}</td>
-                            <td class="reward-cell">${formatRupiah(row.reward)}</td>
-                            <td>${row.keterangan || '-'}</td>
-                        </tr>
-                    `;
+                    html += `<tr>
+                        <td class="no-cell">${row.no}</td><td></td>
+                        <td>${row.nama}</td><td>${row.kegiatan || '-'}</td>
+                        <td class="reward-cell">${formatRupiah(row.reward)}</td>
+                        <td>${row.keterangan || '-'}</td>
+                    </tr>`;
+                }
+            });
+            html += `</tbody></table></div>`;
+            if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada data yang sesuai pencarian "${searchQuery}".</p></div>`;
+            return html;
+        }
+
+        // ============================================================
+        // 🎨 RENDER ANGGARAN: PER LEMBAGA
+        // ============================================================
+        function renderAnggaranPerLembaga() {
+            let html = '';
+            let hasData = false;
+            
+            // Group anggaranData by lembaga
+            const grouped = {};
+            anggaranData.forEach(row => {
+                if (row.isHeader) {
+                    if (!grouped[row.lembaga]) grouped[row.lembaga] = { no: row.no, data: [] };
+                } else if (row.parentLembaga) {
+                    if (!grouped[row.parentLembaga]) grouped[row.parentLembaga] = { no: row.parentNo, data: [] };
+                    grouped[row.parentLembaga].data.push(row);
+                }
+            });
+            
+            // Ambil kategori dari header
+            const categories = anggaranHeaders.categories || [];
+            
+            Object.entries(grouped).forEach(([lembaga, info]) => {
+                // Filter search
+                if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    if (!lembaga.toLowerCase().includes(q)) return;
+                }
+                
+                hasData = true;
+                
+                html += `<div class="lembaga-section fade-up visible">
+                    <div class="lembaga-header">
+                        <h3><span class="badge-letter">${info.no}</span> ${lembaga}</h3>
+                    </div>
+                    <div style="padding: 16px; background: var(--putih);">`;
+                
+                // Tampilkan setiap kategori
+                categories.forEach((cat, catIdx) => {
+                    // Kumpulkan data dari semua baris untuk kategori ini
+                    const anggaranList = [];
+                    const realisasiList = [];
+                    const sisaList = [];
+                    const tanggalList = [];
+                    
+                    info.data.forEach(row => {
+                        if (row.categories && row.categories[catIdx]) {
+                            const d = row.categories[catIdx].data;
+                            if (d['ANGGARAN']) anggaranList.push(d['ANGGARAN']);
+                            if (d['REALISASI']) realisasiList.push(d['REALISASI']);
+                            if (d['SISA ANGGARAN']) sisaList.push(d['SISA ANGGARAN']);
+                            if (d['TANGGAL PENCAIRAN']) tanggalList.push(d['TANGGAL PENCAIRAN']);
+                        }
+                    });
+                    
+                    // Ambil nilai anggaran (baris pertama biasanya)
+                    const totalAnggaran = anggaranList.reduce((s, v) => s + extractNumber(v), 0);
+                    const totalRealisasi = realisasiList.reduce((s, v) => s + extractNumber(v), 0);
+                    const sisa = sisaList.length > 0 ? extractNumber(sisaList[sisaList.length - 1]) : (totalAnggaran - totalRealisasi);
+                    const persen = totalAnggaran > 0 ? (totalRealisasi / totalAnggaran * 100).toFixed(1) : 0;
+                    
+                    // Skip kategori yang benar-benar kosong
+                    if (totalAnggaran === 0 && totalRealisasi === 0 && sisa === 0) return;
+                    
+                    html += `<div class="anggaran-category">
+                        <div class="anggaran-category-header">
+                            <span>${cat.name}</span>
+                            <span class="persen">${persen}% tercairkan</span>
+                        </div>
+                        <div class="anggaran-category-body">
+                            <div class="anggaran-cell">
+                                <div class="label">Anggaran</div>
+                                <div class="value">${formatRupiah(totalAnggaran.toString())}</div>
+                            </div>
+                            <div class="anggaran-cell">
+                                <div class="label">Realisasi</div>
+                                <div class="value realisasi">${formatRupiah(totalRealisasi.toString())}</div>
+                            </div>
+                            <div class="anggaran-cell">
+                                <div class="label">Sisa Anggaran</div>
+                                <div class="value sisa ${sisa > 0 ? 'aman' : ''}">${formatRupiah(sisa.toString())}</div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                
+                html += `</div></div>`;
+            });
+            
+            if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada lembaga yang sesuai pencarian "${searchQuery}".</p></div>`;
+            return html;
+        }
+
+        // ============================================================
+        // 🎨 RENDER ANGGARAN: TABEL SHEET
+        // ============================================================
+        function renderAnggaranTableSheet() {
+            const categories = anggaranHeaders.categories || [];
+            
+            // Hitung total kolom
+            let totalCols = 2; // NO + LEMBAGA
+            categories.forEach(cat => { totalCols += cat.cols.length; });
+            
+            let html = `<div class="table-container fade-up visible"><table class="data-table" style="min-width: 1200px;">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="vertical-align: middle;">NO</th>
+                        <th rowspan="2" style="vertical-align: middle;">LEMBAGA</th>`;
+            
+            categories.forEach(cat => {
+                html += `<th colspan="${cat.cols.length}" style="background: linear-gradient(135deg, #0f3d24, var(--hijau-tua));">${cat.name}</th>`;
+            });
+            
+            html += `</tr><tr>`;
+            categories.forEach(cat => {
+                cat.cols.forEach(col => {
+                    html += `<th style="font-size: 0.7rem;">${col.subLabel}</th>`;
+                });
+            });
+            html += `</tr></thead><tbody>`;
+            
+            let hasData = false;
+            let lastNo = '';
+            
+            anggaranData.forEach(row => {
+                if (row.isHeader) {
+                    if (searchQuery && !row.lembaga.toLowerCase().includes(searchQuery.toLowerCase())) return;
+                    hasData = true;
+                    lastNo = row.no;
+                    html += `<tr class="row-group">
+                        <td style="text-align:center;font-weight:800;color:var(--emas);">${row.no}</td>
+                        <td colspan="${totalCols - 1}" style="font-weight:800;color:var(--hijau-tua);">${row.lembaga}</td>
+                    </tr>`;
+                } else if (row.parentLembaga) {
+                    if (searchQuery && !row.parentLembaga.toLowerCase().includes(searchQuery.toLowerCase())) return;
+                    hasData = true;
+                    html += `<tr>`;
+                    html += `<td></td><td></td>`;
+                    row.categories.forEach(cat => {
+                        cat.cols && cat.cols.forEach((col, idx) => {
+                            // Akses data dengan subLabel
+                            const keys = Object.keys(cat.data || {});
+                            const key = keys[idx];
+                            html += `<td>${cat.data[key] || ''}</td>`;
+                        });
+                    });
+                    // Jika categories tidak lengkap, isi kolom kosong
+                    let filled = 0;
+                    row.categories.forEach(cat => { filled += (cat.cols ? cat.cols.length : 0); });
+                    if (filled < totalCols - 2) {
+                        html += `<td colspan="${totalCols - 2 - filled}"></td>`;
+                    }
+                    html += `</tr>`;
                 }
             });
             
             html += `</tbody></table></div>`;
-            
-            if (!hasData) {
-                return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada data yang sesuai pencarian "${searchQuery}".</p></div>`;
-            }
-            
+            if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada data yang sesuai pencarian "${searchQuery}".</p></div>`;
             return html;
         }
 
@@ -918,6 +1262,13 @@
             renderContent();
         });
 
+        document.querySelectorAll('.btn-data-source').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentSource = btn.dataset.source;
+                loadActiveData();
+            });
+        });
+
         let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
@@ -930,7 +1281,7 @@
         document.getElementById('refreshBtn').addEventListener('click', function() {
             this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
             this.disabled = true;
-            loadData().then(() => {
+            loadActiveData().then(() => {
                 this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
                 this.disabled = false;
             });
@@ -941,83 +1292,141 @@
         // ============================================================
         document.getElementById('exportPdfBtn').addEventListener('click', () => {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
             
             doc.setFillColor(26, 77, 46);
-            doc.rect(0, 0, 210, 20, 'F');
+            doc.rect(0, 0, 297, 20, 'F');
             doc.setTextColor(232, 212, 139);
             doc.setFontSize(14);
             doc.setFont('helvetica', 'bold');
-            doc.text('DATA REWARD SANTRI', 105, 10, { align: 'center' });
+            const title = currentSource === 'reward' ? 'DATA REWARD SANTRI' : 'LAPORAN REALISASI ANGGARAN';
+            doc.text(title, 148, 10, { align: 'center' });
             doc.setFontSize(9);
-            doc.text('Departemen Tahfizh - Ponpes Abu Hurairah Mataram', 105, 16, { align: 'center' });
+            doc.text('Departemen Tahfizh - Ponpes Abu Hurairah Mataram', 148, 16, { align: 'center' });
             
-            const body = [];
-            rawData.forEach(row => {
-                if (row.type === 'group') {
-                    body.push([
-                        { content: row.groupLetter, styles: { halign: 'center', fontStyle: 'bold', fillColor: [232, 212, 139], textColor: [26, 77, 46] } },
-                        { content: row.lembaga, styles: { fontStyle: 'bold', fillColor: [232, 212, 139], textColor: [26, 77, 46] } },
-                        { content: '', styles: { fillColor: [232, 212, 139] } },
-                        { content: '', styles: { fillColor: [232, 212, 139] } },
-                        { content: '', styles: { fillColor: [232, 212, 139] } },
-                        { content: '', styles: { fillColor: [232, 212, 139] } }
-                    ]);
-                } else if (row.type === 'data') {
-                    body.push([
-                        row.no, '', row.nama, row.kegiatan || '-',
-                        formatRupiah(row.reward), row.keterangan || '-'
-                    ]);
-                }
-            });
+            if (currentSource === 'reward') {
+                const body = [];
+                rawData.forEach(row => {
+                    if (row.type === 'group') {
+                        body.push([
+                            { content: row.groupLetter, styles: { halign: 'center', fontStyle: 'bold', fillColor: [232, 212, 139], textColor: [26, 77, 46] } },
+                            { content: row.lembaga, styles: { fontStyle: 'bold', fillColor: [232, 212, 139], textColor: [26, 77, 46] } },
+                            { content: '', styles: { fillColor: [232, 212, 139] } },
+                            { content: '', styles: { fillColor: [232, 212, 139] } },
+                            { content: '', styles: { fillColor: [232, 212, 139] } },
+                            { content: '', styles: { fillColor: [232, 212, 139] } }
+                        ]);
+                    } else if (row.type === 'data') {
+                        body.push([row.no, '', row.nama, row.kegiatan || '-', formatRupiah(row.reward), row.keterangan || '-']);
+                    }
+                });
+                
+                doc.autoTable({
+                    startY: 25,
+                    head: [['NO', 'LEMBAGA', 'NAMA SANTRI', 'KEGIATAN', 'REWARD', 'KETERANGAN']],
+                    body: body,
+                    styles: { font: 'helvetica', fontSize: 8, cellPadding: 2 },
+                    headStyles: { fillColor: [26, 77, 46], textColor: [232, 212, 139], fontStyle: 'bold', halign: 'center' },
+                    alternateRowStyles: { fillColor: [250, 246, 237] }
+                });
+            } else {
+                // Anggaran
+                const categories = anggaranHeaders.categories || [];
+                const head = [['NO', 'LEMBAGA']];
+                const head2 = [['', '']];
+                categories.forEach(cat => {
+                    cat.cols.forEach((col, idx) => {
+                        if (idx === 0) head[0].push(cat.name);
+                        else head[0].push('');
+                        head2[0].push(col.subLabel);
+                    });
+                });
+                
+                const body = [];
+                anggaranData.forEach(row => {
+                    if (row.isHeader) {
+                        const rowArr = [row.no, row.lembaga];
+                        for (let i = 2; i < head[0].length; i++) rowArr.push('');
+                        body.push(rowArr.map((c, i) => 
+                            i < 2 ? { content: c, styles: { fontStyle: 'bold', fillColor: [232, 212, 139], textColor: [26, 77, 46] } } : { content: c, styles: { fillColor: [232, 212, 139] } }
+                        ));
+                    } else if (row.parentLembaga) {
+                        const rowArr = ['', ''];
+                        row.categories.forEach(cat => {
+                            cat.cols.forEach(col => {
+                                rowArr.push(cat.data[col.subLabel] || '');
+                            });
+                        });
+                        body.push(rowArr);
+                    }
+                });
+                
+                doc.autoTable({
+                    startY: 25,
+                    head: [head[0], head2[0]],
+                    body: body,
+                    styles: { font: 'helvetica', fontSize: 7, cellPadding: 1.5 },
+                    headStyles: { fillColor: [26, 77, 46], textColor: [232, 212, 139], fontStyle: 'bold', halign: 'center' },
+                    alternateRowStyles: { fillColor: [250, 246, 237] }
+                });
+            }
             
-            doc.autoTable({
-                startY: 25,
-                head: [['NO', 'LEMBAGA', 'NAMA SANTRI', 'KEGIATAN', 'REWARD', 'KETERANGAN']],
-                body: body,
-                styles: { font: 'helvetica', fontSize: 8, cellPadding: 2 },
-                headStyles: { fillColor: [26, 77, 46], textColor: [232, 212, 139], fontStyle: 'bold', halign: 'center' },
-                columnStyles: {
-                    0: { halign: 'center', cellWidth: 12 },
-                    1: { cellWidth: 30 },
-                    2: { cellWidth: 45 },
-                    3: { cellWidth: 35 },
-                    4: { cellWidth: 28, halign: 'right' },
-                    5: { cellWidth: 25 }
-                },
-                alternateRowStyles: { fillColor: [250, 246, 237] }
-            });
-            
-            doc.save('Data-Reward-Santri.pdf');
+            doc.save(title.replace(/ /g, '-') + '.pdf');
         });
 
         // ============================================================
         // 📤 EXPORT EXCEL
         // ============================================================
         document.getElementById('exportExcelBtn').addEventListener('click', () => {
-            const excelData = [
-                ['NO', 'LEMBAGA', 'NAMA SANTRI', 'KEGIATAN', 'REWARD', 'KETERANGAN']
-            ];
+            let excelData = [];
+            let fileName = '';
             
-            rawData.forEach(row => {
-                if (row.type === 'group') {
-                    excelData.push([row.groupLetter, row.lembaga, '', '', '', '']);
-                } else if (row.type === 'data') {
-                    excelData.push([
-                        row.no, '', row.nama, row.kegiatan || '-',
-                        formatRupiah(row.reward), row.keterangan || '-'
-                    ]);
-                }
-            });
+            if (currentSource === 'reward') {
+                excelData = [['NO', 'LEMBAGA', 'NAMA SANTRI', 'KEGIATAN', 'REWARD', 'KETERANGAN']];
+                rawData.forEach(row => {
+                    if (row.type === 'group') {
+                        excelData.push([row.groupLetter, row.lembaga, '', '', '', '']);
+                    } else if (row.type === 'data') {
+                        excelData.push([row.no, '', row.nama, row.kegiatan || '-', formatRupiah(row.reward), row.keterangan || '-']);
+                    }
+                });
+                fileName = 'Data-Reward-Santri.xlsx';
+            } else {
+                const categories = anggaranHeaders.categories || [];
+                const head1 = ['NO', 'LEMBAGA'];
+                const head2 = ['', ''];
+                categories.forEach(cat => {
+                    cat.cols.forEach((col, idx) => {
+                        if (idx === 0) head1.push(cat.name);
+                        else head1.push('');
+                        head2.push(col.subLabel);
+                    });
+                });
+                excelData.push(head1);
+                excelData.push(head2);
+                
+                anggaranData.forEach(row => {
+                    if (row.isHeader) {
+                        const rowArr = [row.no, row.lembaga];
+                        for (let i = 2; i < head1.length; i++) rowArr.push('');
+                        excelData.push(rowArr);
+                    } else if (row.parentLembaga) {
+                        const rowArr = ['', ''];
+                        row.categories.forEach(cat => {
+                            cat.cols.forEach(col => {
+                                rowArr.push(cat.data[col.subLabel] || '');
+                            });
+                        });
+                        excelData.push(rowArr);
+                    }
+                });
+                fileName = 'Laporan-Realisasi-Anggaran.xlsx';
+            }
             
             const ws = XLSX.utils.aoa_to_sheet(excelData);
-            ws['!cols'] = [
-                { wch: 6 }, { wch: 20 }, { wch: 30 }, { wch: 25 }, { wch: 15 }, { wch: 15 }
-            ];
-            
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Reward');
-            XLSX.writeFile(wb, 'Data-Reward-Santri.xlsx');
+            XLSX.utils.book_append_sheet(wb, ws, currentSource === 'reward' ? 'Reward' : 'Anggaran');
+            XLSX.writeFile(wb, fileName);
         });
 
         // ============================================================
@@ -1031,10 +1440,10 @@
         // ============================================================
         // 🚀 START
         // ============================================================
-        console.log('🌙 HAFZApp - Halaman Reward — Barakallah!');
+        console.log('🌙 HAFZApp - Halaman Reward & Anggaran — Barakallah!');
         document.addEventListener('DOMContentLoaded', () => {
             loadNavbar();
-            loadData();
+            loadActiveData();
         });
     </script>
 </body>
