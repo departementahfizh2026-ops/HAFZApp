@@ -9,6 +9,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
+        /* ===== Garis Pembatas Vertikal Antar Kategori ===== */
+.data-table th.kategori-start,
+.data-table td.kategori-start {
+    border-left: 3px solid #999 !important;
+}
+
+.data-table th.kategori-end,
+.data-table td.kategori-end {
+    border-right: 1px solid rgba(150, 150, 150, 0.3);
+}
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --hijau-tua: #1a4d2e; --hijau-muda: #2d6a4f; --emas: #c9a84c;
@@ -1207,26 +1217,42 @@ function renderAnggaranPerLembaga() {
 // ============================================================
 // 🎨 RENDER ANGGARAN: TABEL SHEET (DENGAN TANGGAL PENCAIRAN)
 // ============================================================
+// ============================================================
+// 🎨 RENDER ANGGARAN: TABEL SHEET (DENGAN GARIS PEMBATAS)
+// ============================================================
 function renderAnggaranTableSheet() {
     const categories = anggaranHeaders.categories || [];
     
-    // Bangun kolom: setiap kategori punya 4 kolom (Tanggal, Anggaran, Realisasi, Sisa)
+    // Hitung total kolom
+    let totalCols = 2; // NO + LEMBAGA
+    categories.forEach(cat => { totalCols += cat.cols.length; });
+    
     let html = `<div class="table-container fade-up visible"><table class="data-table" style="min-width: 1400px;">
         <thead>
             <tr>
                 <th rowspan="2" style="vertical-align: middle; width: 50px;">NO</th>
                 <th rowspan="2" style="vertical-align: middle; width: 180px;">LEMBAGA</th>`;
     
-    categories.forEach(cat => {
-        html += `<th colspan="${cat.cols.length}" style="background: linear-gradient(135deg, #0f3d24, var(--hijau-tua));">${cat.name}</th>`;
+    // Baris 1 header: kategori
+    categories.forEach((cat, catIdx) => {
+        const cls = catIdx === 0 ? 'kategori-start' : '';
+        html += `<th colspan="${cat.cols.length}" class="${cls}" style="background: linear-gradient(135deg, #0f3d24, var(--hijau-tua));">${cat.name}</th>`;
     });
     
     html += `</tr><tr>`;
+    
+    // Baris 2 header: sub-kolom
     categories.forEach(cat => {
-        cat.cols.forEach(col => {
-            html += `<th style="font-size: 0.7rem; white-space: nowrap;">${col.subLabel}</th>`;
+        cat.cols.forEach((col, colIdx) => {
+            const isFirst = colIdx === 0;
+            const isLast = colIdx === cat.cols.length - 1;
+            let cls = [];
+            if (isFirst) cls.push('kategori-start');
+            if (isLast) cls.push('kategori-end');
+            html += `<th class="${cls.join(' ')}" style="font-size: 0.7rem; white-space: nowrap;">${col.subLabel}</th>`;
         });
     });
+    
     html += `</tr></thead><tbody>`;
     
     let hasData = false;
@@ -1234,7 +1260,6 @@ function renderAnggaranTableSheet() {
     anggaranData.forEach(entry => {
         if (searchQuery && !entry.lembaga.toLowerCase().includes(searchQuery.toLowerCase())) return;
         
-        // Cek apakah entry punya data
         const hasAnyData = entry.categories.some(cat => 
             cat.data.some(rowData => Object.keys(rowData).length > 0)
         );
@@ -1242,17 +1267,13 @@ function renderAnggaranTableSheet() {
         
         hasData = true;
         
-        // ===== Baris 1: Header lembaga + data utama =====
+        // ===== Baris header lembaga =====
         html += `<tr class="row-group">
             <td style="text-align:center;font-weight:800;color:var(--emas);">${entry.no}</td>
-            <td colspan="${2 + categories.reduce((s, c) => s + c.cols.length, 0) - 1}" style="font-weight:800;color:var(--hijau-tua);">${entry.lembaga}</td>
+            <td colspan="${totalCols - 1}" style="font-weight:800;color:var(--hijau-tua);">${entry.lembaga}</td>
         </tr>`;
         
-        // ===== Baris data per kategori =====
-        // Gabungkan semua data (baris pencairan) jadi beberapa baris
-        // Kita perlu mensinkronkan: baris ke-N menampilkan data ke-N dari setiap kategori
-        
-        // Cari max jumlah baris dari semua kategori
+        // ===== Baris data per pencairan =====
         let maxRows = 0;
         entry.categories.forEach(cat => {
             maxRows = Math.max(maxRows, cat.data.length);
@@ -1260,16 +1281,19 @@ function renderAnggaranTableSheet() {
         
         for (let r = 0; r < maxRows; r++) {
             html += `<tr>`;
-            // Kolom NO dan LEMBAGA untuk baris data (kosong)
-            html += `<td></td><td></td>`;
+            html += `<td></td><td></td>`; // Kolom NO & LEMBAGA untuk baris data
             
-            // Loop tiap kategori
             categories.forEach((cat, catIdx) => {
                 const rowData = entry.categories[catIdx].data[r] || {};
                 
-                cat.cols.forEach(col => {
+                cat.cols.forEach((col, colIdx) => {
+                    const isFirst = colIdx === 0;
+                    const isLast = colIdx === cat.cols.length - 1;
+                    let cls = [];
+                    if (isFirst) cls.push('kategori-start');
+                    if (isLast) cls.push('kategori-end');
+                    
                     const val = rowData[col.subLabel] || '';
-                    let cellContent = val;
                     let cellStyle = '';
                     
                     // Style khusus per sub-kolom
@@ -1281,10 +1305,10 @@ function renderAnggaranTableSheet() {
                         const sisaNum = extractNumber(val);
                         cellStyle = `font-weight: 700; color: ${sisaNum > 0 ? '#16a085' : '#c0392b'};`;
                     } else if (col.subLabel === 'TANGGAL PENCAIRAN' && val) {
-                        cellStyle = 'font-style: italic; color: #7a8a85; font-size: 0.8rem;';
+                        cellStyle = 'font-style: italic; color: #7a8a85; font-size: 0.8rem; white-space: nowrap;';
                     }
                     
-                    html += `<td style="${cellStyle}">${cellContent || ''}</td>`;
+                    html += `<td class="${cls.join(' ')}" style="${cellStyle}">${val || ''}</td>`;
                 });
             });
             
