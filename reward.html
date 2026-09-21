@@ -10,14 +10,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         /* ===== Garis Pembatas Vertikal Antar Kategori ===== */
+/* ===== Garis Pembatas Vertikal Antar Kategori ===== */
 .data-table th.kategori-start,
 .data-table td.kategori-start {
-    border-left: 3px solid #999 !important;
+    border-left: 2px solid #999 !important;
 }
 
 .data-table th.kategori-end,
 .data-table td.kategori-end {
-    border-right: 1px solid rgba(150, 150, 150, 0.3);
+    border-right: 1px solid rgba(150, 150, 150, 0.2);
+}
+
+/* Header kategori - kasih efek lebih tegas */
+.data-table th {
+    word-break: break-word;
 }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
