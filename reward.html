@@ -1204,27 +1204,28 @@ function renderAnggaranPerLembaga() {
         // 🎨 RENDER ANGGARAN: TABEL SHEET
         // ============================================================
         // ============================================================
-// 🎨 RENDER ANGGARAN: TABEL SHEET
+// ============================================================
+// 🎨 RENDER ANGGARAN: TABEL SHEET (DENGAN TANGGAL PENCAIRAN)
 // ============================================================
 function renderAnggaranTableSheet() {
     const categories = anggaranHeaders.categories || [];
     
-    // Buat ringkasan kolom: untuk tiap kategori, tampilkan ANGGARAN, REALISASI, SISA
-    let html = `<div class="table-container fade-up visible"><table class="data-table" style="min-width: 1200px;">
+    // Bangun kolom: setiap kategori punya 4 kolom (Tanggal, Anggaran, Realisasi, Sisa)
+    let html = `<div class="table-container fade-up visible"><table class="data-table" style="min-width: 1400px;">
         <thead>
             <tr>
                 <th rowspan="2" style="vertical-align: middle; width: 50px;">NO</th>
                 <th rowspan="2" style="vertical-align: middle; width: 180px;">LEMBAGA</th>`;
     
     categories.forEach(cat => {
-        html += `<th colspan="3" style="background: linear-gradient(135deg, #0f3d24, var(--hijau-tua));">${cat.name}</th>`;
+        html += `<th colspan="${cat.cols.length}" style="background: linear-gradient(135deg, #0f3d24, var(--hijau-tua));">${cat.name}</th>`;
     });
     
     html += `</tr><tr>`;
     categories.forEach(cat => {
-        html += `<th style="font-size: 0.7rem;">Anggaran</th>
-                 <th style="font-size: 0.7rem;">Realisasi</th>
-                 <th style="font-size: 0.7rem;">Sisa</th>`;
+        cat.cols.forEach(col => {
+            html += `<th style="font-size: 0.7rem; white-space: nowrap;">${col.subLabel}</th>`;
+        });
     });
     html += `</tr></thead><tbody>`;
     
@@ -1233,40 +1234,68 @@ function renderAnggaranTableSheet() {
     anggaranData.forEach(entry => {
         if (searchQuery && !entry.lembaga.toLowerCase().includes(searchQuery.toLowerCase())) return;
         
-        // Gabungkan data per kategori
-        const categorySummary = entry.categories.map(cat => {
-            let anggaran = 0, realisasi = 0, sisa = 0;
-            cat.data.forEach(rowData => {
-                if (rowData['ANGGARAN']) anggaran += extractNumber(rowData['ANGGARAN']);
-                if (rowData['REALISASI']) realisasi += extractNumber(rowData['REALISASI']);
-                if (rowData['SISA ANGGARAN']) sisa = extractNumber(rowData['SISA ANGGARAN']);
-            });
-            return { anggaran, realisasi, sisa };
-        });
-        
-        // Skip jika semua kosong
-        if (categorySummary.every(c => c.anggaran === 0 && c.realisasi === 0 && c.sisa === 0)) return;
+        // Cek apakah entry punya data
+        const hasAnyData = entry.categories.some(cat => 
+            cat.data.some(rowData => Object.keys(rowData).length > 0)
+        );
+        if (!hasAnyData) return;
         
         hasData = true;
-        html += `<tr>
-            <td class="no-cell">${entry.no}</td>
-            <td style="text-align:left;font-weight:700;color:var(--hijau-tua);">${entry.lembaga}</td>`;
         
-        categorySummary.forEach(cat => {
-            html += `
-                <td class="reward-cell">${cat.anggaran > 0 ? formatRupiah(cat.anggaran.toString()) : '-'}</td>
-                <td style="color: #16a085; font-weight: 700;">${cat.realisasi > 0 ? formatRupiah(cat.realisasi.toString()) : '-'}</td>
-                <td style="color: #c0392b; font-weight: 700;">${cat.sisa > 0 ? formatRupiah(cat.sisa.toString()) : '-'}</td>
-            `;
+        // ===== Baris 1: Header lembaga + data utama =====
+        html += `<tr class="row-group">
+            <td style="text-align:center;font-weight:800;color:var(--emas);">${entry.no}</td>
+            <td colspan="${2 + categories.reduce((s, c) => s + c.cols.length, 0) - 1}" style="font-weight:800;color:var(--hijau-tua);">${entry.lembaga}</td>
+        </tr>`;
+        
+        // ===== Baris data per kategori =====
+        // Gabungkan semua data (baris pencairan) jadi beberapa baris
+        // Kita perlu mensinkronkan: baris ke-N menampilkan data ke-N dari setiap kategori
+        
+        // Cari max jumlah baris dari semua kategori
+        let maxRows = 0;
+        entry.categories.forEach(cat => {
+            maxRows = Math.max(maxRows, cat.data.length);
         });
-        html += `</tr>`;
+        
+        for (let r = 0; r < maxRows; r++) {
+            html += `<tr>`;
+            // Kolom NO dan LEMBAGA untuk baris data (kosong)
+            html += `<td></td><td></td>`;
+            
+            // Loop tiap kategori
+            categories.forEach((cat, catIdx) => {
+                const rowData = entry.categories[catIdx].data[r] || {};
+                
+                cat.cols.forEach(col => {
+                    const val = rowData[col.subLabel] || '';
+                    let cellContent = val;
+                    let cellStyle = '';
+                    
+                    // Style khusus per sub-kolom
+                    if (col.subLabel === 'ANGGARAN' && val) {
+                        cellStyle = 'font-weight: 700; color: var(--hijau-tua);';
+                    } else if (col.subLabel === 'REALISASI' && val) {
+                        cellStyle = 'font-weight: 700; color: #16a085;';
+                    } else if (col.subLabel === 'SISA ANGGARAN' && val) {
+                        const sisaNum = extractNumber(val);
+                        cellStyle = `font-weight: 700; color: ${sisaNum > 0 ? '#16a085' : '#c0392b'};`;
+                    } else if (col.subLabel === 'TANGGAL PENCAIRAN' && val) {
+                        cellStyle = 'font-style: italic; color: #7a8a85; font-size: 0.8rem;';
+                    }
+                    
+                    html += `<td style="${cellStyle}">${cellContent || ''}</td>`;
+                });
+            });
+            
+            html += `</tr>`;
+        }
     });
     
     html += `</tbody></table></div>`;
     if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada data yang sesuai pencarian "${searchQuery}".</p></div>`;
     return html;
 }
-
         // ============================================================
         // 🎯 EVENTS
         // ============================================================
