@@ -839,95 +839,106 @@
         // ============================================================
         // 📊 LOAD DATA (Realisasi Anggaran)
         // ============================================================
-        async function loadAnggaranData() {
-            const url = getCsvUrl('anggaran');
-            console.log('🔄 Memuat anggaran dari:', url);
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-            const csvText = await response.text();
-            const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
-            
-            if (lines.length < 3) throw new Error('Data anggaran kosong');
+        // ============================================================
+// 📊 LOAD DATA (Realisasi Anggaran) - DIPERBAIKI
+// ============================================================
+async function loadAnggaranData() {
+    const url = getCsvUrl('anggaran');
+    console.log('🔄 Memuat anggaran dari:', url);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+    const csvText = await response.text();
+    const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+    
+    if (lines.length < 3) throw new Error('Data anggaran kosong');
 
-            // Baris 1 = kategori (merged, ada yang kosong)
-            // Baris 2 = sub-kolom (TANGGAL PENCAIRAN, ANGGARAN, REALISASI, SISA ANGGARAN)
-            const row1 = parseCSVLine(lines[0]);
-            const row2 = parseCSVLine(lines[1]);
-            
-            console.log('📋 Row1 (kategori):', row1);
-            console.log('📋 Row2 (sub-kolom):', row2);
+    const row1 = parseCSVLine(lines[0]);
+    const row2 = parseCSVLine(lines[1]);
+    
+    console.log('📋 Row1 (kategori):', row1);
+    console.log('📋 Row2 (sub-kolom):', row2);
 
-            // Bangun struktur header: kolom mana termasuk kategori apa
-            // Kolom 0 = NO, Kolom 1 = LEMBAGA
-            // Sisanya = 4 kolom per kategori (TANGGAL, ANGGARAN, REALISASI, SISA)
-            let currentKategori = '';
-            const categories = [];
-            let currentCat = null;
-            
-            for (let i = 2; i < row2.length; i++) {
-                if (row1[i] && row1[i].trim()) {
-                    // Mulai kategori baru
-                    currentKategori = row1[i].trim();
-                    currentCat = { name: currentKategori, startIdx: i, cols: [] };
-                    categories.push(currentCat);
-                }
-                if (currentCat) {
-                    currentCat.cols.push({
-                        index: i,
-                        subLabel: (row2[i] || '').trim()
-                    });
-                }
-            }
-            
-            console.log('📊 Kategori ditemukan:', categories.map(c => c.name));
-            
-            // Parse data (mulai baris 3)
-            anggaranData = [];
-            let currentLembaga = '';
-            let currentNo = '';
-            
-            for (let i = 2; i < lines.length; i++) {
-                const cols = parseCSVLine(lines[i]);
-                if (cols.length === 0 || cols.every(c => !c)) continue;
-                
-                const no = cols[0] || '';
-                const lembaga = cols[1] || '';
-                
-                // Baris grup lembaga (ada NO + LEMBAGA)
-                if (no && lembaga) {
-                    currentNo = no;
-                    currentLembaga = lembaga.trim();
-                    anggaranData.push({
-                        no: currentNo,
-                        lembaga: currentLembaga,
-                        isHeader: true,
-                        categories: []
-                    });
-                } else if (currentLembaga) {
-                    // Baris data tambahan (pencairan ke-2, ke-3, dst.)
-                    // Kumpulkan data dari semua kolom
-                    const categoryData = categories.map(cat => {
-                        const data = {};
-                        cat.cols.forEach(col => {
-                            data[col.subLabel] = cols[col.index] || '';
-                        });
-                        return { name: cat.name, data };
-                    });
-                    
-                    anggaranData.push({
-                        no: '',
-                        lembaga: '',
-                        isHeader: false,
-                        parentNo: currentNo,
-                        parentLembaga: currentLembaga,
-                        categories: categoryData
-                    });
-                }
-            }
-            
-            console.log('✅ Anggaran:', anggaranData.length, 'baris');
-            anggaranHeaders = { categories };
+    // Bangun struktur kategori
+    let currentCat = null;
+    const categories = [];
+    
+    for (let i = 2; i < row2.length; i++) {
+        if (row1[i] && row1[i].trim()) {
+            currentCat = { name: row1[i].trim(), startIdx: i, cols: [] };
+            categories.push(currentCat);
         }
+        if (currentCat) {
+            currentCat.cols.push({
+                index: i,
+                subLabel: (row2[i] || '').trim().toUpperCase()
+            });
+        }
+    }
+    
+    console.log('📊 Kategori:', categories.map(c => c.name + ' (' + c.cols.length + ' kolom)'));
+
+    // Parse data - gabungkan baris lembaga dengan baris pencairannya
+    anggaranData = [];
+    let currentEntry = null;
+    
+    for (let i = 2; i < lines.length; i++) {
+        const cols = parseCSVLine(lines[i]);
+        if (cols.length === 0 || cols.every(c => !c)) continue;
+        
+        const no = cols[0] || '';
+        const lembaga = cols[1] || '';
+        
+        // Deteksi baris lembaga baru (ada NO dan LEMBAGA)
+        if (no && lembaga && !isNaN(parseInt(no))) {
+            // Simpan entry sebelumnya
+            if (currentEntry) anggaranData.push(currentEntry);
+            
+            // Mulai entry baru
+            currentEntry = {
+                no: no,
+                lembaga: lembaga.trim(),
+                // Untuk setiap kategori, kumpulkan semua data
+                categories: categories.map(cat => ({
+                    name: cat.name,
+                    cols: cat.cols,
+                    // Array untuk menampung multiple baris data
+                    data: [{}]
+                }))
+            };
+            
+            // Isi data dari baris ini
+            categories.forEach((cat, catIdx) => {
+                cat.cols.forEach(col => {
+                    const val = cols[col.index] || '';
+                    if (val && !currentEntry.categories[catIdx].data[0][col.subLabel]) {
+                        currentEntry.categories[catIdx].data[0][col.subLabel] = val;
+                    }
+                });
+            });
+        } else if (currentEntry && cols.some(c => c)) {
+            // Baris lanjutan (pencairan tambahan untuk lembaga sebelumnya)
+            categories.forEach((cat, catIdx) => {
+                const rowData = {};
+                let hasData = false;
+                cat.cols.forEach(col => {
+                    const val = cols[col.index] || '';
+                    if (val) {
+                        rowData[col.subLabel] = val;
+                        hasData = true;
+                    }
+                });
+                if (hasData) {
+                    currentEntry.categories[catIdx].data.push(rowData);
+                }
+            });
+        }
+    }
+    if (currentEntry) anggaranData.push(currentEntry);
+    
+    console.log('✅ Anggaran:', anggaranData.length, 'lembaga');
+    console.log('📊 Contoh data lembaga pertama:', anggaranData[0]);
+    anggaranHeaders = { categories };
+}
 
         // ============================================================
         // 📊 LOAD DATA berdasarkan sumber aktif
@@ -1093,162 +1104,168 @@
         // ============================================================
         // 🎨 RENDER ANGGARAN: PER LEMBAGA
         // ============================================================
-        function renderAnggaranPerLembaga() {
-            let html = '';
-            let hasData = false;
-            
-            // Group anggaranData by lembaga
-            const grouped = {};
-            anggaranData.forEach(row => {
-                if (row.isHeader) {
-                    if (!grouped[row.lembaga]) grouped[row.lembaga] = { no: row.no, data: [] };
-                } else if (row.parentLembaga) {
-                    if (!grouped[row.parentLembaga]) grouped[row.parentLembaga] = { no: row.parentNo, data: [] };
-                    grouped[row.parentLembaga].data.push(row);
-                }
-            });
-            
-            // Ambil kategori dari header
-            const categories = anggaranHeaders.categories || [];
-            
-            Object.entries(grouped).forEach(([lembaga, info]) => {
-                // Filter search
-                if (searchQuery) {
-                    const q = searchQuery.toLowerCase();
-                    if (!lembaga.toLowerCase().includes(q)) return;
-                }
-                
-                hasData = true;
-                
-                html += `<div class="lembaga-section fade-up visible">
-                    <div class="lembaga-header">
-                        <h3><span class="badge-letter">${info.no}</span> ${lembaga}</h3>
-                    </div>
-                    <div style="padding: 16px; background: var(--putih);">`;
-                
-                // Tampilkan setiap kategori
-                categories.forEach((cat, catIdx) => {
-                    // Kumpulkan data dari semua baris untuk kategori ini
-                    const anggaranList = [];
-                    const realisasiList = [];
-                    const sisaList = [];
-                    const tanggalList = [];
-                    
-                    info.data.forEach(row => {
-                        if (row.categories && row.categories[catIdx]) {
-                            const d = row.categories[catIdx].data;
-                            if (d['ANGGARAN']) anggaranList.push(d['ANGGARAN']);
-                            if (d['REALISASI']) realisasiList.push(d['REALISASI']);
-                            if (d['SISA ANGGARAN']) sisaList.push(d['SISA ANGGARAN']);
-                            if (d['TANGGAL PENCAIRAN']) tanggalList.push(d['TANGGAL PENCAIRAN']);
-                        }
-                    });
-                    
-                    // Ambil nilai anggaran (baris pertama biasanya)
-                    const totalAnggaran = anggaranList.reduce((s, v) => s + extractNumber(v), 0);
-                    const totalRealisasi = realisasiList.reduce((s, v) => s + extractNumber(v), 0);
-                    const sisa = sisaList.length > 0 ? extractNumber(sisaList[sisaList.length - 1]) : (totalAnggaran - totalRealisasi);
-                    const persen = totalAnggaran > 0 ? (totalRealisasi / totalAnggaran * 100).toFixed(1) : 0;
-                    
-                    // Skip kategori yang benar-benar kosong
-                    if (totalAnggaran === 0 && totalRealisasi === 0 && sisa === 0) return;
-                    
-                    html += `<div class="anggaran-category">
-                        <div class="anggaran-category-header">
-                            <span>${cat.name}</span>
-                            <span class="persen">${persen}% tercairkan</span>
-                        </div>
-                        <div class="anggaran-category-body">
-                            <div class="anggaran-cell">
-                                <div class="label">Anggaran</div>
-                                <div class="value">${formatRupiah(totalAnggaran.toString())}</div>
-                            </div>
-                            <div class="anggaran-cell">
-                                <div class="label">Realisasi</div>
-                                <div class="value realisasi">${formatRupiah(totalRealisasi.toString())}</div>
-                            </div>
-                            <div class="anggaran-cell">
-                                <div class="label">Sisa Anggaran</div>
-                                <div class="value sisa ${sisa > 0 ? 'aman' : ''}">${formatRupiah(sisa.toString())}</div>
-                            </div>
-                        </div>
-                    </div>`;
-                });
-                
-                html += `</div></div>`;
-            });
-            
-            if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada lembaga yang sesuai pencarian "${searchQuery}".</p></div>`;
-            return html;
+        // ============================================================
+// 🎨 RENDER ANGGARAN: PER LEMBAGA
+// ============================================================
+function renderAnggaranPerLembaga() {
+    let html = '';
+    let hasData = false;
+    
+    anggaranData.forEach(entry => {
+        // Filter search
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            if (!entry.lembaga.toLowerCase().includes(q)) return;
         }
+        
+        hasData = true;
+        
+        // Header lembaga + total keseluruhan
+        let grandTotalAnggaran = 0;
+        let grandTotalRealisasi = 0;
+        
+        // Render tiap kategori
+        let categoryHtml = '';
+        entry.categories.forEach(cat => {
+            // Gabungkan nilai dari semua baris data
+            let totalAnggaran = 0;
+            let totalRealisasi = 0;
+            let sisaAnggaran = 0;
+            const tanggalList = [];
+            
+            cat.data.forEach(rowData => {
+                if (rowData['ANGGARAN']) totalAnggaran += extractNumber(rowData['ANGGARAN']);
+                if (rowData['REALISASI']) totalRealisasi += extractNumber(rowData['REALISASI']);
+                if (rowData['SISA ANGGARAN']) sisaAnggaran = extractNumber(rowData['SISA ANGGARAN']); // Ambil yang terakhir
+                if (rowData['TANGGAL PENCAIRAN']) tanggalList.push(rowData['TANGGAL PENCAIRAN']);
+            });
+            
+            // Skip jika benar-benar kosong
+            if (totalAnggaran === 0 && totalRealisasi === 0) return;
+            
+            grandTotalAnggaran += totalAnggaran;
+            grandTotalRealisasi += totalRealisasi;
+            
+            const persen = totalAnggaran > 0 ? (totalRealisasi / totalAnggaran * 100).toFixed(1) : 0;
+            
+            categoryHtml += `
+                <div class="anggaran-category">
+                    <div class="anggaran-category-header">
+                        <span>${cat.name}</span>
+                        <span class="persen">${persen}% tercairkan</span>
+                    </div>
+                    <div class="anggaran-category-body">
+                        <div class="anggaran-cell">
+                            <div class="label">Anggaran</div>
+                            <div class="value">${formatRupiah(totalAnggaran.toString())}</div>
+                        </div>
+                        <div class="anggaran-cell">
+                            <div class="label">Realisasi</div>
+                            <div class="value realisasi">${formatRupiah(totalRealisasi.toString())}</div>
+                        </div>
+                        <div class="anggaran-cell">
+                            <div class="label">Sisa Anggaran</div>
+                            <div class="value sisa ${sisaAnggaran > 0 ? 'aman' : ''}">${formatRupiah(sisaAnggaran.toString())}</div>
+                        </div>
+                    </div>
+                    ${tanggalList.length > 0 ? `
+                    <div style="background: var(--cream); padding: 8px 16px; font-size: 0.75rem; color: #7a8a85; display: flex; flex-wrap: wrap; gap: 12px; border-top: 1px solid rgba(201,168,76,0.15);">
+                        <span><i class="fas fa-calendar-alt" style="color: var(--emas); margin-right: 4px;"></i> Tanggal Pencairan:</span>
+                        ${tanggalList.map(t => `<span style="background: var(--putih); padding: 2px 10px; border-radius: 20px; border: 1px solid rgba(201,168,76,0.2); font-weight: 600; color: var(--hijau-tua);">${t}</span>`).join('')}
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+        
+        if (!categoryHtml) return; // Skip jika tidak ada data kategori
+        
+        html += `
+            <div class="lembaga-section fade-up visible">
+                <div class="lembaga-header">
+                    <h3><span class="badge-letter">${entry.no}</span> ${entry.lembaga}</h3>
+                    <div class="lembaga-total">
+                        <i class="fas fa-wallet"></i> Anggaran: ${formatRupiah(grandTotalAnggaran.toString())} &nbsp;·&nbsp;
+                        <i class="fas fa-hand-holding-usd"></i> Realisasi: ${formatRupiah(grandTotalRealisasi.toString())}
+                    </div>
+                </div>
+                <div style="padding: 16px; background: var(--putih);">
+                    ${categoryHtml}
+                </div>
+            </div>
+        `;
+    });
+    
+    if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada lembaga yang sesuai pencarian "${searchQuery}".</p></div>`;
+    return html;
+}
 
         // ============================================================
         // 🎨 RENDER ANGGARAN: TABEL SHEET
         // ============================================================
-        function renderAnggaranTableSheet() {
-            const categories = anggaranHeaders.categories || [];
-            
-            // Hitung total kolom
-            let totalCols = 2; // NO + LEMBAGA
-            categories.forEach(cat => { totalCols += cat.cols.length; });
-            
-            let html = `<div class="table-container fade-up visible"><table class="data-table" style="min-width: 1200px;">
-                <thead>
-                    <tr>
-                        <th rowspan="2" style="vertical-align: middle;">NO</th>
-                        <th rowspan="2" style="vertical-align: middle;">LEMBAGA</th>`;
-            
-            categories.forEach(cat => {
-                html += `<th colspan="${cat.cols.length}" style="background: linear-gradient(135deg, #0f3d24, var(--hijau-tua));">${cat.name}</th>`;
+        // ============================================================
+// 🎨 RENDER ANGGARAN: TABEL SHEET
+// ============================================================
+function renderAnggaranTableSheet() {
+    const categories = anggaranHeaders.categories || [];
+    
+    // Buat ringkasan kolom: untuk tiap kategori, tampilkan ANGGARAN, REALISASI, SISA
+    let html = `<div class="table-container fade-up visible"><table class="data-table" style="min-width: 1200px;">
+        <thead>
+            <tr>
+                <th rowspan="2" style="vertical-align: middle; width: 50px;">NO</th>
+                <th rowspan="2" style="vertical-align: middle; width: 180px;">LEMBAGA</th>`;
+    
+    categories.forEach(cat => {
+        html += `<th colspan="3" style="background: linear-gradient(135deg, #0f3d24, var(--hijau-tua));">${cat.name}</th>`;
+    });
+    
+    html += `</tr><tr>`;
+    categories.forEach(cat => {
+        html += `<th style="font-size: 0.7rem;">Anggaran</th>
+                 <th style="font-size: 0.7rem;">Realisasi</th>
+                 <th style="font-size: 0.7rem;">Sisa</th>`;
+    });
+    html += `</tr></thead><tbody>`;
+    
+    let hasData = false;
+    
+    anggaranData.forEach(entry => {
+        if (searchQuery && !entry.lembaga.toLowerCase().includes(searchQuery.toLowerCase())) return;
+        
+        // Gabungkan data per kategori
+        const categorySummary = entry.categories.map(cat => {
+            let anggaran = 0, realisasi = 0, sisa = 0;
+            cat.data.forEach(rowData => {
+                if (rowData['ANGGARAN']) anggaran += extractNumber(rowData['ANGGARAN']);
+                if (rowData['REALISASI']) realisasi += extractNumber(rowData['REALISASI']);
+                if (rowData['SISA ANGGARAN']) sisa = extractNumber(rowData['SISA ANGGARAN']);
             });
-            
-            html += `</tr><tr>`;
-            categories.forEach(cat => {
-                cat.cols.forEach(col => {
-                    html += `<th style="font-size: 0.7rem;">${col.subLabel}</th>`;
-                });
-            });
-            html += `</tr></thead><tbody>`;
-            
-            let hasData = false;
-            let lastNo = '';
-            
-            anggaranData.forEach(row => {
-                if (row.isHeader) {
-                    if (searchQuery && !row.lembaga.toLowerCase().includes(searchQuery.toLowerCase())) return;
-                    hasData = true;
-                    lastNo = row.no;
-                    html += `<tr class="row-group">
-                        <td style="text-align:center;font-weight:800;color:var(--emas);">${row.no}</td>
-                        <td colspan="${totalCols - 1}" style="font-weight:800;color:var(--hijau-tua);">${row.lembaga}</td>
-                    </tr>`;
-                } else if (row.parentLembaga) {
-                    if (searchQuery && !row.parentLembaga.toLowerCase().includes(searchQuery.toLowerCase())) return;
-                    hasData = true;
-                    html += `<tr>`;
-                    html += `<td></td><td></td>`;
-                    row.categories.forEach(cat => {
-                        cat.cols && cat.cols.forEach((col, idx) => {
-                            // Akses data dengan subLabel
-                            const keys = Object.keys(cat.data || {});
-                            const key = keys[idx];
-                            html += `<td>${cat.data[key] || ''}</td>`;
-                        });
-                    });
-                    // Jika categories tidak lengkap, isi kolom kosong
-                    let filled = 0;
-                    row.categories.forEach(cat => { filled += (cat.cols ? cat.cols.length : 0); });
-                    if (filled < totalCols - 2) {
-                        html += `<td colspan="${totalCols - 2 - filled}"></td>`;
-                    }
-                    html += `</tr>`;
-                }
-            });
-            
-            html += `</tbody></table></div>`;
-            if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada data yang sesuai pencarian "${searchQuery}".</p></div>`;
-            return html;
-        }
+            return { anggaran, realisasi, sisa };
+        });
+        
+        // Skip jika semua kosong
+        if (categorySummary.every(c => c.anggaran === 0 && c.realisasi === 0 && c.sisa === 0)) return;
+        
+        hasData = true;
+        html += `<tr>
+            <td class="no-cell">${entry.no}</td>
+            <td style="text-align:left;font-weight:700;color:var(--hijau-tua);">${entry.lembaga}</td>`;
+        
+        categorySummary.forEach(cat => {
+            html += `
+                <td class="reward-cell">${cat.anggaran > 0 ? formatRupiah(cat.anggaran.toString()) : '-'}</td>
+                <td style="color: #16a085; font-weight: 700;">${cat.realisasi > 0 ? formatRupiah(cat.realisasi.toString()) : '-'}</td>
+                <td style="color: #c0392b; font-weight: 700;">${cat.sisa > 0 ? formatRupiah(cat.sisa.toString()) : '-'}</td>
+            `;
+        });
+        html += `</tr>`;
+    });
+    
+    html += `</tbody></table></div>`;
+    if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada data yang sesuai pencarian "${searchQuery}".</p></div>`;
+    return html;
+}
 
         // ============================================================
         // 🎯 EVENTS
