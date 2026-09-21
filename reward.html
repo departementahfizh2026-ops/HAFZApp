@@ -9,18 +9,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        /* ===== Garis Pembatas Vertikal Antar Kategori ===== */
-/* ===== Garis Pembatas Vertikal Antar Kategori ===== */
-.data-table th.kategori-start,
-.data-table td.kategori-start {
-    border-left: 2px solid #999 !important;
-}
-
-.data-table th.kategori-end,
-.data-table td.kategori-end {
-    border-right: 1px solid rgba(150, 150, 150, 0.2);
-}
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --hijau-tua: #1a4d2e; --hijau-muda: #2d6a4f; --emas: #c9a84c;
@@ -227,7 +215,6 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 0.85rem;
-            min-width: 700px;
         }
         .data-table thead {
             background: linear-gradient(135deg, var(--hijau-tua), #0f3d24);
@@ -240,6 +227,7 @@
             font-size: 0.8rem;
             letter-spacing: 0.3px;
             border-bottom: 2px solid var(--emas);
+            white-space: nowrap;
         }
         .data-table th:first-child { border-top-left-radius: 12px; }
         .data-table th:last-child { border-top-right-radius: 12px; }
@@ -272,6 +260,17 @@
         .data-table td.no-cell {
             font-weight: 700;
             color: var(--emas);
+        }
+
+        /* ===== GARIS PEMBATAS VERTIKAL ANTAR KATEGORI ===== */
+        .data-table th.kategori-start,
+        .data-table td.kategori-start {
+            border-left: 1px solid #999 !important;
+        }
+
+        .data-table th.kategori-end,
+        .data-table td.kategori-end {
+            border-right: 1px solid rgba(150, 150, 150, 0.3);
         }
 
         /* ===== PER LEMBAGA ===== */
@@ -410,13 +409,6 @@
         }
         .anggaran-cell .value.sisa.aman {
             color: #16a085;
-        }
-        .anggaran-cell .tanggal {
-            font-size: 0.7rem;
-            color: #999;
-            font-weight: 500;
-            margin-top: 4px;
-            font-style: italic;
         }
 
         /* ===== STATES ===== */
@@ -560,7 +552,6 @@
                 <button data-view="sheet"><i class="fas fa-table"></i> Tabel</button>
             </div>
             <div class="toolbar-buttons">
-                <!-- Button untuk ganti data source -->
                 <button class="toolbar-btn btn-data-source active" data-source="reward">
                     <i class="fas fa-trophy"></i> Reward
                 </button>
@@ -580,7 +571,7 @@
             </div>
         </div>
 
-        <div class="highlight-box" style="background: linear-gradient(135deg, var(--hijau-tua), #0f3d24); border-radius: var(--radius); padding: 40px 44px; margin: 50px 0 20px; color: var(--emas-muda); box-shadow: 0 12px 40px rgba(26,77,46,0.25); display: grid; grid-template-columns: 1fr; gap: 20px; text-align: center;">
+        <div style="background: linear-gradient(135deg, var(--hijau-tua), #0f3d24); border-radius: var(--radius); padding: 40px 44px; margin: 50px 0 20px; color: var(--emas-muda); box-shadow: 0 12px 40px rgba(26,77,46,0.25); display: grid; grid-template-columns: 1fr; gap: 20px; text-align: center;">
             <div>
                 <h3 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 12px;"><i class="fas fa-link" style="color: var(--emas); margin-right: 10px;"></i> DEPARTEMEN TAHFIZH</h3>
                 <p style="opacity: 0.9; line-height: 1.8;">
@@ -761,10 +752,10 @@
         let currentSource = 'reward';
         let currentView = 'lembaga';
         let searchQuery = '';
-        let rawData = [];           // untuk reward
-        let groupedData = {};       // untuk reward
-        let anggaranData = [];      // untuk anggaran
-        let anggaranHeaders = {};   // header info anggaran
+        let rawData = [];
+        let groupedData = {};
+        let anggaranData = [];
+        let anggaranHeaders = {};
 
         // ============================================================
         // 📊 FORMAT HELPERS
@@ -851,106 +842,98 @@
         // ============================================================
         // 📊 LOAD DATA (Realisasi Anggaran)
         // ============================================================
-        // ============================================================
-// 📊 LOAD DATA (Realisasi Anggaran) - DIPERBAIKI
-// ============================================================
-async function loadAnggaranData() {
-    const url = getCsvUrl('anggaran');
-    console.log('🔄 Memuat anggaran dari:', url);
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-    const csvText = await response.text();
-    const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
-    
-    if (lines.length < 3) throw new Error('Data anggaran kosong');
+        async function loadAnggaranData() {
+            const url = getCsvUrl('anggaran');
+            console.log('🔄 Memuat anggaran dari:', url);
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+            const csvText = await response.text();
+            const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+            
+            if (lines.length < 3) throw new Error('Data anggaran kosong');
 
-    const row1 = parseCSVLine(lines[0]);
-    const row2 = parseCSVLine(lines[1]);
-    
-    console.log('📋 Row1 (kategori):', row1);
-    console.log('📋 Row2 (sub-kolom):', row2);
+            const row1 = parseCSVLine(lines[0]);
+            const row2 = parseCSVLine(lines[1]);
+            
+            console.log('📋 Row1 (kategori):', row1);
+            console.log('📋 Row2 (sub-kolom):', row2);
 
-    // Bangun struktur kategori
-    let currentCat = null;
-    const categories = [];
-    
-    for (let i = 2; i < row2.length; i++) {
-        if (row1[i] && row1[i].trim()) {
-            currentCat = { name: row1[i].trim(), startIdx: i, cols: [] };
-            categories.push(currentCat);
-        }
-        if (currentCat) {
-            currentCat.cols.push({
-                index: i,
-                subLabel: (row2[i] || '').trim().toUpperCase()
-            });
-        }
-    }
-    
-    console.log('📊 Kategori:', categories.map(c => c.name + ' (' + c.cols.length + ' kolom)'));
+            // Bangun struktur kategori
+            let currentCat = null;
+            const categories = [];
+            
+            for (let i = 2; i < row2.length; i++) {
+                if (row1[i] && row1[i].trim()) {
+                    currentCat = { name: row1[i].trim(), startIdx: i, cols: [] };
+                    categories.push(currentCat);
+                }
+                if (currentCat) {
+                    currentCat.cols.push({
+                        index: i,
+                        subLabel: (row2[i] || '').trim().toUpperCase()
+                    });
+                }
+            }
+            
+            console.log('📊 Kategori:', categories.map(c => c.name + ' (' + c.cols.length + ' kolom)'));
 
-    // Parse data - gabungkan baris lembaga dengan baris pencairannya
-    anggaranData = [];
-    let currentEntry = null;
-    
-    for (let i = 2; i < lines.length; i++) {
-        const cols = parseCSVLine(lines[i]);
-        if (cols.length === 0 || cols.every(c => !c)) continue;
-        
-        const no = cols[0] || '';
-        const lembaga = cols[1] || '';
-        
-        // Deteksi baris lembaga baru (ada NO dan LEMBAGA)
-        if (no && lembaga && !isNaN(parseInt(no))) {
-            // Simpan entry sebelumnya
+            // Parse data - gabungkan baris lembaga dengan baris pencairannya
+            anggaranData = [];
+            let currentEntry = null;
+            
+            for (let i = 2; i < lines.length; i++) {
+                const cols = parseCSVLine(lines[i]);
+                if (cols.length === 0 || cols.every(c => !c)) continue;
+                
+                const no = cols[0] || '';
+                const lembaga = cols[1] || '';
+                
+                // Deteksi baris lembaga baru
+                if (no && lembaga && !isNaN(parseInt(no))) {
+                    if (currentEntry) anggaranData.push(currentEntry);
+                    
+                    currentEntry = {
+                        no: no,
+                        lembaga: lembaga.trim(),
+                        categories: categories.map(cat => ({
+                            name: cat.name,
+                            cols: cat.cols,
+                            data: [{}]
+                        }))
+                    };
+                    
+                    // Isi data dari baris ini
+                    categories.forEach((cat, catIdx) => {
+                        cat.cols.forEach(col => {
+                            const val = cols[col.index] || '';
+                            if (val && !currentEntry.categories[catIdx].data[0][col.subLabel]) {
+                                currentEntry.categories[catIdx].data[0][col.subLabel] = val;
+                            }
+                        });
+                    });
+                } else if (currentEntry && cols.some(c => c)) {
+                    // Baris lanjutan (pencairan tambahan)
+                    categories.forEach((cat, catIdx) => {
+                        const rowData = {};
+                        let hasData = false;
+                        cat.cols.forEach(col => {
+                            const val = cols[col.index] || '';
+                            if (val) {
+                                rowData[col.subLabel] = val;
+                                hasData = true;
+                            }
+                        });
+                        if (hasData) {
+                            currentEntry.categories[catIdx].data.push(rowData);
+                        }
+                    });
+                }
+            }
             if (currentEntry) anggaranData.push(currentEntry);
             
-            // Mulai entry baru
-            currentEntry = {
-                no: no,
-                lembaga: lembaga.trim(),
-                // Untuk setiap kategori, kumpulkan semua data
-                categories: categories.map(cat => ({
-                    name: cat.name,
-                    cols: cat.cols,
-                    // Array untuk menampung multiple baris data
-                    data: [{}]
-                }))
-            };
-            
-            // Isi data dari baris ini
-            categories.forEach((cat, catIdx) => {
-                cat.cols.forEach(col => {
-                    const val = cols[col.index] || '';
-                    if (val && !currentEntry.categories[catIdx].data[0][col.subLabel]) {
-                        currentEntry.categories[catIdx].data[0][col.subLabel] = val;
-                    }
-                });
-            });
-        } else if (currentEntry && cols.some(c => c)) {
-            // Baris lanjutan (pencairan tambahan untuk lembaga sebelumnya)
-            categories.forEach((cat, catIdx) => {
-                const rowData = {};
-                let hasData = false;
-                cat.cols.forEach(col => {
-                    const val = cols[col.index] || '';
-                    if (val) {
-                        rowData[col.subLabel] = val;
-                        hasData = true;
-                    }
-                });
-                if (hasData) {
-                    currentEntry.categories[catIdx].data.push(rowData);
-                }
-            });
+            console.log('✅ Anggaran:', anggaranData.length, 'lembaga');
+            anggaranHeaders = { categories };
         }
-    }
-    if (currentEntry) anggaranData.push(currentEntry);
-    
-    console.log('✅ Anggaran:', anggaranData.length, 'lembaga');
-    console.log('📊 Contoh data lembaga pertama:', anggaranData[0]);
-    anggaranHeaders = { categories };
-}
 
         // ============================================================
         // 📊 LOAD DATA berdasarkan sumber aktif
@@ -974,7 +957,7 @@ async function loadAnggaranData() {
         }
 
         // ============================================================
-        // 📝 Update text halaman sesuai sumber
+        // 📝 Update text halaman
         // ============================================================
         function updatePageText() {
             const src = DATA_SOURCES[currentSource];
@@ -986,7 +969,6 @@ async function loadAnggaranData() {
             document.getElementById('sectionSubtitle').textContent = 'Data dari sheet ' + src.name + ' — otomatis terupdate';
             document.getElementById('searchInput').placeholder = src.searchPlaceholder;
             
-            // Update active button
             document.querySelectorAll('.btn-data-source').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.source === currentSource);
             });
@@ -1116,212 +1098,192 @@ async function loadAnggaranData() {
         // ============================================================
         // 🎨 RENDER ANGGARAN: PER LEMBAGA
         // ============================================================
-        // ============================================================
-// 🎨 RENDER ANGGARAN: PER LEMBAGA
-// ============================================================
-function renderAnggaranPerLembaga() {
-    let html = '';
-    let hasData = false;
-    
-    anggaranData.forEach(entry => {
-        // Filter search
-        if (searchQuery) {
-            const q = searchQuery.toLowerCase();
-            if (!entry.lembaga.toLowerCase().includes(q)) return;
-        }
-        
-        hasData = true;
-        
-        // Header lembaga + total keseluruhan
-        let grandTotalAnggaran = 0;
-        let grandTotalRealisasi = 0;
-        
-        // Render tiap kategori
-        let categoryHtml = '';
-        entry.categories.forEach(cat => {
-            // Gabungkan nilai dari semua baris data
-            let totalAnggaran = 0;
-            let totalRealisasi = 0;
-            let sisaAnggaran = 0;
-            const tanggalList = [];
+        function renderAnggaranPerLembaga() {
+            let html = '';
+            let hasData = false;
             
-            cat.data.forEach(rowData => {
-                if (rowData['ANGGARAN']) totalAnggaran += extractNumber(rowData['ANGGARAN']);
-                if (rowData['REALISASI']) totalRealisasi += extractNumber(rowData['REALISASI']);
-                if (rowData['SISA ANGGARAN']) sisaAnggaran = extractNumber(rowData['SISA ANGGARAN']); // Ambil yang terakhir
-                if (rowData['TANGGAL PENCAIRAN']) tanggalList.push(rowData['TANGGAL PENCAIRAN']);
+            anggaranData.forEach(entry => {
+                if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    if (!entry.lembaga.toLowerCase().includes(q)) return;
+                }
+                
+                hasData = true;
+                
+                let grandTotalAnggaran = 0;
+                let grandTotalRealisasi = 0;
+                let categoryHtml = '';
+                
+                entry.categories.forEach(cat => {
+                    let totalAnggaran = 0;
+                    let totalRealisasi = 0;
+                    let sisaAnggaran = 0;
+                    const tanggalList = [];
+                    
+                    cat.data.forEach(rowData => {
+                        if (rowData['ANGGARAN']) totalAnggaran += extractNumber(rowData['ANGGARAN']);
+                        if (rowData['REALISASI']) totalRealisasi += extractNumber(rowData['REALISASI']);
+                        if (rowData['SISA ANGGARAN']) sisaAnggaran = extractNumber(rowData['SISA ANGGARAN']);
+                        if (rowData['TANGGAL PENCAIRAN']) tanggalList.push(rowData['TANGGAL PENCAIRAN']);
+                    });
+                    
+                    if (totalAnggaran === 0 && totalRealisasi === 0) return;
+                    
+                    grandTotalAnggaran += totalAnggaran;
+                    grandTotalRealisasi += totalRealisasi;
+                    
+                    const persen = totalAnggaran > 0 ? (totalRealisasi / totalAnggaran * 100).toFixed(1) : 0;
+                    
+                    categoryHtml += `
+                        <div class="anggaran-category">
+                            <div class="anggaran-category-header">
+                                <span>${cat.name}</span>
+                                <span class="persen">${persen}% tercairkan</span>
+                            </div>
+                            <div class="anggaran-category-body">
+                                <div class="anggaran-cell">
+                                    <div class="label">Anggaran</div>
+                                    <div class="value">${formatRupiah(totalAnggaran.toString())}</div>
+                                </div>
+                                <div class="anggaran-cell">
+                                    <div class="label">Realisasi</div>
+                                    <div class="value realisasi">${formatRupiah(totalRealisasi.toString())}</div>
+                                </div>
+                                <div class="anggaran-cell">
+                                    <div class="label">Sisa Anggaran</div>
+                                    <div class="value sisa ${sisaAnggaran > 0 ? 'aman' : ''}">${formatRupiah(sisaAnggaran.toString())}</div>
+                                </div>
+                            </div>
+                            ${tanggalList.length > 0 ? `
+                            <div style="background: var(--cream); padding: 8px 16px; font-size: 0.75rem; color: #7a8a85; display: flex; flex-wrap: wrap; gap: 12px; border-top: 1px solid rgba(201,168,76,0.15);">
+                                <span><i class="fas fa-calendar-alt" style="color: var(--emas); margin-right: 4px;"></i> Tanggal Pencairan:</span>
+                                ${tanggalList.map(t => `<span style="background: var(--putih); padding: 2px 10px; border-radius: 20px; border: 1px solid rgba(201,168,76,0.2); font-weight: 600; color: var(--hijau-tua);">${t}</span>`).join('')}
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+                
+                if (!categoryHtml) return;
+                
+                html += `
+                    <div class="lembaga-section fade-up visible">
+                        <div class="lembaga-header">
+                            <h3><span class="badge-letter">${entry.no}</span> ${entry.lembaga}</h3>
+                            <div class="lembaga-total">
+                                <i class="fas fa-wallet"></i> Anggaran: ${formatRupiah(grandTotalAnggaran.toString())} &nbsp;·&nbsp;
+                                <i class="fas fa-hand-holding-usd"></i> Realisasi: ${formatRupiah(grandTotalRealisasi.toString())}
+                            </div>
+                        </div>
+                        <div style="padding: 16px; background: var(--putih);">
+                            ${categoryHtml}
+                        </div>
+                    </div>
+                `;
             });
             
-            // Skip jika benar-benar kosong
-            if (totalAnggaran === 0 && totalRealisasi === 0) return;
-            
-            grandTotalAnggaran += totalAnggaran;
-            grandTotalRealisasi += totalRealisasi;
-            
-            const persen = totalAnggaran > 0 ? (totalRealisasi / totalAnggaran * 100).toFixed(1) : 0;
-            
-            categoryHtml += `
-                <div class="anggaran-category">
-                    <div class="anggaran-category-header">
-                        <span>${cat.name}</span>
-                        <span class="persen">${persen}% tercairkan</span>
-                    </div>
-                    <div class="anggaran-category-body">
-                        <div class="anggaran-cell">
-                            <div class="label">Anggaran</div>
-                            <div class="value">${formatRupiah(totalAnggaran.toString())}</div>
-                        </div>
-                        <div class="anggaran-cell">
-                            <div class="label">Realisasi</div>
-                            <div class="value realisasi">${formatRupiah(totalRealisasi.toString())}</div>
-                        </div>
-                        <div class="anggaran-cell">
-                            <div class="label">Sisa Anggaran</div>
-                            <div class="value sisa ${sisaAnggaran > 0 ? 'aman' : ''}">${formatRupiah(sisaAnggaran.toString())}</div>
-                        </div>
-                    </div>
-                    ${tanggalList.length > 0 ? `
-                    <div style="background: var(--cream); padding: 8px 16px; font-size: 0.75rem; color: #7a8a85; display: flex; flex-wrap: wrap; gap: 12px; border-top: 1px solid rgba(201,168,76,0.15);">
-                        <span><i class="fas fa-calendar-alt" style="color: var(--emas); margin-right: 4px;"></i> Tanggal Pencairan:</span>
-                        ${tanggalList.map(t => `<span style="background: var(--putih); padding: 2px 10px; border-radius: 20px; border: 1px solid rgba(201,168,76,0.2); font-weight: 600; color: var(--hijau-tua);">${t}</span>`).join('')}
-                    </div>
-                    ` : ''}
-                </div>
-            `;
-        });
-        
-        if (!categoryHtml) return; // Skip jika tidak ada data kategori
-        
-        html += `
-            <div class="lembaga-section fade-up visible">
-                <div class="lembaga-header">
-                    <h3><span class="badge-letter">${entry.no}</span> ${entry.lembaga}</h3>
-                    <div class="lembaga-total">
-                        <i class="fas fa-wallet"></i> Anggaran: ${formatRupiah(grandTotalAnggaran.toString())} &nbsp;·&nbsp;
-                        <i class="fas fa-hand-holding-usd"></i> Realisasi: ${formatRupiah(grandTotalRealisasi.toString())}
-                    </div>
-                </div>
-                <div style="padding: 16px; background: var(--putih);">
-                    ${categoryHtml}
-                </div>
-            </div>
-        `;
-    });
-    
-    if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada lembaga yang sesuai pencarian "${searchQuery}".</p></div>`;
-    return html;
-}
+            if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada lembaga yang sesuai pencarian "${searchQuery}".</p></div>`;
+            return html;
+        }
 
         // ============================================================
         // 🎨 RENDER ANGGARAN: TABEL SHEET
         // ============================================================
-        // ============================================================
-// ============================================================
-// 🎨 RENDER ANGGARAN: TABEL SHEET (DENGAN TANGGAL PENCAIRAN)
-// ============================================================
-// ============================================================
-// 🎨 RENDER ANGGARAN: TABEL SHEET (DENGAN GARIS PEMBATAS)
-// ============================================================
-function renderAnggaranTableSheet() {
-    const categories = anggaranHeaders.categories || [];
-    
-    // Hitung total kolom
-    let totalCols = 2; // NO + LEMBAGA
-    categories.forEach(cat => { totalCols += cat.cols.length; });
-    
-    let html = `<div class="table-container fade-up visible"><table class="data-table" style="min-width: 1400px;">
-        <thead>
-            <tr>
-                <th rowspan="2" style="vertical-align: middle; width: 50px;">NO</th>
-                <th rowspan="2" style="vertical-align: middle; width: 180px;">LEMBAGA</th>`;
-    
-    // Baris 1 header: kategori
-    categories.forEach((cat, catIdx) => {
-        const cls = catIdx === 0 ? 'kategori-start' : '';
-        html += `<th colspan="${cat.cols.length}" class="${cls}" style="background: linear-gradient(135deg, #0f3d24, var(--hijau-tua));">${cat.name}</th>`;
-    });
-    
-    html += `</tr><tr>`;
-    
-    // Baris 2 header: sub-kolom
-    categories.forEach(cat => {
-        cat.cols.forEach((col, colIdx) => {
-            const isFirst = colIdx === 0;
-            const isLast = colIdx === cat.cols.length - 1;
-            let cls = [];
-            if (isFirst) cls.push('kategori-start');
-            if (isLast) cls.push('kategori-end');
-            html += `<th class="${cls.join(' ')}" style="font-size: 0.7rem; white-space: nowrap;">${col.subLabel}</th>`;
-        });
-    });
-    
-    html += `</tr></thead><tbody>`;
-    
-    let hasData = false;
-    
-    anggaranData.forEach(entry => {
-        if (searchQuery && !entry.lembaga.toLowerCase().includes(searchQuery.toLowerCase())) return;
-        
-        const hasAnyData = entry.categories.some(cat => 
-            cat.data.some(rowData => Object.keys(rowData).length > 0)
-        );
-        if (!hasAnyData) return;
-        
-        hasData = true;
-        
-        // ===== Baris header lembaga =====
-        html += `<tr class="row-group">
-            <td style="text-align:center;font-weight:800;color:var(--emas);">${entry.no}</td>
-            <td colspan="${totalCols - 1}" style="font-weight:800;color:var(--hijau-tua);">${entry.lembaga}</td>
-        </tr>`;
-        
-        // ===== Baris data per pencairan =====
-        let maxRows = 0;
-        entry.categories.forEach(cat => {
-            maxRows = Math.max(maxRows, cat.data.length);
-        });
-        
-        for (let r = 0; r < maxRows; r++) {
-            html += `<tr>`;
-            html += `<td></td><td></td>`; // Kolom NO & LEMBAGA untuk baris data
+        function renderAnggaranTableSheet() {
+            const categories = anggaranHeaders.categories || [];
+            
+            let totalCols = 2;
+            categories.forEach(cat => { totalCols += cat.cols.length; });
+            
+            let html = `<div class="table-container fade-up visible"><table class="data-table" style="min-width: 1400px;">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="vertical-align: middle; width: 50px; min-width: 50px;">NO</th>
+                        <th rowspan="2" style="vertical-align: middle; width: 180px; min-width: 180px;">LEMBAGA</th>`;
             
             categories.forEach((cat, catIdx) => {
-                const rowData = entry.categories[catIdx].data[r] || {};
-                
+                const cls = catIdx === 0 ? 'kategori-start' : '';
+                html += `<th colspan="${cat.cols.length}" class="${cls}" style="background: linear-gradient(135deg, #0f3d24, var(--hijau-tua));">${cat.name}</th>`;
+            });
+            
+            html += `</tr><tr>`;
+            
+            categories.forEach(cat => {
                 cat.cols.forEach((col, colIdx) => {
                     const isFirst = colIdx === 0;
                     const isLast = colIdx === cat.cols.length - 1;
                     let cls = [];
                     if (isFirst) cls.push('kategori-start');
                     if (isLast) cls.push('kategori-end');
-                    
-                    const val = rowData[col.subLabel] || '';
-                    let cellStyle = '';
-                    
-                    // Style khusus per sub-kolom
-                    if (col.subLabel === 'ANGGARAN' && val) {
-                        cellStyle = 'font-weight: 700; color: var(--hijau-tua);';
-                    } else if (col.subLabel === 'REALISASI' && val) {
-                        cellStyle = 'font-weight: 700; color: #16a085;';
-                    } else if (col.subLabel === 'SISA ANGGARAN' && val) {
-                        const sisaNum = extractNumber(val);
-                        cellStyle = `font-weight: 700; color: ${sisaNum > 0 ? '#16a085' : '#c0392b'};`;
-                    } else if (col.subLabel === 'TANGGAL PENCAIRAN' && val) {
-                        cellStyle = 'font-style: italic; color: #7a8a85; font-size: 0.8rem; white-space: nowrap;';
-                    }
-                    
-                    html += `<td class="${cls.join(' ')}" style="${cellStyle}">${val || ''}</td>`;
+                    html += `<th class="${cls.join(' ')}" style="font-size: 0.7rem; white-space: nowrap;">${col.subLabel}</th>`;
                 });
             });
             
-            html += `</tr>`;
+            html += `</tr></thead><tbody>`;
+            
+            let hasData = false;
+            
+            anggaranData.forEach(entry => {
+                if (searchQuery && !entry.lembaga.toLowerCase().includes(searchQuery.toLowerCase())) return;
+                
+                const hasAnyData = entry.categories.some(cat => 
+                    cat.data.some(rowData => Object.keys(rowData).length > 0)
+                );
+                if (!hasAnyData) return;
+                
+                hasData = true;
+                
+                html += `<tr class="row-group">
+                    <td style="text-align:center;font-weight:800;color:var(--emas);">${entry.no}</td>
+                    <td colspan="${totalCols - 1}" style="font-weight:800;color:var(--hijau-tua); white-space: nowrap;">${entry.lembaga}</td>
+                </tr>`;
+                
+                let maxRows = 0;
+                entry.categories.forEach(cat => {
+                    maxRows = Math.max(maxRows, cat.data.length);
+                });
+                
+                for (let r = 0; r < maxRows; r++) {
+                    html += `<tr>`;
+                    html += `<td></td><td></td>`;
+                    
+                    categories.forEach((cat, catIdx) => {
+                        const rowData = entry.categories[catIdx].data[r] || {};
+                        
+                        cat.cols.forEach((col, colIdx) => {
+                            const isFirst = colIdx === 0;
+                            const isLast = colIdx === cat.cols.length - 1;
+                            let cls = [];
+                            if (isFirst) cls.push('kategori-start');
+                            if (isLast) cls.push('kategori-end');
+                            
+                            const val = rowData[col.subLabel] || '';
+                            let cellStyle = '';
+                            
+                            if (col.subLabel === 'ANGGARAN' && val) {
+                                cellStyle = 'font-weight: 700; color: var(--hijau-tua);';
+                            } else if (col.subLabel === 'REALISASI' && val) {
+                                cellStyle = 'font-weight: 700; color: #16a085;';
+                            } else if (col.subLabel === 'SISA ANGGARAN' && val) {
+                                const sisaNum = extractNumber(val);
+                                cellStyle = `font-weight: 700; color: ${sisaNum > 0 ? '#16a085' : '#c0392b'};`;
+                            } else if (col.subLabel === 'TANGGAL PENCAIRAN' && val) {
+                                cellStyle = 'font-style: italic; color: #7a8a85; font-size: 0.8rem; white-space: nowrap;';
+                            }
+                            
+                            html += `<td class="${cls.join(' ')}" style="${cellStyle}">${val || ''}</td>`;
+                        });
+                    });
+                    
+                    html += `</tr>`;
+                }
+            });
+            
+            html += `</tbody></table></div>`;
+            if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada data yang sesuai pencarian "${searchQuery}".</p></div>`;
+            return html;
         }
-    });
-    
-    html += `</tbody></table></div>`;
-    if (!hasData) return `<div class="empty-state"><i class="fas fa-search"></i><p>Tidak ada data yang sesuai pencarian "${searchQuery}".</p></div>`;
-    return html;
-}
+
         // ============================================================
         // 🎯 EVENTS
         // ============================================================
@@ -1402,7 +1364,6 @@ function renderAnggaranTableSheet() {
                     alternateRowStyles: { fillColor: [250, 246, 237] }
                 });
             } else {
-                // Anggaran
                 const categories = anggaranHeaders.categories || [];
                 const head = [['NO', 'LEMBAGA']];
                 const head2 = [['', '']];
@@ -1415,21 +1376,25 @@ function renderAnggaranTableSheet() {
                 });
                 
                 const body = [];
-                anggaranData.forEach(row => {
-                    if (row.isHeader) {
-                        const rowArr = [row.no, row.lembaga];
-                        for (let i = 2; i < head[0].length; i++) rowArr.push('');
-                        body.push(rowArr.map((c, i) => 
-                            i < 2 ? { content: c, styles: { fontStyle: 'bold', fillColor: [232, 212, 139], textColor: [26, 77, 46] } } : { content: c, styles: { fillColor: [232, 212, 139] } }
-                        ));
-                    } else if (row.parentLembaga) {
-                        const rowArr = ['', ''];
-                        row.categories.forEach(cat => {
+                anggaranData.forEach(entry => {
+                    const rowArr = [entry.no, entry.lembaga];
+                    for (let i = 2; i < head[0].length; i++) rowArr.push('');
+                    body.push(rowArr.map((c, i) => 
+                        i < 2 ? { content: c, styles: { fontStyle: 'bold', fillColor: [232, 212, 139], textColor: [26, 77, 46] } } : { content: c, styles: { fillColor: [232, 212, 139] } }
+                    ));
+                    
+                    let maxRows = 0;
+                    entry.categories.forEach(cat => { maxRows = Math.max(maxRows, cat.data.length); });
+                    
+                    for (let r = 0; r < maxRows; r++) {
+                        const dataRow = ['', ''];
+                        entry.categories.forEach(cat => {
                             cat.cols.forEach(col => {
-                                rowArr.push(cat.data[col.subLabel] || '');
+                                const val = (cat.data[r] || {})[col.subLabel] || '';
+                                dataRow.push(val);
                             });
                         });
-                        body.push(rowArr);
+                        body.push(dataRow);
                     }
                 });
                 
@@ -1477,19 +1442,22 @@ function renderAnggaranTableSheet() {
                 excelData.push(head1);
                 excelData.push(head2);
                 
-                anggaranData.forEach(row => {
-                    if (row.isHeader) {
-                        const rowArr = [row.no, row.lembaga];
-                        for (let i = 2; i < head1.length; i++) rowArr.push('');
-                        excelData.push(rowArr);
-                    } else if (row.parentLembaga) {
-                        const rowArr = ['', ''];
-                        row.categories.forEach(cat => {
+                anggaranData.forEach(entry => {
+                    const rowArr = [entry.no, entry.lembaga];
+                    for (let i = 2; i < head1.length; i++) rowArr.push('');
+                    excelData.push(rowArr);
+                    
+                    let maxRows = 0;
+                    entry.categories.forEach(cat => { maxRows = Math.max(maxRows, cat.data.length); });
+                    
+                    for (let r = 0; r < maxRows; r++) {
+                        const dataRow = ['', ''];
+                        entry.categories.forEach(cat => {
                             cat.cols.forEach(col => {
-                                rowArr.push(cat.data[col.subLabel] || '');
+                                dataRow.push((cat.data[r] || {})[col.subLabel] || '');
                             });
                         });
-                        excelData.push(rowArr);
+                        excelData.push(dataRow);
                     }
                 });
                 fileName = 'Laporan-Realisasi-Anggaran.xlsx';
