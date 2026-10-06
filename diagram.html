@@ -389,10 +389,8 @@
     <div class="ornament ornament-2"></div>
 
     <div class="container">
-        
-        <!-- ===== NAVBAR ===== -->
-       <!-- ===== NAVBAR (di-load dari navbar.html) ===== -->
-<div id="navbar-container"></div>
+        <!-- ===== NAVBAR (di-load dari navbar.html) ===== -->
+        <div id="navbar-container"></div>
 
         <!-- ===== HERO ===== -->
         <section class="hero">
@@ -480,6 +478,7 @@
             <div class="footer-logo"><i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span></div>
             <div class="footer-links">
                 <a href="index.html">Menu</a>
+                <a href="reward.html">Reward</a>
                 <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
             </div>
             <div style="font-size:0.8rem;opacity:0.6;">© 2026 · Departemen Tahfizh</div>
@@ -517,11 +516,56 @@
 
     <script>
         // ============================================================
+        // 📌 LOAD NAVBAR DARI FILE EKSTERNAL
+        // ============================================================
+        async function loadNavbar() {
+            try {
+                const response = await fetch('navbar.html');
+                const html = await response.text();
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+                console.log('✅ Navbar berhasil dimuat');
+            } catch (error) {
+                console.error('❌ Gagal memuat navbar:', error);
+                document.getElementById('navbar-container').innerHTML = 
+                    '<p style="text-align:center;color:#e74c3c;padding:20px;">Gagal memuat navbar</p>';
+            }
+        }
+
+        function initNavbar() {
+            const toggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            if (!toggle || !navLinks) return;
+            
+            toggle.addEventListener('click', () => {
+                navLinks.classList.toggle('open');
+                const icon = toggle.querySelector('i');
+                icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+            });
+            
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                if (link.getAttribute('href') === currentPage) link.classList.add('active');
+            });
+            
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('open');
+                    const icon = toggle.querySelector('i');
+                    icon.className = 'fas fa-bars';
+                });
+            });
+            
+            document.querySelectorAll('.tentang-link').forEach(l => {
+                l.addEventListener('click', e => { e.preventDefault(); openModal('tentangModal'); });
+            });
+        }
+
+        // ============================================================
         // 🔧 KONFIGURASI
         // ============================================================
         const CHART_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQtcUnWuW83ACf_wEccbl-HUapE0h1dkcNXo4Tec41qVGJeOPDjysL46gVXtu8jqCFAgK01cKipJPp2/pub?output=csv';
 
-        // Kolom untuk chart batang (semua kategori)
         const CHART_COLUMNS = [
             { label: 'Tasmi 1 Juz Muqorror', keywords: ['tasmi 1 juz', 'muqorror'] },
             { label: 'Tasmi 1 Juz Luar Muqorror', keywords: ['tasmi 1 juz', 'luar'] },
@@ -533,10 +577,13 @@
             { label: 'Tasmi 30 Juz Sekali Duduk', keywords: ['tasmi 30', 'sekali duduk'] }
         ];
 
-        // Kolom untuk laporan sertifikat
+        // ============================================================
+        // 📋 KOLOM LAPORAN SERTIFIKAT (Tabel Detail Capaian)
+        // ============================================================
         const LAPORAN_COLUMNS = [
             { key: 'jumlahSantri', label: 'Jumlah Santri', short: 'Jumlah Santri', icon: 'fa-users', keywords: ['jumlah santri'], isNonSertifikat: true },
             { key: 'tasmi1', label: 'Tasmi 1 Juz Sesuai Muqorror', short: 'Tasmi 1 Juz', icon: 'fa-certificate', keywords: ['tasmi 1 juz', 'muqorror'] },
+            { key: 'setengahJuz', label: "Tasmi' 1/2 Juz", short: 'Tasmi 1/2 Juz', icon: 'fa-bookmark', keywords: ['tasmi', '1/2'] },
             { key: 'tasmi3', label: 'Tasmi 3 Juz', short: 'Tasmi 3 Juz', icon: 'fa-star', keywords: ['tasmi 3 juz'] },
             { key: 'tasmi5', label: 'Tasmi 5 Juz', short: 'Tasmi 5 Juz', icon: 'fa-star-half-alt', keywords: ['tasmi 5 juz'] },
             { key: 'setoran', label: 'Setoran 10, 20, 30 Juz', short: 'Setoran 10/20/30 Juz', icon: 'fa-layer-group', keywords: ['setoran'] },
@@ -544,33 +591,21 @@
         ];
 
         // ============================================================
-        // 🎯 PARSER CSV YANG BENAR (Mengatasi: \r\n, tanda kutip, kolom kosong)
+        // 🎯 PARSER CSV & ANGKA
         // ============================================================
         function parseCSVLine(line) {
             const result = [];
             let current = '';
             let inQuotes = false;
-            
-            // Hapus \r di akhir
             line = line.replace(/\r$/, '');
-            
             for (let i = 0; i < line.length; i++) {
                 const char = line[i];
                 const nextChar = line[i + 1];
-                
                 if (char === '"') {
-                    if (inQuotes && nextChar === '"') {
-                        // Escaped quote
-                        current += '"';
-                        i++;
-                    } else {
-                        // Toggle quote mode
-                        inQuotes = !inQuotes;
-                    }
+                    if (inQuotes && nextChar === '"') { current += '"'; i++; }
+                    else { inQuotes = !inQuotes; }
                 } else if (char === ',' && !inQuotes) {
-                    // Pemisah kolom
-                    result.push(current.trim());
-                    current = '';
+                    result.push(current.trim()); current = '';
                 } else {
                     current += char;
                 }
@@ -579,23 +614,16 @@
             return result;
         }
 
-        // ============================================================
-        // 🔢 PARSER ANGKA YANG TOLERAN
-        // ============================================================
         function parseNumber(str) {
             if (str === null || str === undefined || str === '') return 0;
-            
-            // Bersihkan karakter khusus
             const cleaned = str.toString()
-                .replace(/["'`]/g, '')           // hapus semua jenis kutip
-                .replace(/\u00A0/g, '')          // hapus non-breaking space
-                .replace(/\s/g, '')              // hapus semua spasi
-                .replace(/^[-–—]+$/, '')         // hapus jika cuma tanda strip
-                .replace(/,/g, '.')              // ganti koma desimal jadi titik
+                .replace(/["'`]/g, '')
+                .replace(/\u00A0/g, '')
+                .replace(/\s/g, '')
+                .replace(/^[-–—]+$/, '')
+                .replace(/,/g, '.')
                 .trim();
-            
             if (cleaned === '' || cleaned === '-') return 0;
-            
             const num = parseFloat(cleaned);
             return isNaN(num) ? 0 : num;
         }
@@ -611,27 +639,12 @@
             const m = document.getElementById(id); 
             if (m) { m.classList.remove('active'); document.body.style.overflow = ''; } 
         }
-        document.querySelectorAll('.tentang-link').forEach(l => {
-            l.addEventListener('click', e => { e.preventDefault(); openModal('tentangModal'); });
-        });
         const tm = document.getElementById('tentangModal');
         if (tm) {
             document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
             tm.addEventListener('click', e => { if (e.target === tm) closeModal('tentangModal'); });
         }
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeModal('tentangModal');
-        });
-
-        // ============================================================
-        // 📱 MOBILE MENU
-        // ============================================================
-        //const toggle = document.getElementById('menuToggle');
-        //const navLinks = document.getElementById('navLinks');
-        //toggle.addEventListener('click', () => {
-          //  navLinks.classList.toggle('open');
-            //toggle.querySelector('i').className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-        //});
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal('tentangModal'); });
 
         // ============================================================
         // 📜 SCROLL ANIMATION
@@ -679,7 +692,6 @@
                 if (!response.ok) throw new Error(`HTTP error ${response.status}`);
                 
                 const csvText = await response.text();
-                // Pisah baris dengan \r\n atau \n
                 const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
                 
                 console.log('📊 Jumlah baris:', lines.length);
@@ -689,11 +701,10 @@
                     return;
                 }
 
-                // 🔧 Gunakan parser CSV yang benar
                 const headers = parseCSVLine(lines[0]);
                 console.log('📋 Headers:', headers);
 
-                // ===== Proses untuk Chart Batang =====
+                // Proses untuk Chart Batang
                 const lembagaIndex = findColumnByKeywords(headers, ['lembaga']);
                 const columnIndices = [];
                 const columnLabels = [];
@@ -729,7 +740,7 @@
                     if (chartData.length > 0) renderChart(chartData[0], columnLabels);
                 }
 
-                // ===== Proses untuk Laporan Sertifikat =====
+                // Proses untuk Laporan Sertifikat
                 renderLaporan(headers, lines);
 
                 console.log('✅ Semua diagram berhasil dimuat!');
@@ -747,13 +758,11 @@
             const lembagaIndex = findColumnByKeywords(headers, ['lembaga']);
             if (lembagaIndex === -1) return;
 
-            // Cari index untuk setiap kolom laporan
             const laporanCols = LAPORAN_COLUMNS.map(col => {
                 const idx = findColumnByKeywords(headers, col.keywords);
                 return { ...col, index: idx };
             });
 
-            // Ambil data per lembaga
             const lembagaData = [];
             const totals = {};
             LAPORAN_COLUMNS.forEach(col => totals[col.key] = 0);
@@ -772,24 +781,24 @@
                 lembagaData.push(row);
             }
 
-            // ===== RENDER SUMMARY CARDS =====
+            // RENDER SUMMARY CARDS (kecuali Jumlah Santri)
             const summaryContainer = document.getElementById('summaryCards');
-summaryContainer.innerHTML = '';
-LAPORAN_COLUMNS.forEach(col => {
-    // ✅ Lewati kolom non-sertifikat (Jumlah Santri) — tidak dibuat kartu
-    if (col.isNonSertifikat) return;
-    
-    const card = document.createElement('div');
-    card.className = 'summary-card';
-    card.innerHTML = `
-        <div class="icon"><i class="fas ${col.icon}"></i></div>
-        <div class="number">${totals[col.key]}</div>
-        <div class="label">${col.label}</div>
-        <div class="total-note">Total dari ${lembagaData.length} lembaga</div>
-    `;
-    summaryContainer.appendChild(card);
-});
-            // ===== RENDER TABLE =====
+            summaryContainer.innerHTML = '';
+            LAPORAN_COLUMNS.forEach(col => {
+                if (col.isNonSertifikat) return;
+                
+                const card = document.createElement('div');
+                card.className = 'summary-card';
+                card.innerHTML = `
+                    <div class="icon"><i class="fas ${col.icon}"></i></div>
+                    <div class="number">${totals[col.key]}</div>
+                    <div class="label">${col.label}</div>
+                    <div class="total-note">Total dari ${lembagaData.length} lembaga</div>
+                `;
+                summaryContainer.appendChild(card);
+            });
+
+            // RENDER TABLE
             const thead = document.getElementById('tableHead');
             const tbody = document.getElementById('tableBody');
             const tfoot = document.getElementById('tableFoot');
@@ -815,7 +824,7 @@ LAPORAN_COLUMNS.forEach(col => {
             });
             tbody.innerHTML = bodyHtml;
 
-            // ===== RENDER FOOTER TOTAL =====
+            // RENDER FOOTER TOTAL
             let footHtml = '<tr><td>TOTAL</td>';
             let totalSertifikatFooter = 0;
             LAPORAN_COLUMNS.forEach(col => {
@@ -825,7 +834,7 @@ LAPORAN_COLUMNS.forEach(col => {
             footHtml += `<td>${totalSertifikatFooter}</td></tr>`;
             tfoot.innerHTML = footHtml;
 
-            // ===== RENDER PIE CHART =====
+            // RENDER PIE CHART
             const pieCtx = document.getElementById('pieChart').getContext('2d');
             if (pieChart) pieChart.destroy();
 
@@ -837,14 +846,16 @@ LAPORAN_COLUMNS.forEach(col => {
                 'rgba(45, 106, 79, 0.85)',
                 'rgba(201, 168, 76, 0.85)',
                 'rgba(232, 212, 139, 0.85)',
-                'rgba(15, 61, 36, 0.85)'
+                'rgba(15, 61, 36, 0.85)',
+                'rgba(150, 130, 60, 0.85)'
             ];
             const pieBorderColors = [
                 'rgba(26, 77, 46, 1)',
                 'rgba(45, 106, 79, 1)',
                 'rgba(201, 168, 76, 1)',
                 'rgba(232, 212, 139, 1)',
-                'rgba(15, 61, 36, 1)'
+                'rgba(15, 61, 36, 1)',
+                'rgba(150, 130, 60, 1)'
             ];
 
             pieChart = new Chart(pieCtx, {
@@ -853,8 +864,8 @@ LAPORAN_COLUMNS.forEach(col => {
                     labels: pieLabels,
                     datasets: [{
                         data: pieValues,
-                        backgroundColor: pieColors,
-                        borderColor: pieBorderColors,
+                        backgroundColor: pieColors.slice(0, pieLabels.length),
+                        borderColor: pieBorderColors.slice(0, pieLabels.length),
                         borderWidth: 2
                     }]
                 },
@@ -981,64 +992,10 @@ LAPORAN_COLUMNS.forEach(col => {
         // 🚀 START
         // ============================================================
         console.log('🌙 HAFZApp - Halaman Diagram — Barakallah!');
-        document.addEventListener('DOMContentLoaded', loadChartData);
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            setTimeout(loadChartData, 100);
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNavbar();
+            loadChartData();
+        });
     </script>
-    
-    <script>
-    // ============================================================
-    // 📌 LOAD NAVBAR DARI FILE EKSTERNAL
-    // ============================================================
-    async function loadNavbar() {
-        try {
-            const response = await fetch('navbar.html');
-            const html = await response.text();
-            document.getElementById('navbar-container').innerHTML = html;
-            initNavbar();
-            console.log('✅ Navbar berhasil dimuat');
-        } catch (error) {
-            console.error('❌ Gagal memuat navbar:', error);
-        }
-    }
-
-    function initNavbar() {
-        const toggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        if (!toggle || !navLinks) return;
-        
-        toggle.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
-            const icon = toggle.querySelector('i');
-            icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-        });
-        
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            if (link.getAttribute('href') === currentPage) {
-                link.classList.add('active');
-            }
-        });
-        
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('open');
-                const icon = toggle.querySelector('i');
-                icon.className = 'fas fa-bars';
-            });
-        });
-        
-        document.querySelectorAll('.tentang-link').forEach(l => {
-            l.addEventListener('click', e => { 
-                e.preventDefault(); 
-                openModal('tentangModal'); 
-            });
-        });
-    }
-    
-    // Panggil loadNavbar saat DOM siap
-    document.addEventListener('DOMContentLoaded', loadNavbar);
-</script>
 </body>
 </html>
