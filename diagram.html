@@ -6,6 +6,9 @@
     <title>HAFZApp - Diagram Capaian Tasmi'</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -154,14 +157,59 @@
             border: 1px solid rgba(201,168,76,0.12);
             overflow-x: auto;
         }
+        .table-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
         .table-wrapper h3 {
             font-size: 1.4rem;
             color: var(--hijau-tua);
             font-weight: 800;
-            margin-bottom: 20px;
             text-align: center;
+            margin: 0;
+            flex: 1;
+            min-width: 200px;
         }
         .table-wrapper h3 i { color: var(--emas); margin-right: 8px; }
+        .table-export-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .table-export-btn {
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .table-export-btn.btn-pdf {
+            background: #c0392b;
+            color: white;
+        }
+        .table-export-btn.btn-pdf:hover {
+            background: #a93226;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(192,57,43,0.3);
+        }
+        .table-export-btn.btn-excel {
+            background: #16a085;
+            color: white;
+        }
+        .table-export-btn.btn-excel:hover {
+            background: #12876f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(22,160,133,0.3);
+        }
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -374,6 +422,7 @@
             .summary-card .number { font-size: 1.8rem; }
             .pie-wrapper { padding: 24px 16px; }
             .pie-wrapper .chart-container { height: 300px; }
+            .table-header-row { flex-direction: column; }
         }
         @media (max-width: 480px) {
             .container { padding: 12px 14px 40px; }
@@ -381,6 +430,7 @@
             .summary-grid { grid-template-columns: 1fr; }
             .summary-card .number { font-size: 2rem; }
             .pie-wrapper .chart-container { height: 250px; }
+            .table-export-btn { font-size: 0.7rem; padding: 6px 10px; }
         }
     </style>
 </head>
@@ -407,8 +457,30 @@
             <p class="subtitle">Rekapitulasi capaian sertifikat tasmi' dari seluruh lembaga</p>
         </div>
 
+        <!-- ===== 1. KARTU RINGKASAN (POSISI 1) ===== -->
         <div class="summary-grid fade-up" id="summaryCards"></div>
 
+        <!-- ===== 2. TABEL DETAIL (POSISI 2) ===== -->
+        <div class="table-wrapper fade-up">
+            <div class="table-header-row">
+                <h3><i class="fas fa-table"></i> Detail Capaian per Lembaga</h3>
+                <div class="table-export-buttons">
+                    <button class="table-export-btn btn-pdf" id="exportDetailPdfBtn">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </button>
+                    <button class="table-export-btn btn-excel" id="exportDetailExcelBtn">
+                        <i class="fas fa-file-excel"></i> Excel
+                    </button>
+                </div>
+            </div>
+            <table class="data-table" id="detailTable">
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+                <tfoot id="tableFoot"></tfoot>
+            </table>
+        </div>
+
+        <!-- ===== 3. PIE CHART (POSISI 3) ===== -->
         <div class="pie-wrapper fade-up">
             <h3><i class="fas fa-chart-pie"></i> Proporsi Capaian Sertifikat</h3>
             <p class="pie-subtitle">Distribusi total capaian per kategori sertifikat</p>
@@ -417,16 +489,7 @@
             </div>
         </div>
 
-        <div class="table-wrapper fade-up">
-            <h3><i class="fas fa-table"></i> Detail Capaian per Lembaga</h3>
-            <table class="data-table" id="detailTable">
-                <thead id="tableHead"></thead>
-                <tbody id="tableBody"></tbody>
-                <tfoot id="tableFoot"></tfoot>
-            </table>
-        </div>
-
-        <!-- ===== CHART CAPAIAN PER LEMBAGA ===== -->
+        <!-- ===== 4. CHART CAPAIAN PER LEMBAGA (POSISI 4) ===== -->
         <div class="section-title">
             <h2><i class="fas fa-chart-bar"></i> Perkembangan Tahfizh</h2>
             <p class="subtitle">Visualisasi capaian tasmi' per lembaga</p>
@@ -516,7 +579,7 @@
 
     <script>
         // ============================================================
-        // 📌 LOAD NAVBAR DARI FILE EKSTERNAL
+        // 📌 LOAD NAVBAR
         // ============================================================
         async function loadNavbar() {
             try {
@@ -527,8 +590,6 @@
                 console.log('✅ Navbar berhasil dimuat');
             } catch (error) {
                 console.error('❌ Gagal memuat navbar:', error);
-                document.getElementById('navbar-container').innerHTML = 
-                    '<p style="text-align:center;color:#e74c3c;padding:20px;">Gagal memuat navbar</p>';
             }
         }
 
@@ -578,12 +639,13 @@
         ];
 
         // ============================================================
-        // 📋 KOLOM LAPORAN SERTIFIKAT (Tabel Detail Capaian)
+        // 📋 KOLOM LAPORAN SERTIFIKAT
+        // Tasmi' 1/2 Juz = isNonSertifikat: true (hanya muncul di tabel)
         // ============================================================
         const LAPORAN_COLUMNS = [
             { key: 'jumlahSantri', label: 'Jumlah Santri', short: 'Jumlah Santri', icon: 'fa-users', keywords: ['jumlah santri'], isNonSertifikat: true },
             { key: 'tasmi1', label: 'Tasmi 1 Juz Sesuai Muqorror', short: 'Tasmi 1 Juz', icon: 'fa-certificate', keywords: ['tasmi 1 juz', 'muqorror'] },
-            { key: 'setengahJuz', label: "Tasmi' 1/2 Juz", short: 'Tasmi 1/2 Juz', icon: 'fa-bookmark', keywords: ['tasmi', '1/2'] },
+            { key: 'setengahJuz', label: "Tasmi' 1/2 Juz", short: 'Tasmi 1/2 Juz', icon: 'fa-bookmark', keywords: ['tasmi', '1/2'], isNonSertifikat: true },
             { key: 'tasmi3', label: 'Tasmi 3 Juz', short: 'Tasmi 3 Juz', icon: 'fa-star', keywords: ['tasmi 3 juz'] },
             { key: 'tasmi5', label: 'Tasmi 5 Juz', short: 'Tasmi 5 Juz', icon: 'fa-star-half-alt', keywords: ['tasmi 5 juz'] },
             { key: 'setoran', label: 'Setoran 10, 20, 30 Juz', short: 'Setoran 10/20/30 Juz', icon: 'fa-layer-group', keywords: ['setoran'] },
@@ -679,6 +741,7 @@
         let tasmiChart = null;
         let pieChart = null;
         let chartData = [];
+        let detailData = [];
 
         // ============================================================
         // 📊 LOAD DATA
@@ -780,8 +843,10 @@
                 });
                 lembagaData.push(row);
             }
+            
+            detailData = { lembagaData, totals };
 
-            // RENDER SUMMARY CARDS (kecuali Jumlah Santri)
+            // RENDER SUMMARY CARDS (kecuali isNonSertifikat)
             const summaryContainer = document.getElementById('summaryCards');
             summaryContainer.innerHTML = '';
             LAPORAN_COLUMNS.forEach(col => {
@@ -834,7 +899,7 @@
             footHtml += `<td>${totalSertifikatFooter}</td></tr>`;
             tfoot.innerHTML = footHtml;
 
-            // RENDER PIE CHART
+            // RENDER PIE CHART (kecuali isNonSertifikat)
             const pieCtx = document.getElementById('pieChart').getContext('2d');
             if (pieChart) pieChart.destroy();
 
@@ -846,16 +911,14 @@
                 'rgba(45, 106, 79, 0.85)',
                 'rgba(201, 168, 76, 0.85)',
                 'rgba(232, 212, 139, 0.85)',
-                'rgba(15, 61, 36, 0.85)',
-                'rgba(150, 130, 60, 0.85)'
+                'rgba(15, 61, 36, 0.85)'
             ];
             const pieBorderColors = [
                 'rgba(26, 77, 46, 1)',
                 'rgba(45, 106, 79, 1)',
                 'rgba(201, 168, 76, 1)',
                 'rgba(232, 212, 139, 1)',
-                'rgba(15, 61, 36, 1)',
-                'rgba(150, 130, 60, 1)'
+                'rgba(15, 61, 36, 1)'
             ];
 
             pieChart = new Chart(pieCtx, {
@@ -959,6 +1022,127 @@
                 }
             });
         }
+
+        // ============================================================
+        // 📤 EXPORT DETAIL TABLE - PDF
+        // ============================================================
+        document.getElementById('exportDetailPdfBtn').addEventListener('click', () => {
+            if (!detailData.lembagaData || detailData.lembagaData.length === 0) {
+                alert('Data belum dimuat. Silakan tunggu beberapa saat.');
+                return;
+            }
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+            
+            doc.setFillColor(26, 77, 46);
+            doc.rect(0, 0, 297, 20, 'F');
+            doc.setTextColor(232, 212, 139);
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('DETAIL CAPAIAN PER LEMBAGA', 148, 10, { align: 'center' });
+            doc.setFontSize(9);
+            doc.text('Departemen Tahfizh - Ponpes Abu Hurairah Mataram', 148, 16, { align: 'center' });
+            
+            const head = [['LEMBAGA', ...LAPORAN_COLUMNS.map(c => c.label), 'TOTAL']];
+            const body = [];
+            
+            detailData.lembagaData.forEach(row => {
+                const rowArr = [row.lembaga];
+                let totalBaris = 0;
+                LAPORAN_COLUMNS.forEach(col => {
+                    rowArr.push(row[col.key]);
+                    if (!col.isNonSertifikat) totalBaris += row[col.key];
+                });
+                rowArr.push(totalBaris);
+                body.push(rowArr);
+            });
+            
+            const footArr = ['TOTAL'];
+            let totalSertifikat = 0;
+            LAPORAN_COLUMNS.forEach(col => {
+                footArr.push(detailData.totals[col.key]);
+                if (!col.isNonSertifikat) totalSertifikat += detailData.totals[col.key];
+            });
+            footArr.push(totalSertifikat);
+            body.push(footArr);
+            
+            doc.autoTable({
+                startY: 25,
+                head: head,
+                body: body,
+                styles: { font: 'helvetica', fontSize: 7, cellPadding: 1.5, halign: 'center' },
+                headStyles: { fillColor: [26, 77, 46], textColor: [232, 212, 139], fontStyle: 'bold', halign: 'center', fontSize: 7 },
+                columnStyles: {
+                    0: { halign: 'left', fontStyle: 'bold', cellWidth: 40 }
+                },
+                alternateRowStyles: { fillColor: [250, 246, 237] },
+                didParseCell: function(data) {
+                    if (data.row.index === body.length - 1 && data.section === 'body') {
+                        data.cell.styles.fontStyle = 'bold';
+                        data.cell.styles.fillColor = [240, 235, 227];
+                        data.cell.styles.textColor = [26, 77, 46];
+                    }
+                }
+            });
+            
+            doc.save('Detail-Capaian-Tasmi.pdf');
+        });
+
+        // ============================================================
+        // 📤 EXPORT DETAIL TABLE - EXCEL
+        // ============================================================
+        document.getElementById('exportDetailExcelBtn').addEventListener('click', () => {
+            if (!detailData.lembagaData || detailData.lembagaData.length === 0) {
+                alert('Data belum dimuat. Silakan tunggu beberapa saat.');
+                return;
+            }
+            
+            const excelData = [];
+            excelData.push(['DETAIL CAPAIAN PER LEMBAGA']);
+            excelData.push(['Departemen Tahfizh - Ponpes Abu Hurairah Mataram']);
+            excelData.push([]);
+            
+            const header = ['LEMBAGA', ...LAPORAN_COLUMNS.map(c => c.label), 'TOTAL'];
+            excelData.push(header);
+            
+            detailData.lembagaData.forEach(row => {
+                const rowArr = [row.lembaga];
+                let totalBaris = 0;
+                LAPORAN_COLUMNS.forEach(col => {
+                    rowArr.push(row[col.key]);
+                    if (!col.isNonSertifikat) totalBaris += row[col.key];
+                });
+                rowArr.push(totalBaris);
+                excelData.push(rowArr);
+            });
+            
+            const footArr = ['TOTAL'];
+            let totalSertifikat = 0;
+            LAPORAN_COLUMNS.forEach(col => {
+                footArr.push(detailData.totals[col.key]);
+                if (!col.isNonSertifikat) totalSertifikat += detailData.totals[col.key];
+            });
+            footArr.push(totalSertifikat);
+            excelData.push(footArr);
+            
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            
+            ws['!cols'] = [
+                { wch: 25 },
+                ...LAPORAN_COLUMNS.map(() => ({ wch: 15 })),
+                { wch: 10 }
+            ];
+            
+            ws['!merges'] = [
+                { s: { r: 0, c: 0 }, e: { r: 0, c: header.length - 1 } },
+                { s: { r: 1, c: 0 }, e: { r: 1, c: header.length - 1 } }
+            ];
+            
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Detail Capaian');
+            XLSX.writeFile(wb, 'Detail-Capaian-Tasmi.xlsx');
+        });
 
         // ============================================================
         // 🎯 EVENT LISTENERS
