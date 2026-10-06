@@ -88,6 +88,64 @@
         .section-title h2 i { color: var(--emas); margin-right: 10px; }
         .section-title .subtitle { color: #4a5e58; font-size: 1.1rem; margin-top: 4px; }
 
+        /* ===== LOADING STATES ===== */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            color: var(--hijau-tua);
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(201,168,76,0.2);
+            border-top-color: var(--emas);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .loading-container p {
+            font-size: 0.95rem;
+            color: #7a8a85;
+            font-weight: 500;
+        }
+
+        /* Skeleton loading untuk kartu */
+        .skeleton-card {
+            background: var(--putih);
+            border-radius: 16px;
+            padding: 24px 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(201,168,76,0.12);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .skeleton-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--hijau-tua), var(--emas));
+        }
+        .skeleton-item {
+            background: linear-gradient(90deg, #f0ebe3 0%, #f8f4ed 50%, #f0ebe3 100%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .skeleton-icon { width: 50px; height: 50px; border-radius: 14px; margin: 0 auto 12px; }
+        .skeleton-number { width: 60%; height: 2rem; margin: 0 auto 8px; }
+        .skeleton-label { width: 80%; height: 0.9rem; margin: 0 auto 6px; }
+        .skeleton-note { width: 60%; height: 0.7rem; margin: 0 auto; }
+
         /* ===== SUMMARY CARDS ===== */
         .summary-grid {
             display: grid;
@@ -105,6 +163,11 @@
             transition: 0.3s;
             position: relative;
             overflow: hidden;
+            animation: fadeInUp 0.6s ease backwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .summary-card::before {
             content: '';
@@ -156,6 +219,8 @@
             box-shadow: var(--shadow);
             border: 1px solid rgba(201,168,76,0.12);
             overflow-x: auto;
+            position: relative;
+            min-height: 200px;
         }
         .table-header-row {
             display: flex;
@@ -192,24 +257,10 @@
             align-items: center;
             gap: 6px;
         }
-        .table-export-btn.btn-pdf {
-            background: #c0392b;
-            color: white;
-        }
-        .table-export-btn.btn-pdf:hover {
-            background: #a93226;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(192,57,43,0.3);
-        }
-        .table-export-btn.btn-excel {
-            background: #16a085;
-            color: white;
-        }
-        .table-export-btn.btn-excel:hover {
-            background: #12876f;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(22,160,133,0.3);
-        }
+        .table-export-btn.btn-pdf { background: #c0392b; color: white; }
+        .table-export-btn.btn-pdf:hover { background: #a93226; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(192,57,43,0.3); }
+        .table-export-btn.btn-excel { background: #16a085; color: white; }
+        .table-export-btn.btn-excel:hover { background: #12876f; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(22,160,133,0.3); }
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -229,13 +280,8 @@
             line-height: 1.3;
             border-bottom: 2px solid var(--emas);
         }
-        .data-table th:first-child {
-            text-align: left;
-            border-top-left-radius: 12px;
-        }
-        .data-table th:last-child {
-            border-top-right-radius: 12px;
-        }
+        .data-table th:first-child { text-align: left; border-top-left-radius: 12px; }
+        .data-table th:last-child { border-top-right-radius: 12px; }
         .data-table td {
             padding: 10px 8px;
             text-align: center;
@@ -248,9 +294,23 @@
             font-weight: 700;
             color: var(--hijau-tua);
         }
-        .data-table tbody tr:hover {
-            background: rgba(201,168,76,0.05);
+        .data-table tbody tr { animation: fadeInRow 0.4s ease backwards; }
+        .data-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+        .data-table tbody tr:nth-child(2) { animation-delay: 0.1s; }
+        .data-table tbody tr:nth-child(3) { animation-delay: 0.15s; }
+        .data-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
+        .data-table tbody tr:nth-child(5) { animation-delay: 0.25s; }
+        .data-table tbody tr:nth-child(6) { animation-delay: 0.3s; }
+        .data-table tbody tr:nth-child(7) { animation-delay: 0.35s; }
+        .data-table tbody tr:nth-child(8) { animation-delay: 0.4s; }
+        .data-table tbody tr:nth-child(9) { animation-delay: 0.45s; }
+        .data-table tbody tr:nth-child(10) { animation-delay: 0.5s; }
+        .data-table tbody tr:nth-child(n+11) { animation-delay: 0.55s; }
+        @keyframes fadeInRow {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
+        .data-table tbody tr:hover { background: rgba(201,168,76,0.05); }
         .data-table td.nilai-besar {
             background: rgba(26,77,46,0.05);
             color: var(--hijau-tua);
@@ -285,6 +345,8 @@
             margin: 30px 0;
             box-shadow: var(--shadow);
             border: 1px solid rgba(201,168,76,0.12);
+            position: relative;
+            min-height: 300px;
         }
         .pie-wrapper h3 {
             font-size: 1.4rem;
@@ -305,6 +367,52 @@
             height: 400px;
             max-width: 500px;
             margin: 0 auto;
+        }
+
+        /* ===== CHART WRAPPER ===== */
+        .chart-wrapper-card {
+            background: var(--putih);
+            border-radius: var(--radius);
+            padding: 40px 44px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(201,168,76,0.12);
+            position: relative;
+            min-height: 400px;
+        }
+        .chart-wrapper-card h3 {
+            font-size: 1.8rem;
+            color: var(--hijau-tua);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .chart-wrapper-card h3 i { color: var(--emas); margin-right: 10px; }
+        .chart-wrapper-card .chart-subtitle {
+            text-align: center;
+            color: #4a5e58;
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Loading overlay untuk chart */
+        .chart-loading-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        .chart-loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* ===== HIGHLIGHT BOX ===== */
@@ -423,6 +531,7 @@
             .pie-wrapper { padding: 24px 16px; }
             .pie-wrapper .chart-container { height: 300px; }
             .table-header-row { flex-direction: column; }
+            .chart-wrapper-card { padding: 24px 16px; }
         }
         @media (max-width: 480px) {
             .container { padding: 12px 14px 40px; }
@@ -439,10 +548,8 @@
     <div class="ornament ornament-2"></div>
 
     <div class="container">
-        <!-- ===== NAVBAR (di-load dari navbar.html) ===== -->
         <div id="navbar-container"></div>
 
-        <!-- ===== HERO ===== -->
         <section class="hero">
             <div class="hero-text">
                 <div class="arabic-tagline">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
@@ -451,58 +558,65 @@
             </div>
         </section>
 
-        <!-- ===== LAPORAN SERTIFIKAT TERCETAK ===== -->
         <div class="section-title" id="laporan">
             <h2><i class="fas fa-certificate"></i> Laporan Perkembangan Sertifikat Tasmi' yang Sudah Tercetak</h2>
             <p class="subtitle">Rekapitulasi capaian sertifikat tasmi' dari seluruh lembaga</p>
         </div>
 
-        <!-- ===== 1. KARTU RINGKASAN (POSISI 1) ===== -->
-        <div class="summary-grid fade-up" id="summaryCards"></div>
+        <!-- ===== 1. KARTU RINGKASAN ===== -->
+        <div class="summary-grid" id="summaryCards">
+            <!-- Skeleton loading -->
+            <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
+            <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
+            <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
+            <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
+            <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
+        </div>
 
-        <!-- ===== 2. TABEL DETAIL (POSISI 2) ===== -->
+        <!-- ===== 2. TABEL DETAIL ===== -->
         <div class="table-wrapper fade-up">
             <div class="table-header-row">
                 <h3><i class="fas fa-table"></i> Detail Capaian per Lembaga</h3>
                 <div class="table-export-buttons">
-                    <button class="table-export-btn btn-pdf" id="exportDetailPdfBtn">
-                        <i class="fas fa-file-pdf"></i> PDF
-                    </button>
-                    <button class="table-export-btn btn-excel" id="exportDetailExcelBtn">
-                        <i class="fas fa-file-excel"></i> Excel
-                    </button>
+                    <button class="table-export-btn btn-pdf" id="exportDetailPdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+                    <button class="table-export-btn btn-excel" id="exportDetailExcelBtn"><i class="fas fa-file-excel"></i> Excel</button>
                 </div>
             </div>
-            <table class="data-table" id="detailTable">
-                <thead id="tableHead"></thead>
-                <tbody id="tableBody"></tbody>
-                <tfoot id="tableFoot"></tfoot>
-            </table>
+            <div id="tableContainer">
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <p>Memuat data tabel...</p>
+                </div>
+            </div>
         </div>
 
-        <!-- ===== 3. PIE CHART (POSISI 3) ===== -->
+        <!-- ===== 3. PIE CHART ===== -->
         <div class="pie-wrapper fade-up">
             <h3><i class="fas fa-chart-pie"></i> Proporsi Capaian Sertifikat</h3>
             <p class="pie-subtitle">Distribusi total capaian per kategori sertifikat</p>
             <div class="chart-container">
                 <canvas id="pieChart"></canvas>
+                <div class="chart-loading-overlay" id="pieLoadingOverlay">
+                    <div class="loading-spinner"></div>
+                    <p>Memuat diagram lingkaran...</p>
+                </div>
             </div>
         </div>
 
-        <!-- ===== 4. CHART CAPAIAN PER LEMBAGA (POSISI 4) ===== -->
+        <!-- ===== 4. BAR CHART ===== -->
         <div class="section-title">
             <h2><i class="fas fa-chart-bar"></i> Perkembangan Tahfizh</h2>
             <p class="subtitle">Visualisasi capaian tasmi' per lembaga</p>
         </div>
 
-        <div style="background: var(--putih); border-radius: var(--radius); padding: 40px 44px; margin: 30px 0; box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.12);">
-            <h3 style="font-size: 1.8rem; color: var(--hijau-tua); font-weight: 800; text-align: center; margin-bottom: 8px;"><i class="fas fa-chart-line" style="color: var(--emas); margin-right: 10px;"></i> Grafik Capaian Tasmi'</h3>
-            <p style="text-align: center; color: #4a5e58; font-size: 1rem; margin-bottom: 30px;">Data diambil dari Google Sheets — otomatis terupdate</p>
+        <div class="chart-wrapper-card">
+            <h3><i class="fas fa-chart-line"></i> Grafik Capaian Tasmi'</h3>
+            <p class="chart-subtitle">Data diambil dari Google Sheets — otomatis terupdate</p>
             <div style="position: relative; height: 450px; max-width: 100%;">
                 <canvas id="tasmiChart"></canvas>
-                <div id="chartLoading" style="text-align: center; padding: 60px 20px; color: var(--hijau-tua);">
-                    <i class="fas fa-spinner" style="font-size: 3rem; color: var(--emas); animation: spin 1s linear infinite;"></i>
-                    <p style="margin-top: 12px;">Memuat data dari Google Sheets...</p>
+                <div class="chart-loading-overlay" id="barLoadingOverlay">
+                    <div class="loading-spinner"></div>
+                    <p>Memuat grafik capaian...</p>
                 </div>
             </div>
             <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px;">
@@ -536,7 +650,6 @@
             </div>
         </div>
 
-        <!-- ===== FOOTER ===== -->
         <footer class="footer">
             <div class="footer-logo"><i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span></div>
             <div class="footer-links">
@@ -548,7 +661,6 @@
         </footer>
     </div>
 
-    <!-- ===== WHATSAPP ===== -->
     <div class="whatsapp-float">
         <div class="bubble" id="waBubble"><i class="fab fa-whatsapp"></i> Chat Admin</div>
         <a href="https://wa.me/6282340530283" target="_blank" class="whatsapp-btn" id="waButton">
@@ -557,7 +669,6 @@
         </a>
     </div>
 
-    <!-- ===== MODAL TENTANG ===== -->
     <div class="modal-overlay" id="tentangModal">
         <div class="modal-content">
             <button class="modal-close" id="tentangModalClose">&times;</button>
@@ -587,7 +698,6 @@
                 const html = await response.text();
                 document.getElementById('navbar-container').innerHTML = html;
                 initNavbar();
-                console.log('✅ Navbar berhasil dimuat');
             } catch (error) {
                 console.error('❌ Gagal memuat navbar:', error);
             }
@@ -640,12 +750,14 @@
 
         // ============================================================
         // 📋 KOLOM LAPORAN SERTIFIKAT
-        // Tasmi' 1/2 Juz = isNonSertifikat: true (hanya muncul di tabel)
+        // 🔧 PERBAIKAN: 2 flag terpisah
+        //   - isNonSertifikat: true → TIDAK masuk total, TIDAK muncul di kartu & pie
+        //   - hideFromSummary: true → MASUK total, TAPI tidak muncul di kartu & pie
         // ============================================================
         const LAPORAN_COLUMNS = [
-            { key: 'jumlahSantri', label: 'Jumlah Santri', short: 'Jumlah Santri', icon: 'fa-users', keywords: ['jumlah santri'], isNonSertifikat: true },
+            { key: 'jumlahSantri', label: 'Jumlah Santri', short: 'Jumlah Santri', icon: 'fa-users', keywords: ['jumlah santri'], isNonSertifikat: true, hideFromSummary: true },
             { key: 'tasmi1', label: 'Tasmi 1 Juz Sesuai Muqorror', short: 'Tasmi 1 Juz', icon: 'fa-certificate', keywords: ['tasmi 1 juz', 'muqorror'] },
-            { key: 'setengahJuz', label: "Tasmi' 1/2 Juz", short: 'Tasmi 1/2 Juz', icon: 'fa-bookmark', keywords: ['tasmi', '1/2'], isNonSertifikat: true },
+            { key: 'setengahJuz', label: "Tasmi' 1/2 Juz", short: 'Tasmi 1/2 Juz', icon: 'fa-bookmark', keywords: ['tasmi', '1/2'], hideFromSummary: true },
             { key: 'tasmi3', label: 'Tasmi 3 Juz', short: 'Tasmi 3 Juz', icon: 'fa-star', keywords: ['tasmi 3 juz'] },
             { key: 'tasmi5', label: 'Tasmi 5 Juz', short: 'Tasmi 5 Juz', icon: 'fa-star-half-alt', keywords: ['tasmi 5 juz'] },
             { key: 'setoran', label: 'Setoran 10, 20, 30 Juz', short: 'Setoran 10/20/30 Juz', icon: 'fa-layer-group', keywords: ['setoran'] },
@@ -741,14 +853,16 @@
         let tasmiChart = null;
         let pieChart = null;
         let chartData = [];
-        let detailData = [];
+        let detailData = {};
 
         // ============================================================
         // 📊 LOAD DATA
         // ============================================================
         async function loadChartData() {
-            const loading = document.getElementById('chartLoading');
             console.log('🔄 Memuat data dari:', CHART_SHEET_URL);
+            
+            // Tampilkan loading di semua komponen
+            showLoadingStates();
             
             try {
                 const response = await fetch(CHART_SHEET_URL);
@@ -760,7 +874,7 @@
                 console.log('📊 Jumlah baris:', lines.length);
                 
                 if (lines.length < 2) {
-                    if (loading) loading.innerHTML = '<p style="color:#e67e22;">Data kosong.</p>';
+                    showErrorState('Data kosong');
                     return;
                 }
 
@@ -799,19 +913,66 @@
                         select.appendChild(opt);
                     });
 
-                    if (loading) loading.style.display = 'none';
                     if (chartData.length > 0) renderChart(chartData[0], columnLabels);
                 }
 
                 // Proses untuk Laporan Sertifikat
                 renderLaporan(headers, lines);
 
+                // Sembunyikan loading
+                hideLoadingStates();
+
                 console.log('✅ Semua diagram berhasil dimuat!');
                 
             } catch (error) {
                 console.error('❌ Error:', error);
-                if (loading) loading.innerHTML = `<p style="color:#e74c3c;">Error: ${error.message}</p>`;
+                showErrorState(error.message);
             }
+        }
+
+        // ============================================================
+        // 🎬 LOADING STATE HELPERS
+        // ============================================================
+        function showLoadingStates() {
+            // Tabel loading
+            document.getElementById('tableContainer').innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <p>Memuat data tabel...</p>
+                </div>
+            `;
+            
+            // Pie chart loading overlay
+            document.getElementById('pieLoadingOverlay').classList.remove('hidden');
+            
+            // Bar chart loading overlay
+            document.getElementById('barLoadingOverlay').classList.remove('hidden');
+            
+            // Summary skeleton
+            const sc = document.getElementById('summaryCards');
+            sc.innerHTML = `
+                <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
+                <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
+                <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
+                <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
+                <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
+            `;
+        }
+
+        function hideLoadingStates() {
+            document.getElementById('pieLoadingOverlay').classList.add('hidden');
+            document.getElementById('barLoadingOverlay').classList.add('hidden');
+        }
+
+        function showErrorState(message) {
+            document.getElementById('tableContainer').innerHTML = `
+                <div class="loading-container">
+                    <i class="fas fa-exclamation-triangle" style="font-size:3rem;color:#e74c3c;margin-bottom:12px;"></i>
+                    <p style="color:#e74c3c;">Error: ${message}</p>
+                </div>
+            `;
+            document.getElementById('pieLoadingOverlay').classList.add('hidden');
+            document.getElementById('barLoadingOverlay').classList.add('hidden');
         }
 
         // ============================================================
@@ -846,14 +1007,15 @@
             
             detailData = { lembagaData, totals };
 
-            // RENDER SUMMARY CARDS (kecuali isNonSertifikat)
+            // RENDER SUMMARY CARDS (hanya yang TIDAK hideFromSummary)
             const summaryContainer = document.getElementById('summaryCards');
             summaryContainer.innerHTML = '';
-            LAPORAN_COLUMNS.forEach(col => {
-                if (col.isNonSertifikat) return;
+            LAPORAN_COLUMNS.forEach((col, idx) => {
+                if (col.hideFromSummary) return;
                 
                 const card = document.createElement('div');
                 card.className = 'summary-card';
+                card.style.animationDelay = (idx * 0.1) + 's';
                 card.innerHTML = `
                     <div class="icon"><i class="fas ${col.icon}"></i></div>
                     <div class="number">${totals[col.key]}</div>
@@ -863,17 +1025,14 @@
                 summaryContainer.appendChild(card);
             });
 
-            // RENDER TABLE
-            const thead = document.getElementById('tableHead');
-            const tbody = document.getElementById('tableBody');
-            const tfoot = document.getElementById('tableFoot');
-
+            // RENDER TABLE (di dalam container #tableContainer)
+            const tableContainer = document.getElementById('tableContainer');
+            
             let headHtml = '<tr><th style="text-align:left;">LEMBAGA</th>';
             LAPORAN_COLUMNS.forEach(col => {
                 headHtml += `<th>${col.label}</th>`;
             });
             headHtml += '<th>TOTAL</th></tr>';
-            thead.innerHTML = headHtml;
 
             let bodyHtml = '';
             lembagaData.forEach(row => {
@@ -881,31 +1040,38 @@
                 bodyHtml += `<tr><td>${row.lembaga}</td>`;
                 LAPORAN_COLUMNS.forEach(col => {
                     const val = row[col.key];
+                    // ✅ MASUK TOTAL jika bukan isNonSertifikat (Jumlah Santri)
                     if (!col.isNonSertifikat) totalBaris += val;
                     const cls = col.isNonSertifikat ? 'kolom-santri' : (val > 0 ? 'nilai-besar' : 'kolom-kosong');
                     bodyHtml += `<td class="${cls}">${val}</td>`;
                 });
                 bodyHtml += `<td class="nilai-besar">${totalBaris}</td></tr>`;
             });
-            tbody.innerHTML = bodyHtml;
 
-            // RENDER FOOTER TOTAL
             let footHtml = '<tr><td>TOTAL</td>';
             let totalSertifikatFooter = 0;
             LAPORAN_COLUMNS.forEach(col => {
                 footHtml += `<td>${totals[col.key]}</td>`;
+                // ✅ MASUK TOTAL FOOTER jika bukan isNonSertifikat
                 if (!col.isNonSertifikat) totalSertifikatFooter += totals[col.key];
             });
             footHtml += `<td>${totalSertifikatFooter}</td></tr>`;
-            tfoot.innerHTML = footHtml;
 
-            // RENDER PIE CHART (kecuali isNonSertifikat)
+            tableContainer.innerHTML = `
+                <table class="data-table">
+                    <thead>${headHtml}</thead>
+                    <tbody>${bodyHtml}</tbody>
+                    <tfoot>${footHtml}</tfoot>
+                </table>
+            `;
+
+            // RENDER PIE CHART (hanya yang TIDAK hideFromSummary)
             const pieCtx = document.getElementById('pieChart').getContext('2d');
             if (pieChart) pieChart.destroy();
 
-            const laporanColumnsFiltered = LAPORAN_COLUMNS.filter(col => !col.isNonSertifikat);
-            const pieLabels = laporanColumnsFiltered.map(col => col.short);
-            const pieValues = laporanColumnsFiltered.map(col => totals[col.key]);
+            const pieColumnsFiltered = LAPORAN_COLUMNS.filter(col => !col.hideFromSummary);
+            const pieLabels = pieColumnsFiltered.map(col => col.short);
+            const pieValues = pieColumnsFiltered.map(col => totals[col.key]);
             const pieColors = [
                 'rgba(26, 77, 46, 0.85)',
                 'rgba(45, 106, 79, 0.85)',
@@ -935,6 +1101,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    },
                     plugins: {
                         legend: {
                             position: 'bottom',
@@ -999,6 +1169,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    },
                     plugins: {
                         legend: {
                             display: true,
@@ -1156,8 +1330,6 @@
         document.getElementById('chartRefreshBtn').addEventListener('click', function() {
             this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
             this.disabled = true;
-            const loading = document.getElementById('chartLoading');
-            if (loading) loading.style.display = 'block';
             loadChartData().then(() => {
                 this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
                 this.disabled = false;
