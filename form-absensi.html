@@ -39,7 +39,7 @@
         .ornament-2 { width: 400px; height: 400px; bottom: -50px; left: -100px; opacity: 0.2; }
         .container { max-width: 900px; margin: 0 auto; padding: 20px 24px 60px; position: relative; z-index: 1; }
 
-        /* ===== NAVBAR ===== */
+        /* ===== NAVBAR (dari navbar.html) ===== */
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
             padding: 16px 28px; background: rgba(255,255,255,0.85);
@@ -97,132 +97,78 @@
             width: 100%; height: 5px;
             background: linear-gradient(90deg, var(--hijau-tua), var(--maroon), var(--emas));
         }
-        .form-group {
-            margin-bottom: 24px;
-        }
+        .form-group { margin-bottom: 24px; }
         .form-group label {
             display: flex; align-items: center; gap: 8px;
             font-weight: 700; color: var(--hijau-tua);
             font-size: 0.95rem; margin-bottom: 8px;
         }
-        .form-group label i {
-            color: var(--maroon);
-            font-size: 1rem;
-            width: 20px;
-        }
-        .form-group label .required {
-            color: var(--maroon);
-            font-weight: 900;
-            margin-left: 4px;
-        }
+        .form-group label i { color: var(--maroon); font-size: 1rem; width: 20px; }
+        .form-group label .required { color: var(--maroon); font-weight: 900; margin-left: 4px; }
         .form-group select,
         .form-group input[type="text"],
         .form-group textarea {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: 12px;
+            width: 100%; padding: 14px 18px; border-radius: 12px;
             border: 2px solid rgba(201,168,76,0.25);
-            background: var(--cream);
-            color: var(--hijau-tua);
-            font-size: 0.95rem;
-            font-family: inherit;
-            outline: none;
-            transition: 0.3s;
-            font-weight: 600;
+            background: var(--cream); color: var(--hijau-tua);
+            font-size: 0.95rem; font-family: inherit; outline: none;
+            transition: 0.3s; font-weight: 600;
         }
         .form-group select:focus,
         .form-group input:focus,
         .form-group textarea:focus {
-            border-color: var(--maroon);
-            background: var(--putih);
+            border-color: var(--maroon); background: var(--putih);
             box-shadow: 0 0 0 4px rgba(128,0,32,0.1);
         }
         .form-group select:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            background: #f5f5f5;
+            opacity: 0.6; cursor: not-allowed; background: #f5f5f5;
         }
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
+        .form-group textarea { min-height: 100px; resize: vertical; }
         .form-group .helper-text {
-            font-size: 0.8rem;
-            color: #7a8a85;
-            margin-top: 6px;
-            font-style: italic;
+            font-size: 0.8rem; color: #7a8a85; margin-top: 6px; font-style: italic;
         }
         .form-group .error-text {
-            font-size: 0.85rem;
-            color: var(--maroon);
-            margin-top: 6px;
-            font-weight: 600;
-            display: none;
+            font-size: 0.85rem; color: var(--maroon); margin-top: 6px;
+            font-weight: 600; display: none;
         }
         .form-group.has-error select,
         .form-group.has-error input,
         .form-group.has-error textarea {
-            border-color: var(--maroon);
-            background: rgba(128,0,32,0.03);
+            border-color: var(--maroon); background: rgba(128,0,32,0.03);
         }
-        .form-group.has-error .error-text {
-            display: block;
-        }
+        .form-group.has-error .error-text { display: block; }
 
         /* ===== RADIO STATUS ===== */
         .radio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-            margin-top: 4px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px; margin-top: 4px;
         }
-        .radio-item {
-            position: relative;
-        }
+        .radio-item { position: relative; }
         .radio-item input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
+            position: absolute; opacity: 0; cursor: pointer;
         }
         .radio-item label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px 12px;
-            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; padding: 14px 12px; border-radius: 12px;
             border: 2px solid rgba(201,168,76,0.25);
-            background: var(--cream);
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: var(--hijau-tua);
+            background: var(--cream); cursor: pointer; transition: 0.3s;
+            font-weight: 700; font-size: 0.85rem; color: var(--hijau-tua);
             margin-bottom: 0;
         }
-        .radio-item label i {
-            font-size: 1rem;
-            color: inherit;
-            width: auto;
-        }
+        .radio-item label i { font-size: 1rem; color: inherit; width: auto; }
         .radio-item input[type="radio"]:checked + label {
-            background: var(--hijau-tua);
-            color: var(--emas-muda);
-            border-color: var(--hijau-tua);
-            transform: translateY(-2px);
+            background: var(--hijau-tua); color: var(--emas-muda);
+            border-color: var(--hijau-tua); transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(26,77,46,0.3);
         }
         .radio-item input[type="radio"]:checked + label.radio-terlambat {
-            background: #d97706;
-            border-color: #d97706;
+            background: #d97706; border-color: #d97706;
         }
         .radio-item input[type="radio"]:checked + label.radio-sakit {
-            background: #0891b2;
-            border-color: #0891b2;
+            background: #0891b2; border-color: #0891b2;
         }
         .radio-item input[type="radio"]:checked + label.radio-izin {
-            background: var(--maroon);
-            border-color: var(--maroon);
+            background: var(--maroon); border-color: var(--maroon);
         }
         .radio-item input[type="radio"]:hover + label {
             border-color: var(--emas);
@@ -231,127 +177,93 @@
         /* ===== SIGNATURE PAD ===== */
         .signature-wrapper {
             border: 2px dashed rgba(201,168,76,0.4);
-            border-radius: 12px;
-            background: var(--cream);
-            padding: 12px;
-            position: relative;
-            transition: 0.3s;
+            border-radius: 12px; background: var(--cream);
+            padding: 12px; position: relative; transition: 0.3s;
         }
         .signature-wrapper.has-signature {
-            border-style: solid;
-            border-color: var(--hijau-tua);
+            border-style: solid; border-color: var(--hijau-tua);
             background: var(--putih);
         }
         .signature-wrapper.has-error {
-            border-color: var(--maroon);
-            background: rgba(128,0,32,0.03);
+            border-color: var(--maroon); background: rgba(128,0,32,0.03);
         }
         .signature-canvas-container {
-            position: relative;
-            width: 100%;
-            background: var(--putih);
-            border-radius: 8px;
-            overflow: hidden;
+            position: relative; width: 100%; background: var(--putih);
+            border-radius: 8px; overflow: hidden;
         }
         #signatureCanvas {
-            display: block;
-            width: 100%;
-            height: 200px;
-            background: var(--putih);
-            cursor: crosshair;
-            touch-action: none;
+            display: block; width: 100%; height: 200px;
+            background: var(--putih); cursor: crosshair; touch-action: none;
         }
         .signature-hint {
-            position: absolute;
-            top: 50%; left: 50%;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            color: #c9a84c;
-            font-style: italic;
-            font-size: 1rem;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            text-align: center;
+            color: #c9a84c; font-style: italic; font-size: 1rem;
+            pointer-events: none; transition: opacity 0.3s; text-align: center;
         }
         .signature-hint i { display: block; font-size: 1.5rem; margin-bottom: 6px; }
         .signature-wrapper.has-signature .signature-hint { opacity: 0; }
         .signature-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-            gap: 10px;
-            flex-wrap: wrap;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 10px; gap: 10px; flex-wrap: wrap;
         }
         .signature-clear-btn {
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: 1px solid var(--maroon);
-            background: transparent;
-            color: var(--maroon);
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            padding: 8px 16px; border-radius: 30px;
+            border: 1px solid var(--maroon); background: transparent;
+            color: var(--maroon); font-size: 0.8rem; font-weight: 700;
+            cursor: pointer; transition: 0.3s; font-family: inherit;
+            display: inline-flex; align-items: center; gap: 6px;
         }
-        .signature-clear-btn:hover {
-            background: var(--maroon);
-            color: white;
-        }
+        .signature-clear-btn:hover { background: var(--maroon); color: white; }
         .signature-status {
-            font-size: 0.8rem;
-            color: var(--hijau-tua);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-size: 0.8rem; color: var(--hijau-tua); font-weight: 600;
+            display: flex; align-items: center; gap: 6px;
         }
         .signature-status i { color: #16a085; }
 
-        /* ===== SUBMIT BUTTON ===== */
-        .submit-btn {
-            width: 100%;
-            padding: 18px;
-            border-radius: 60px;
-            border: none;
-            background: linear-gradient(135deg, var(--hijau-tua), #0f3d24);
-            color: var(--emas-muda);
-            font-size: 1.05rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        /* ===== FORM ACTIONS (RESET + SUBMIT) ===== */
+        .form-actions {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 12px;
             margin-top: 12px;
-            box-shadow: 0 6px 20px rgba(26,77,46,0.3);
+        }
+        .submit-btn {
+            padding: 18px; border-radius: 60px; border: none;
+            background: linear-gradient(135deg, var(--hijau-tua), #0f3d24);
+            color: var(--emas-muda); font-size: 1.05rem; font-weight: 800;
+            cursor: pointer; transition: 0.3s; font-family: inherit;
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 10px; box-shadow: 0 6px 20px rgba(26,77,46,0.3);
             letter-spacing: 0.5px;
         }
         .submit-btn:hover:not(:disabled) {
             transform: translateY(-3px);
             box-shadow: 0 12px 30px rgba(26,77,46,0.4);
         }
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        
+        .reset-btn {
+            padding: 18px; border-radius: 60px;
+            border: 2px solid var(--maroon); background: transparent;
+            color: var(--maroon); font-size: 1rem; font-weight: 800;
+            cursor: pointer; transition: 0.3s; font-family: inherit;
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 10px; letter-spacing: 0.5px;
         }
+        .reset-btn:hover {
+            background: var(--maroon); color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(128,0,32,0.3);
+        }
+        .reset-btn:active { transform: translateY(-1px); }
+        .reset-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         /* ===== ALERT MESSAGES ===== */
         .alert {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin: 16px 0;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            font-weight: 600;
-            animation: slideDown 0.4s ease;
+            padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+            display: flex; align-items: flex-start; gap: 12px;
+            font-weight: 600; animation: slideDown 0.4s ease;
         }
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-10px); }
@@ -367,36 +279,23 @@
         .alert-warning i { color: #d97706; }
         .alert-error i { color: var(--maroon); }
 
-        /* ===== MODAL SUKSES ===== */
+        /* ===== MODAL ===== */
         .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(6px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(6px); z-index: 1000;
+            justify-content: center; align-items: center; padding: 20px;
         }
         .modal-overlay.active { display: flex; }
         .modal-box {
-            background: var(--putih);
-            border-radius: var(--radius);
-            max-width: 480px;
-            width: 100%;
-            padding: 40px 32px;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
-            text-align: center;
+            background: var(--putih); border-radius: var(--radius);
+            max-width: 480px; width: 100%; padding: 40px 32px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4); text-align: center;
             animation: popIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
         .modal-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
+            content: ''; position: absolute; top: 0; left: 0;
             width: 100%; height: 5px;
             background: linear-gradient(90deg, var(--hijau-tua), var(--emas), var(--maroon));
         }
@@ -405,91 +304,89 @@
             to { opacity: 1; transform: scale(1); }
         }
         .modal-icon {
-            width: 80px; height: 80px;
-            border-radius: 50%;
+            width: 80px; height: 80px; border-radius: 50%;
             background: linear-gradient(135deg, var(--hijau-tua), #0f3d24);
             display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2.5rem;
-            color: var(--emas-muda);
+            margin: 0 auto 20px; font-size: 2.5rem; color: var(--emas-muda);
             animation: bounce 0.6s ease 0.3s;
         }
         @keyframes bounce {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.15); }
         }
-        .modal-box h2 {
-            font-size: 1.5rem;
-            color: var(--hijau-tua);
-            margin-bottom: 12px;
-        }
-        .modal-box p {
-            color: #4a5e58;
-            font-size: 0.95rem;
-            margin-bottom: 8px;
-        }
+        .modal-box h2 { font-size: 1.5rem; color: var(--hijau-tua); margin-bottom: 12px; }
+        .modal-box p { color: #4a5e58; font-size: 0.95rem; margin-bottom: 8px; }
         .modal-box .nama-guru {
-            font-weight: 800;
-            color: var(--maroon);
-            font-size: 1.1rem;
-            margin: 8px 0;
+            font-weight: 800; color: var(--maroon);
+            font-size: 1.1rem; margin: 8px 0;
         }
         .modal-box .btn-back {
-            margin-top: 20px;
-            padding: 14px 40px;
-            border-radius: 60px;
-            border: none;
-            background: var(--hijau-tua);
-            color: var(--emas-muda);
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
+            margin-top: 20px; padding: 14px 40px; border-radius: 60px;
+            border: none; background: var(--hijau-tua); color: var(--emas-muda);
+            font-weight: 700; font-size: 1rem; cursor: pointer;
+            text-decoration: none; display: inline-flex; align-items: center;
+            gap: 8px; transition: 0.3s;
         }
         .modal-box .btn-back:hover {
-            background: #0f3d24;
-            transform: translateY(-2px);
+            background: #0f3d24; transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(26,77,46,0.3);
+        }
+
+        /* Modal konfirmasi reset */
+        .modal-confirm { max-width: 400px; }
+        .modal-confirm .modal-icon {
+            background: linear-gradient(135deg, var(--maroon), #a83248);
+            width: 70px; height: 70px; font-size: 2rem;
+        }
+        .modal-confirm h2 { color: var(--maroon); }
+        .modal-confirm .btn-group {
+            display: flex; gap: 10px; margin-top: 20px;
+        }
+        .modal-confirm .btn-group button {
+            flex: 1; padding: 12px 20px; border-radius: 60px;
+            border: none; font-weight: 700; font-size: 0.95rem;
+            cursor: pointer; transition: 0.3s; font-family: inherit;
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 6px;
+        }
+        .modal-confirm .btn-cancel {
+            background: var(--abu); color: var(--hijau-tua);
+        }
+        .modal-confirm .btn-cancel:hover { background: #e0d8cc; }
+        .modal-confirm .btn-confirm {
+            background: var(--maroon); color: white;
+        }
+        .modal-confirm .btn-confirm:hover {
+            background: #a83248; transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(128,0,32,0.3);
         }
 
         /* ===== LOADING OVERLAY ===== */
         .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(4px); z-index: 2000;
+            justify-content: center; align-items: center; flex-direction: column;
         }
         .loading-overlay.active { display: flex; }
         .loading-spinner {
             width: 60px; height: 60px;
             border: 5px solid rgba(201,168,76,0.2);
-            border-top-color: var(--maroon);
-            border-radius: 50%;
+            border-top-color: var(--maroon); border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .loading-overlay p {
-            margin-top: 20px;
-            color: var(--hijau-tua);
-            font-weight: 700;
-            font-size: 1rem;
+            margin-top: 20px; color: var(--hijau-tua);
+            font-weight: 700; font-size: 1rem;
         }
 
         /* ===== FOOTER ===== */
         .footer {
             margin-top: 60px; padding: 30px 0 20px;
             border-top: 2px solid rgba(201,168,76,0.15);
-            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;
+            display: flex; flex-wrap: wrap; justify-content: space-between;
+            align-items: center; gap: 16px;
             color: #3d5550; font-size: 0.9rem;
         }
         .footer .footer-logo { font-weight: 700; color: var(--hijau-tua); font-size: 1.1rem; }
@@ -499,8 +396,10 @@
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
             .nav-links {
-                display: none; flex-direction: column; width: 100%; padding: 16px 0 8px;
-                gap: 6px; background: rgba(255,255,255,0.95); border-radius: 30px; margin-top: 12px;
+                display: none; flex-direction: column; width: 100%;
+                padding: 16px 0 8px; gap: 6px;
+                background: rgba(255,255,255,0.95);
+                border-radius: 30px; margin-top: 12px;
             }
             .nav-links.open { display: flex; }
             .navbar { flex-wrap: wrap; padding: 12px 20px; }
@@ -514,6 +413,7 @@
             .radio-grid { grid-template-columns: 1fr; }
             .form-card { padding: 20px 16px; }
             #signatureCanvas { height: 180px; }
+            .form-actions { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -522,7 +422,7 @@
     <div class="ornament ornament-2"></div>
 
     <div class="container">
-        <!-- ===== NAVBAR ===== -->
+        <!-- ===== NAVBAR (load dari navbar.html) ===== -->
         <div id="navbar-container"></div>
 
         <!-- ===== HERO ===== -->
@@ -536,7 +436,6 @@
 
         <!-- ===== FORM ===== -->
         <div class="form-card">
-            <!-- Alert message -->
             <div id="alertContainer"></div>
 
             <form id="absensiForm" novalidate>
@@ -633,10 +532,15 @@
                     <div class="error-text"><i class="fas fa-exclamation-circle"></i> Tanda tangan wajib diisi</div>
                 </div>
 
-                <!-- Tombol Submit -->
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <i class="fas fa-paper-plane"></i> Kirim Absensi
-                </button>
+                <!-- Tombol Aksi: Reset + Kirim -->
+                <div class="form-actions">
+                    <button type="button" class="reset-btn" id="resetBtn">
+                        <i class="fas fa-redo-alt"></i> Reset
+                    </button>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Kirim Absensi
+                    </button>
+                </div>
 
             </form>
         </div>
@@ -664,6 +568,25 @@
         </div>
     </div>
 
+    <!-- ===== MODAL KONFIRMASI RESET ===== -->
+    <div class="modal-overlay" id="resetConfirmModal">
+        <div class="modal-box modal-confirm">
+            <div class="modal-icon">
+                <i class="fas fa-redo-alt"></i>
+            </div>
+            <h2>Reset Form?</h2>
+            <p>Semua data yang sudah diisi akan dihapus dan dikosongkan kembali.</p>
+            <div class="btn-group">
+                <button class="btn-cancel" id="cancelResetBtn">
+                    <i class="fas fa-times"></i> Batal
+                </button>
+                <button class="btn-confirm" id="confirmResetBtn">
+                    <i class="fas fa-check"></i> Ya, Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== LOADING OVERLAY ===== -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
@@ -677,17 +600,45 @@
         const API_URL = 'https://script.google.com/macros/s/AKfycbwiagodajVAK6aRJojWjXhlxzRGziWbcjFRf81lPjv8AoZlYsDa0sQ52mypGtlwRl2G/exec';
 
         // ============================================================
-        // 📱 MOBILE MENU
+        // 📌 LOAD NAVBAR DARI FILE EKSTERNAL
         // ============================================================
-        const toggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        toggle.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
-            toggle.querySelector('i').className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-        });
+        async function loadNavbar() {
+            try {
+                const response = await fetch('navbar.html');
+                const html = await response.text();
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+                console.log('✅ Navbar berhasil dimuat');
+            } catch (error) {
+                console.error('❌ Gagal memuat navbar:', error);
+            }
+        }
 
-   
-        
+        function initNavbar() {
+            const toggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            if (!toggle || !navLinks) return;
+            
+            toggle.addEventListener('click', () => {
+                navLinks.classList.toggle('open');
+                const icon = toggle.querySelector('i');
+                icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+            });
+            
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                if (link.getAttribute('href') === currentPage) link.classList.add('active');
+            });
+            
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('open');
+                    const icon = toggle.querySelector('i');
+                    icon.className = 'fas fa-bars';
+                });
+            });
+        }
+
         // ============================================================
         // 🎯 ELEMENTS
         // ============================================================
@@ -767,11 +718,7 @@
             }
         }
 
-        function stopDraw(e) {
-            if (isDrawing) {
-                isDrawing = false;
-            }
-        }
+        function stopDraw(e) { if (isDrawing) isDrawing = false; }
 
         canvas.addEventListener('mousedown', startDraw);
         canvas.addEventListener('mousemove', draw);
@@ -801,7 +748,6 @@
                 return;
             }
             
-            // Cek kegiatan sudah dipilih atau belum
             if (!namaKegiatan.value) {
                 namaGuru.disabled = true;
                 namaGuru.innerHTML = '<option value="">-- Pilih Kegiatan Terlebih Dahulu --</option>';
@@ -813,7 +759,6 @@
             showLoading('Memuat data guru...');
             
             try {
-                // Ambil guru yang BELUM absen pada kegiatan ini hari ini
                 const today = getTodayString();
                 const response = await fetch(API_URL, {
                     method: 'POST',
@@ -859,7 +804,6 @@
             }
         });
 
-        // Reset nama guru jika kegiatan berubah
         namaKegiatan.addEventListener('change', function() {
             namaGuru.disabled = true;
             namaGuru.innerHTML = '<option value="">-- Pilih Lembaga Terlebih Dahulu --</option>';
@@ -890,29 +834,16 @@
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Validasi
             let valid = true;
-            
-            // Reset error
             document.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
             
-            if (!namaKegiatan.value) {
-                document.getElementById('groupKegiatan').classList.add('has-error');
-                valid = false;
-            }
-            if (!lembaga.value) {
-                document.getElementById('groupLembaga').classList.add('has-error');
-                valid = false;
-            }
-            if (!namaGuru.value) {
-                document.getElementById('groupGuru').classList.add('has-error');
-                valid = false;
-            }
+            if (!namaKegiatan.value) { document.getElementById('groupKegiatan').classList.add('has-error'); valid = false; }
+            if (!lembaga.value) { document.getElementById('groupLembaga').classList.add('has-error'); valid = false; }
+            if (!namaGuru.value) { document.getElementById('groupGuru').classList.add('has-error'); valid = false; }
+            
             const statusRadios = document.querySelectorAll('input[name="status"]:checked');
-            if (statusRadios.length === 0) {
-                document.getElementById('groupStatus').classList.add('has-error');
-                valid = false;
-            }
+            if (statusRadios.length === 0) { document.getElementById('groupStatus').classList.add('has-error'); valid = false; }
+            
             const statusVal = statusRadios.length > 0 ? statusRadios[0].value : '';
             if ((statusVal === 'Hadir Terlambat' || statusVal === 'Izin') && !alasan.value.trim()) {
                 document.getElementById('groupAlasan').classList.add('has-error');
@@ -925,16 +856,12 @@
             }
             
             if (!valid) {
-                // Scroll ke error pertama
                 const firstError = document.querySelector('.form-group.has-error');
-                if (firstError) {
-                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+                if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 showAlert('error', 'Mohon lengkapi semua field yang wajib diisi.');
                 return;
             }
             
-            // Persiapkan data
             const tandaTanganData = canvas.toDataURL('image/png');
             
             const payload = {
@@ -962,7 +889,6 @@
                 hideLoading();
                 
                 if (result.status === 'success') {
-                    // Tampilkan modal sukses
                     document.getElementById('successNamaGuru').textContent = payload.namaGuru;
                     document.getElementById('successModal').classList.add('active');
                     startCountdown();
@@ -974,7 +900,6 @@
                     showAlert('error', 'Gagal upload tanda tangan. Silakan coba tanda tangan ulang.');
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Absensi';
-                    // Reset tanda tangan
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     hasSignature = false;
                     signatureWrapper.classList.remove('has-signature', 'has-error');
@@ -1017,14 +942,84 @@
         });
 
         // ============================================================
+        // 🔄 TOMBOL RESET FORM
+        // ============================================================
+        const resetBtn = document.getElementById('resetBtn');
+        const resetConfirmModal = document.getElementById('resetConfirmModal');
+        const cancelResetBtn = document.getElementById('cancelResetBtn');
+        const confirmResetBtn = document.getElementById('confirmResetBtn');
+
+        resetBtn.addEventListener('click', () => {
+            resetConfirmModal.classList.add('active');
+        });
+
+        cancelResetBtn.addEventListener('click', () => {
+            resetConfirmModal.classList.remove('active');
+        });
+
+        resetConfirmModal.addEventListener('click', (e) => {
+            if (e.target === resetConfirmModal) {
+                resetConfirmModal.classList.remove('active');
+            }
+        });
+
+        confirmResetBtn.addEventListener('click', () => {
+            resetForm();
+            resetConfirmModal.classList.remove('active');
+            showAlert('success', 'Form berhasil direset. Silakan isi ulang.');
+        });
+
+        function resetForm() {
+            // 1. Reset dropdown kegiatan
+            namaKegiatan.value = '';
+            
+            // 2. Reset dropdown lembaga
+            lembaga.value = '';
+            
+            // 3. Reset dropdown guru
+            namaGuru.innerHTML = '<option value="">-- Pilih Lembaga Terlebih Dahulu --</option>';
+            namaGuru.disabled = true;
+            guruHelper.textContent = 'Pilih lembaga terlebih dahulu';
+            
+            // 4. Reset radio status
+            document.querySelectorAll('input[name="status"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // 5. Reset alasan
+            groupAlasan.style.display = 'none';
+            alasan.value = '';
+            alasan.required = false;
+            
+            // 6. Reset tanda tangan
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasSignature = false;
+            signatureWrapper.classList.remove('has-signature', 'has-error');
+            signatureStatus.style.display = 'none';
+            
+            // 7. Hapus semua class error
+            document.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
+            
+            // 8. Reset tombol submit
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Absensi';
+            
+            // 9. Scroll ke atas form
+            document.getElementById('absensiForm').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+            
+            console.log('🔄 Form berhasil direset');
+        }
+
+        // ============================================================
         // 🎨 HELPER: ALERT & LOADING
         // ============================================================
         function showAlert(type, message) {
             const icons = {
-                info: 'fa-info-circle',
-                success: 'fa-check-circle',
-                warning: 'fa-exclamation-triangle',
-                error: 'fa-times-circle'
+                info: 'fa-info-circle', success: 'fa-check-circle',
+                warning: 'fa-exclamation-triangle', error: 'fa-times-circle'
             };
             alertContainer.innerHTML = `
                 <div class="alert alert-${type}">
@@ -1034,9 +1029,7 @@
             `;
         }
 
-        function clearAlert() {
-            alertContainer.innerHTML = '';
-        }
+        function clearAlert() { alertContainer.innerHTML = ''; }
 
         function showLoading(text) {
             document.getElementById('loadingText').textContent = text || 'Memuat...';
@@ -1055,39 +1048,13 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
-       console.log('🌙 HAFZApp - Form Absensi — Barakallah!');
-document.addEventListener('DOMContentLoaded', loadNavbar);
-   
-     // Load navbar dari navbar.html
-    async function loadNavbar() {
-        try {
-            const response = await fetch('navbar.html');
-            const html = await response.text();
-            document.getElementById('navbar-container').innerHTML = html;
-            initNavbar();
-        } catch (error) {
-            console.error('Gagal memuat navbar:', error);
-        }
-    }
-
-    function initNavbar() {
-        const toggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        if (!toggle || !navLinks) return;
-        
-        toggle.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
-            const icon = toggle.querySelector('i');
-            icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        // ============================================================
+        // 🚀 START
+        // ============================================================
+        console.log('🌙 HAFZApp - Form Absensi — Barakallah!');
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNavbar();
         });
-        
-        // Tandai menu aktif (tidak ada yang aktif karena form-absensi tidak di navbar)
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            if (link.getAttribute('href') === currentPage) link.classList.add('active');
-        });
-    }
-
     </script>
 </body>
 </html>
