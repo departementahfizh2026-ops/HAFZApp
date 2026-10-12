@@ -686,36 +686,7 @@
             toggle.querySelector('i').className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
         });
 
-    // Load navbar dari navbar.html
-    async function loadNavbar() {
-        try {
-            const response = await fetch('navbar.html');
-            const html = await response.text();
-            document.getElementById('navbar-container').innerHTML = html;
-            initNavbar();
-        } catch (error) {
-            console.error('Gagal memuat navbar:', error);
-        }
-    }
-
-    function initNavbar() {
-        const toggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        if (!toggle || !navLinks) return;
-        
-        toggle.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
-            const icon = toggle.querySelector('i');
-            icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-        });
-        
-        // Tandai menu aktif (tidak ada yang aktif karena form-absensi tidak di navbar)
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            if (link.getAttribute('href') === currentPage) link.classList.add('active');
-        });
-    }
-
+   
         
         // ============================================================
         // 🎯 ELEMENTS
@@ -1086,6 +1057,37 @@
 
        console.log('🌙 HAFZApp - Form Absensi — Barakallah!');
 document.addEventListener('DOMContentLoaded', loadNavbar);
+   
+     // Load navbar dari navbar.html
+    async function loadNavbar() {
+        try {
+            const response = await fetch('navbar.html');
+            const html = await response.text();
+            document.getElementById('navbar-container').innerHTML = html;
+            initNavbar();
+        } catch (error) {
+            console.error('Gagal memuat navbar:', error);
+        }
+    }
+
+    function initNavbar() {
+        const toggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        if (!toggle || !navLinks) return;
+        
+        toggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            const icon = toggle.querySelector('i');
+            icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        });
+        
+        // Tandai menu aktif (tidak ada yang aktif karena form-absensi tidak di navbar)
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.getAttribute('href') === currentPage) link.classList.add('active');
+        });
+    }
+
     </script>
 </body>
 </html>
