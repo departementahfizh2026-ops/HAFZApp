@@ -518,14 +518,28 @@
                         <p class="card-desc">Kelola ${menu.toLowerCase()}.</p>
                         <ul class="sub-menu-list">`;
                     data.items.forEach(item => {
-                        const isLink = item.link && item.link !== '#';
-                        if (isLink) {
-                            html += `<li><a href="${item.link}" target="_blank" class="sub-menu-btn">
-                                <i class="fas fa-external-link-alt"></i> ${item.subMenu}</a></li>`;
-                        } else {
-                            html += `<li><span class="sub-menu-btn" style="background:var(--abu);color:var(--hijau-tua);cursor:default;opacity:0.7;">
-                                <i class="fas fa-circle" style="font-size:0.4rem;color:var(--emas);"></i> ${item.subMenu}</span></li>`;
-                        }
+    const isLink = item.link && item.link !== '#';
+    if (isLink) {
+        // 🔍 Deteksi apakah link internal atau eksternal
+        const link = item.link;
+        const isExternal = link.startsWith('http://') || link.startsWith('https://');
+        
+        // Link internal (.html) buka di tab yang sama
+        // Link eksternal buka di tab baru
+        const targetAttr = isExternal ? 'target="_blank"' : '';
+        const iconClass = isExternal ? 'fa-external-link-alt' : 'fa-arrow-right';
+        
+        html += `
+            <li>
+                <a href="${link}" ${targetAttr} class="sub-menu-btn">
+                    <i class="fas ${iconClass}"></i> ${item.subMenu}
+                </a>
+            </li>
+        `;
+    } else {
+        // ... (bagian non-link tetap sama)
+    }
+});
                     });
                     html += '</ul></div>';
                 });
