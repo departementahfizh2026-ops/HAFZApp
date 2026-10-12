@@ -39,7 +39,7 @@
         .ornament-2 { width: 400px; height: 400px; bottom: -50px; left: -100px; opacity: 0.2; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px 24px 60px; position: relative; z-index: 1; }
 
-        /* ===== NAVBAR (dipakai via navbar.html) ===== */
+        /* ===== NAVBAR ===== */
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
             padding: 16px 28px; background: rgba(255,255,255,0.85);
@@ -260,11 +260,8 @@
     <div class="ornament ornament-2"></div>
 
     <div class="container">
-
-        <!-- ===== NAVBAR (di-load dari navbar.html) ===== -->
         <div id="navbar-container"></div>
 
-        <!-- ===== HERO ===== -->
         <section class="hero">
             <div class="hero-text">
                 <div class="arabic-tagline">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
@@ -285,7 +282,6 @@
             </div>
         </section>
 
-        <!-- ===== MENU SECTION ===== -->
         <div class="section-title" id="menu">
             <h2><i class="fas fa-sitemap"></i> Menu Utama HAFZApp</h2>
             <p class="subtitle">Akses cepat ke semua fitur pengelolaan tahfizh</p>
@@ -297,7 +293,6 @@
             </div>
         </div>
 
-        <!-- ===== CONTACT ===== -->
         <div class="highlight-box fade-up">
             <div class="text">
                 <h3><i class="fas fa-link"></i> DEPARTEMEN TAHFIZH</h3>
@@ -318,7 +313,6 @@
             </div>
         </div>
 
-        <!-- ===== FOOTER ===== -->
         <footer class="footer">
             <div class="footer-logo"><i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span></div>
             <div class="footer-links">
@@ -329,7 +323,6 @@
         </footer>
     </div>
 
-    <!-- ===== WHATSAPP ===== -->
     <div class="whatsapp-float">
         <div class="bubble" id="waBubble"><i class="fab fa-whatsapp"></i> Chat Admin</div>
         <a href="https://wa.me/6282340530283" target="_blank" class="whatsapp-btn" id="waButton">
@@ -338,7 +331,6 @@
         </a>
     </div>
 
-    <!-- ===== MODAL TENTANG ===== -->
     <div class="modal-overlay" id="tentangModal">
         <div class="modal-content">
             <button class="modal-close" id="tentangModalClose">&times;</button>
@@ -360,15 +352,13 @@
 
     <script>
         // ============================================================
-        // 📌 LOAD NAVBAR DARI FILE EKSTERNAL
+        // 📌 LOAD NAVBAR
         // ============================================================
         async function loadNavbar() {
             try {
                 const response = await fetch('navbar.html');
                 const html = await response.text();
                 document.getElementById('navbar-container').innerHTML = html;
-                
-                // Aktifkan kembali fungsi-fungsi setelah navbar dimuat
                 initNavbar();
                 console.log('✅ Navbar berhasil dimuat');
             } catch (error) {
@@ -384,23 +374,18 @@
             
             if (!toggle || !navLinks) return;
             
-            // Mobile menu toggle
             toggle.addEventListener('click', () => {
                 navLinks.classList.toggle('open');
                 const icon = toggle.querySelector('i');
                 icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
             });
             
-            // Tandai menu aktif sesuai halaman saat ini
             const currentPage = window.location.pathname.split('/').pop() || 'index.html';
             document.querySelectorAll('.nav-links a').forEach(link => {
                 const href = link.getAttribute('href');
-                if (href === currentPage) {
-                    link.classList.add('active');
-                }
+                if (href === currentPage) link.classList.add('active');
             });
             
-            // Tutup menu saat link diklik (mobile)
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => {
                     navLinks.classList.remove('open');
@@ -409,7 +394,6 @@
                 });
             });
             
-            // Re-attach event listener untuk tombol "Tentang"
             document.querySelectorAll('.tentang-link').forEach(l => {
                 l.addEventListener('click', e => { 
                     e.preventDefault(); 
@@ -505,7 +489,8 @@
                     'Input Nilai Tasmi\'': 'fa-clipboard-list',
                     'Pengajuan Reward Tasmi\'': 'fa-trophy',
                     'Absen Kegiatan Departemen Tahfizh': 'fa-calendar-alt',
-                    'Arsip Departemen Tahfizh': 'fa-archive'
+                    'Arsip Departemen Tahfizh': 'fa-archive',
+                    'Absen Kegiatan': 'fa-clipboard-check'
                 };
                 
                 sortedMenus.forEach(([menu, data]) => {
@@ -517,17 +502,23 @@
                         <h3>${menu}</h3>
                         <p class="card-desc">Kelola ${menu.toLowerCase()}.</p>
                         <ul class="sub-menu-list">`;
+                    
                     data.items.forEach(item => {
                         const isLink = item.link && item.link !== '#';
                         if (isLink) {
-                            html += `<li><a href="${item.link}" target="_blank" class="sub-menu-btn">
-                                <i class="fas fa-external-link-alt"></i> ${item.subMenu}</a></li>`;
+                            // 🔍 Deteksi link internal vs eksternal
+                            const isExternal = item.link.startsWith('http://') || item.link.startsWith('https://');
+                            const targetAttr = isExternal ? 'target="_blank"' : '';
+                            const iconClass = isExternal ? 'fa-external-link-alt' : 'fa-arrow-right';
+                            
+                            html += `<li><a href="${item.link}" ${targetAttr} class="sub-menu-btn">
+                                <i class="fas ${iconClass}"></i> ${item.subMenu}</a></li>`;
                         } else {
                             html += `<li><span class="sub-menu-btn" style="background:var(--abu);color:var(--hijau-tua);cursor:default;opacity:0.7;">
                                 <i class="fas fa-circle" style="font-size:0.4rem;color:var(--emas);"></i> ${item.subMenu}</span></li>`;
                         }
-});
-            
+                    });
+                    
                     html += '</ul></div>';
                 });
                 html += '</div>';
