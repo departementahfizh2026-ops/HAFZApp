@@ -408,7 +408,7 @@
         <div id="navbar-container"></div>
 
         <section class="hero">
-            <img src="Logo.png" alt="Logo Departemen Tahfizh" class="hero-logo">
+            <img src="assets/images/logo.png" alt="Logo Departemen Tahfizh" class="hero-logo">
             <div class="hero-text">
                 <div class="arabic-tagline">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
                 <h1>
@@ -502,7 +502,7 @@
         // ============================================================
         async function loadNavbar() {
             try {
-                const response = await fetch('navbar.html');
+                const response = await fetch('components/navbar.html');
                 const html = await response.text();
                 document.getElementById('navbar-container').innerHTML = html;
                 initNavbar();
