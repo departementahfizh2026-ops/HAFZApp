@@ -1,10 +1,9 @@
-
 <!-- ============================================================
-     NAVBAR - File ini dipakai di halaman yang load via fetch.
+     NAVBAR - File ini dipakai di semua halaman
      Untuk menambah menu baru, cukup edit file ini saja.
      ============================================================ -->
 <nav class="navbar">
-    <a href="index.html" class="logo">
+    <a href="../index.html" class="logo">
         <i class="fas fa-quran"></i>
         HAFZ<span>App</span>
     </a>
@@ -12,9 +11,24 @@
         <i class="fas fa-bars"></i>
     </button>
     <div class="nav-links" id="navLinks">
-        <a href="index.html">Dashboard</a>
-        <a href="diagram.html">Capaian Tasmi'</a>
-        <a href="reward.html">Rekap Reward</a>
+        <a href="../index.html">Dashboard</a>
+        
+        <!-- ===== MENU DROPDOWN: AKADEMIK ===== -->
+        <div class="nav-dropdown">
+            <a href="#" class="nav-dropdown-toggle">
+                Akademik <i class="fas fa-chevron-down" style="font-size:0.7rem;margin-left:4px;"></i>
+            </a>
+            <div class="nav-dropdown-menu">
+                <a href="struktur-organisasi.html">
+                    <i class="fas fa-sitemap"></i> Struktur Organisasi
+                </a>
+                <a href="prosedur-reward.html">
+                    <i class="fas fa-file-alt"></i> Prosedur Pengajuan Reward Tasmi'
+                </a>
+            </div>
+        </div>
+        
+        <a href="album-kegiatan.html">Album Kegiatan</a>
         <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
         <a href="#" class="cta-nav"><i class="fas fa-rocket"></i> Login</a>
     </div>
