@@ -42,30 +42,6 @@
         .ornament-2 { width: 400px; height: 400px; bottom: -50px; left: -100px; opacity: 0.2; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px 24px 60px; position: relative; z-index: 1; }
 
-        /* ===== NAVBAR ===== */
-        .navbar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 28px; background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(16px); border-radius: 60px;
-            box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.2);
-            margin: 12px 0 30px; position: sticky; top: 12px; z-index: 99;
-        }
-        .navbar .logo {
-            display: flex; align-items: center; gap: 12px;
-            font-size: 1.5rem; font-weight: 800; color: var(--hijau-tua); text-decoration: none;
-        }
-        .navbar .logo i { color: var(--emas); font-size: 2rem; }
-        .navbar .logo span { color: var(--emas); }
-        .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
-        .nav-links a {
-            text-decoration: none; color: var(--hijau-tua); font-weight: 600;
-            padding: 8px 18px; border-radius: 40px; transition: 0.3s;
-            font-size: 0.9rem; cursor: pointer;
-        }
-        .nav-links a:hover, .nav-links a.active { background: var(--hijau-tua); color: var(--emas-muda); }
-        .nav-links .cta-nav { background: var(--emas); color: var(--hijau-tua); font-weight: 700; }
-        .menu-toggle { display: none; font-size: 1.8rem; background: none; border: none; color: var(--hijau-tua); cursor: pointer; padding: 4px 12px; }
-
         /* ===== HERO ===== */
         .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 0 20px; }
         .hero-text { max-width: 750px; }
@@ -90,52 +66,31 @@
 
         /* ===== LOADING STATES ===== */
         .loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 20px;
-            color: var(--hijau-tua);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 60px 20px; color: var(--hijau-tua);
         }
         .loading-spinner {
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             border: 4px solid rgba(201,168,76,0.2);
             border-top-color: var(--emas);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 16px;
+            border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 16px;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        .loading-container p {
-            font-size: 0.95rem;
-            color: #7a8a85;
-            font-weight: 500;
-        }
+        .loading-container p { font-size: 0.95rem; color: #7a8a85; font-weight: 500; }
 
-        /* Skeleton loading untuk kartu */
         .skeleton-card {
-            background: var(--putih);
-            border-radius: 16px;
-            padding: 24px 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(201,168,76,0.12);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            background: var(--putih); border-radius: 16px; padding: 24px 20px;
+            box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.12);
+            text-align: center; position: relative; overflow: hidden;
         }
         .skeleton-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
+            content: ''; position: absolute; top: 0; left: 0;
             width: 100%; height: 4px;
             background: linear-gradient(90deg, var(--hijau-tua), var(--emas));
         }
         .skeleton-item {
             background: linear-gradient(90deg, #f0ebe3 0%, #f8f4ed 50%, #f0ebe3 100%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-            border-radius: 8px;
+            background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px;
         }
         @keyframes skeleton-loading {
             0% { background-position: 200% 0; }
@@ -148,21 +103,13 @@
 
         /* ===== SUMMARY CARDS ===== */
         .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px; margin: 30px 0;
         }
         .summary-card {
-            background: var(--putih);
-            border-radius: 16px;
-            padding: 24px 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(201,168,76,0.12);
-            text-align: center;
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
+            background: var(--putih); border-radius: 16px; padding: 24px 20px;
+            box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.12);
+            text-align: center; transition: 0.3s; position: relative; overflow: hidden;
             animation: fadeInUp 0.6s ease backwards;
         }
         @keyframes fadeInUp {
@@ -170,129 +117,72 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .summary-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
+            content: ''; position: absolute; top: 0; left: 0;
             width: 100%; height: 4px;
             background: linear-gradient(90deg, var(--hijau-tua), var(--emas));
         }
         .summary-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(26,77,46,0.15);
-            border-color: var(--emas);
+            box-shadow: 0 20px 50px rgba(26,77,46,0.15); border-color: var(--emas);
         }
         .summary-card .icon {
-            width: 50px; height: 50px;
-            border-radius: 14px;
-            background: var(--cream);
+            width: 50px; height: 50px; border-radius: 14px; background: var(--cream);
             display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 12px;
-            color: var(--emas);
-            font-size: 1.5rem;
+            margin: 0 auto 12px; color: var(--emas); font-size: 1.5rem;
         }
         .summary-card .number {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: var(--hijau-tua);
-            line-height: 1;
-            margin-bottom: 6px;
+            font-size: 2.2rem; font-weight: 900; color: var(--hijau-tua);
+            line-height: 1; margin-bottom: 6px;
         }
-        .summary-card .label {
-            font-size: 0.8rem;
-            color: #4a5e58;
-            font-weight: 600;
-            line-height: 1.4;
-        }
-        .summary-card .total-note {
-            font-size: 0.7rem;
-            color: #999;
-            margin-top: 4px;
-            font-style: italic;
-        }
+        .summary-card .label { font-size: 0.8rem; color: #4a5e58; font-weight: 600; line-height: 1.4; }
+        .summary-card .total-note { font-size: 0.7rem; color: #999; margin-top: 4px; font-style: italic; }
 
         /* ===== TABLE ===== */
         .table-wrapper {
-            background: var(--putih);
-            border-radius: var(--radius);
-            padding: 30px 20px;
-            margin: 30px 0;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(201,168,76,0.12);
-            overflow-x: auto;
-            position: relative;
-            min-height: 200px;
+            background: var(--putih); border-radius: var(--radius); padding: 30px 20px;
+            margin: 30px 0; box-shadow: var(--shadow);
+            border: 1px solid rgba(201,168,76,0.12); overflow-x: auto;
+            position: relative; min-height: 200px;
         }
         .table-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
         }
         .table-wrapper h3 {
-            font-size: 1.4rem;
-            color: var(--hijau-tua);
-            font-weight: 800;
-            text-align: center;
-            margin: 0;
-            flex: 1;
-            min-width: 200px;
+            font-size: 1.4rem; color: var(--hijau-tua); font-weight: 800;
+            text-align: center; margin: 0; flex: 1; min-width: 200px;
         }
         .table-wrapper h3 i { color: var(--emas); margin-right: 8px; }
-        .table-export-buttons {
-            display: flex;
-            gap: 8px;
-        }
+        .table-export-buttons { display: flex; gap: 8px; }
         .table-export-btn {
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: none;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            padding: 8px 16px; border-radius: 30px; border: none;
+            font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.3s;
+            font-family: inherit; display: inline-flex; align-items: center; gap: 6px;
         }
         .table-export-btn.btn-pdf { background: #c0392b; color: white; }
         .table-export-btn.btn-pdf:hover { background: #a93226; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(192,57,43,0.3); }
         .table-export-btn.btn-excel { background: #16a085; color: white; }
         .table-export-btn.btn-excel:hover { background: #12876f; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(22,160,133,0.3); }
         .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            min-width: 900px;
+            width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 900px;
         }
         .data-table thead {
             background: linear-gradient(135deg, var(--hijau-tua), #0f3d24);
             color: var(--emas-muda);
         }
         .data-table th {
-            padding: 12px 8px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 0.75rem;
-            letter-spacing: 0.3px;
-            line-height: 1.3;
+            padding: 12px 8px; text-align: center; font-weight: 700;
+            font-size: 0.75rem; letter-spacing: 0.3px; line-height: 1.3;
             border-bottom: 2px solid var(--emas);
         }
         .data-table th:first-child { text-align: left; border-top-left-radius: 12px; }
         .data-table th:last-child { border-top-right-radius: 12px; }
         .data-table td {
-            padding: 10px 8px;
-            text-align: center;
-            color: #2d3d3a;
-            border-bottom: 1px solid rgba(201,168,76,0.1);
-            font-weight: 600;
+            padding: 10px 8px; text-align: center; color: #2d3d3a;
+            border-bottom: 1px solid rgba(201,168,76,0.1); font-weight: 600;
         }
         .data-table td:first-child {
-            text-align: left;
-            font-weight: 700;
-            color: var(--hijau-tua);
+            text-align: left; font-weight: 700; color: var(--hijau-tua);
         }
         .data-table tbody tr { animation: fadeInRow 0.4s ease backwards; }
         .data-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
@@ -312,108 +202,60 @@
         }
         .data-table tbody tr:hover { background: rgba(201,168,76,0.05); }
         .data-table td.nilai-besar {
-            background: rgba(26,77,46,0.05);
-            color: var(--hijau-tua);
-            font-weight: 800;
+            background: rgba(26,77,46,0.05); color: var(--hijau-tua); font-weight: 800;
         }
         .data-table td.kolom-santri {
-            background: rgba(201,168,76,0.08);
-            color: var(--emas);
-            font-weight: 800;
+            background: rgba(201,168,76,0.08); color: var(--emas); font-weight: 800;
         }
         .data-table td.kolom-kosong {
-            background: rgba(0,0,0,0.02);
-            color: #bbb;
+            background: rgba(0,0,0,0.02); color: #bbb;
         }
-        .data-table tfoot {
-            background: var(--cream);
-            font-weight: 800;
-        }
+        .data-table tfoot { background: var(--cream); font-weight: 800; }
         .data-table tfoot td {
-            padding: 14px 8px;
-            color: var(--hijau-tua);
-            font-size: 0.95rem;
-            border-top: 2px solid var(--emas);
-            border-bottom: none;
+            padding: 14px 8px; color: var(--hijau-tua); font-size: 0.95rem;
+            border-top: 2px solid var(--emas); border-bottom: none;
         }
 
         /* ===== PIE CHART ===== */
         .pie-wrapper {
-            background: var(--putih);
-            border-radius: var(--radius);
-            padding: 40px 30px;
-            margin: 30px 0;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(201,168,76,0.12);
-            position: relative;
-            min-height: 300px;
+            background: var(--putih); border-radius: var(--radius); padding: 40px 30px;
+            margin: 30px 0; box-shadow: var(--shadow);
+            border: 1px solid rgba(201,168,76,0.12); position: relative; min-height: 300px;
         }
         .pie-wrapper h3 {
-            font-size: 1.4rem;
-            color: var(--hijau-tua);
-            font-weight: 800;
-            margin-bottom: 8px;
-            text-align: center;
+            font-size: 1.4rem; color: var(--hijau-tua); font-weight: 800;
+            margin-bottom: 8px; text-align: center;
         }
         .pie-wrapper h3 i { color: var(--emas); margin-right: 8px; }
         .pie-wrapper .pie-subtitle {
-            text-align: center;
-            color: #4a5e58;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
+            text-align: center; color: #4a5e58; font-size: 0.95rem; margin-bottom: 20px;
         }
         .pie-wrapper .chart-container {
-            position: relative;
-            height: 400px;
-            max-width: 500px;
-            margin: 0 auto;
+            position: relative; height: 400px; max-width: 500px; margin: 0 auto;
         }
 
         /* ===== CHART WRAPPER ===== */
         .chart-wrapper-card {
-            background: var(--putih);
-            border-radius: var(--radius);
-            padding: 40px 44px;
-            margin: 30px 0;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(201,168,76,0.12);
-            position: relative;
-            min-height: 400px;
+            background: var(--putih); border-radius: var(--radius); padding: 40px 44px;
+            margin: 30px 0; box-shadow: var(--shadow);
+            border: 1px solid rgba(201,168,76,0.12); position: relative; min-height: 400px;
         }
         .chart-wrapper-card h3 {
-            font-size: 1.8rem;
-            color: var(--hijau-tua);
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 8px;
+            font-size: 1.8rem; color: var(--hijau-tua); font-weight: 800;
+            text-align: center; margin-bottom: 8px;
         }
         .chart-wrapper-card h3 i { color: var(--emas); margin-right: 10px; }
         .chart-wrapper-card .chart-subtitle {
-            text-align: center;
-            color: #4a5e58;
-            font-size: 1rem;
-            margin-bottom: 30px;
+            text-align: center; color: #4a5e58; font-size: 1rem; margin-bottom: 30px;
         }
 
-        /* Loading overlay untuk chart */
         .chart-loading-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(255,255,255,0.95);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius);
-            z-index: 10;
-            opacity: 1;
-            transition: opacity 0.3s ease;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; border-radius: var(--radius);
+            z-index: 10; opacity: 1; transition: opacity 0.3s ease;
         }
-        .chart-loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+        .chart-loading-overlay.hidden { opacity: 0; pointer-events: none; }
 
         /* ===== HIGHLIGHT BOX ===== */
         .highlight-box {
@@ -477,38 +319,6 @@
             background: #ff3b30; border-radius: 50%; border: 2px solid white;
         }
 
-        /* ===== MODAL ===== */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); z-index: 1000;
-            justify-content: center; align-items: center; padding: 20px;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-content {
-            background: var(--putih); border-radius: var(--radius);
-            max-width: 750px; width: 100%; max-height: 90vh; overflow-y: auto;
-            padding: 40px 44px; box-shadow: 0 30px 80px rgba(0,0,0,0.4);
-            border: 1px solid rgba(201,168,76,0.2); position: relative;
-        }
-        .modal-close {
-            position: sticky; top: 0; float: right; background: none; border: none;
-            font-size: 2rem; color: var(--hijau-tua); cursor: pointer; padding: 0 8px;
-        }
-        .modal-content h2 { font-size: 2rem; color: var(--hijau-tua); margin-bottom: 6px; display: flex; align-items: center; gap: 12px; }
-        .modal-content h2 i { color: var(--emas); font-size: 1.8rem; }
-        .modal-content .sub-title { color: var(--hijau-muda); font-size: 0.95rem; border-bottom: 2px solid rgba(201,168,76,0.2); padding-bottom: 16px; margin-bottom: 20px; }
-        .modal-content p { color: #2d3d3a; margin-bottom: 16px; font-size: 0.98rem; line-height: 1.8; }
-        .modal-content .visi-misi {
-            background: var(--cream); border-radius: 14px; padding: 20px 24px;
-            margin-top: 16px; border-left: 4px solid var(--emas);
-        }
-        .modal-content .visi-misi h4 { color: var(--hijau-tua); font-size: 1.05rem; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-        .modal-content .visi-misi h4 i { color: var(--emas); }
-        .modal-content .visi-misi p { margin-bottom: 6px; font-size: 0.95rem; }
-        .modal-content .visi-misi ul { list-style: none; padding: 0; margin: 6px 0 0; }
-        .modal-content .visi-misi ul li { padding: 4px 0 4px 24px; position: relative; font-size: 0.95rem; }
-        .modal-content .visi-misi ul li::before { content: '▸'; position: absolute; left: 0; color: var(--emas); font-weight: 700; }
-
         /* ===== RESPONSIVE ===== */
         .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
         .fade-up.visible { opacity: 1; transform: translateY(0); }
@@ -517,13 +327,6 @@
             .highlight-box { grid-template-columns: 1fr; gap: 30px; padding: 30px 28px; text-align: center; }
         }
         @media (max-width: 768px) {
-            .menu-toggle { display: block; }
-            .nav-links {
-                display: none; flex-direction: column; width: 100%; padding: 16px 0 8px;
-                gap: 6px; background: rgba(255,255,255,0.95); border-radius: 30px; margin-top: 12px;
-            }
-            .nav-links.open { display: flex; }
-            .navbar { flex-wrap: wrap; padding: 12px 20px; }
             .hero-text h1 { font-size: 2.4rem; }
             .section-title h2 { font-size: 1.6rem; }
             .summary-grid { grid-template-columns: 1fr 1fr; }
@@ -541,85 +344,6 @@
             .pie-wrapper .chart-container { height: 250px; }
             .table-export-btn { font-size: 0.7rem; padding: 6px 10px; }
         }
-/* ===== NAV DROPDOWN ===== */
-.nav-dropdown {
-    position: relative;
-    display: inline-block;
-}
-.nav-dropdown-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-}
-.nav-dropdown-menu {
-    display: none;
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(16px);
-    min-width: 260px;
-    border-radius: 14px;
-    box-shadow: 0 12px 40px rgba(26, 77, 46, 0.2);
-    border: 1px solid rgba(201, 168, 76, 0.25);
-    padding: 8px;
-    z-index: 100;
-    animation: dropdownFade 0.25s ease;
-}
-.nav-dropdown:hover .nav-dropdown-menu,
-.nav-dropdown.open .nav-dropdown-menu {
-    display: block;
-}
-.nav-dropdown-menu a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    color: var(--hijau-tua);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.85rem;
-    transition: 0.2s;
-    white-space: nowrap;
-}
-.nav-dropdown-menu a:hover {
-    background: var(--cream);
-    color: var(--maroon, #800020);
-    padding-left: 18px;
-}
-.nav-dropdown-menu a i {
-    color: var(--emas, #c9a84c);
-    width: 16px;
-    text-align: center;
-    font-size: 0.9rem;
-}
-@keyframes dropdownFade {
-    from { opacity: 0; transform: translateY(-6px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Responsive: dropdown jadi statis di mobile */
-@media (max-width: 768px) {
-    .nav-dropdown-menu {
-        position: static;
-        box-shadow: none;
-        border: none;
-        background: transparent;
-        padding: 0;
-        margin-left: 16px;
-        display: none;
-    }
-    .nav-dropdown.open .nav-dropdown-menu {
-        display: block;
-    }
-    .nav-dropdown-menu a {
-        font-size: 0.8rem;
-        padding: 6px 12px;
-    }
-}
-        
     </style>
 </head>
 <body>
@@ -627,6 +351,7 @@
     <div class="ornament ornament-2"></div>
 
     <div class="container">
+        <!-- ===== NAVBAR (di-load dari navbar.html, termasuk modal Tentang) ===== -->
         <div id="navbar-container"></div>
 
         <section class="hero">
@@ -642,9 +367,7 @@
             <p class="subtitle">Rekapitulasi capaian sertifikat tasmi' dari seluruh lembaga</p>
         </div>
 
-        <!-- ===== 1. KARTU RINGKASAN ===== -->
         <div class="summary-grid" id="summaryCards">
-            <!-- Skeleton loading -->
             <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
             <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
             <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
@@ -652,7 +375,6 @@
             <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
         </div>
 
-        <!-- ===== 2. TABEL DETAIL ===== -->
         <div class="table-wrapper fade-up">
             <div class="table-header-row">
                 <h3><i class="fas fa-table"></i> Detail Capaian per Lembaga</h3>
@@ -669,7 +391,6 @@
             </div>
         </div>
 
-        <!-- ===== 3. PIE CHART ===== -->
         <div class="pie-wrapper fade-up">
             <h3><i class="fas fa-chart-pie"></i> Proporsi Capaian Sertifikat</h3>
             <p class="pie-subtitle">Distribusi total capaian per kategori sertifikat</p>
@@ -682,7 +403,6 @@
             </div>
         </div>
 
-        <!-- ===== 4. BAR CHART ===== -->
         <div class="section-title">
             <h2><i class="fas fa-chart-bar"></i> Perkembangan Tahfizh</h2>
             <p class="subtitle">Visualisasi capaian tasmi' per lembaga</p>
@@ -708,7 +428,6 @@
             </div>
         </div>
 
-        <!-- ===== CONTACT ===== -->
         <div class="highlight-box fade-up">
             <div class="text">
                 <h3><i class="fas fa-link"></i> DEPARTEMEN TAHFIZH</h3>
@@ -750,61 +469,23 @@
 
     <script>
         // ============================================================
-        // 📌 LOAD NAVBAR
+        // 📌 LOAD NAVBAR (termasuk modal Tentang dari navbar.html)
         // ============================================================
         async function loadNavbar() {
             try {
                 const response = await fetch('navbar.html');
                 const html = await response.text();
                 document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
+                
+                // initNavbar() sudah didefinisikan di navbar.html
+                if (typeof initNavbar === 'function') {
+                    initNavbar();
+                }
+                console.log('✅ Navbar berhasil dimuat');
             } catch (error) {
                 console.error('❌ Gagal memuat navbar:', error);
             }
         }
-
-        function initNavbar() {
-    const toggle = document.getElementById('menuToggle');
-    const navLinks = document.getElementById('navLinks');
-    if (!toggle || !navLinks) return;
-    
-    // Mobile menu toggle
-    toggle.addEventListener('click', () => {
-        navLinks.classList.toggle('open');
-        const icon = toggle.querySelector('i');
-        icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-    });
-    
-    // ===== DROPDOWN TOGGLE (KHUSUS MOBILE) =====
-    document.querySelectorAll('.nav-dropdown-toggle').forEach(toggleBtn => {
-        toggleBtn.addEventListener('click', (e) => {
-            // Di mobile, klik membuka dropdown
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                const dropdown = toggleBtn.closest('.nav-dropdown');
-                dropdown.classList.toggle('open');
-            }
-        });
-    });
-    
-    // Tandai menu aktif
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === currentPage) link.classList.add('active');
-    });
-    
-    // Tutup menu saat link diklik (mobile)
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            if (!link.classList.contains('nav-dropdown-toggle')) {
-                navLinks.classList.remove('open');
-                const icon = toggle.querySelector('i');
-                icon.className = 'fas fa-bars';
-            }
-        });
-    });
-}
 
         // ============================================================
         // 🔧 KONFIGURASI
@@ -822,12 +503,6 @@
             { label: 'Tasmi 30 Juz Sekali Duduk', keywords: ['tasmi 30', 'sekali duduk'] }
         ];
 
-        // ============================================================
-        // 📋 KOLOM LAPORAN SERTIFIKAT
-        // 🔧 PERBAIKAN: 2 flag terpisah
-        //   - isNonSertifikat: true → TIDAK masuk total, TIDAK muncul di kartu & pie
-        //   - hideFromSummary: true → MASUK total, TAPI tidak muncul di kartu & pie
-        // ============================================================
         const LAPORAN_COLUMNS = [
             { key: 'jumlahSantri', label: 'Jumlah Santri', short: 'Jumlah Santri', icon: 'fa-users', keywords: ['jumlah santri'], isNonSertifikat: true, hideFromSummary: true },
             { key: 'tasmi1', label: 'Tasmi 1 Juz Sesuai Muqorror', short: 'Tasmi 1 Juz', icon: 'fa-certificate', keywords: ['tasmi 1 juz', 'muqorror'] },
@@ -838,9 +513,6 @@
             { key: 'tasmi30', label: 'Tasmi 30 Juz Sekali Duduk', short: 'Tasmi 30 Juz', icon: 'fa-trophy', keywords: ['tasmi 30', 'sekali duduk'] }
         ];
 
-        // ============================================================
-        // 🎯 PARSER CSV & ANGKA
-        // ============================================================
         function parseCSVLine(line) {
             const result = [];
             let current = '';
@@ -876,17 +548,11 @@
             return isNaN(num) ? 0 : num;
         }
 
-        // ============================================================
-        // 📜 SCROLL ANIMATION
-        // ============================================================
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
         }, { threshold: 0.15 });
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-        // ============================================================
-        // 🔍 NORMALISASI HEADER
-        // ============================================================
         function normalizeHeader(str) {
             return str.toLowerCase()
                 .replace(/['"`’‘“”]/g, '')
@@ -903,21 +569,13 @@
             return -1;
         }
 
-        // ============================================================
-        // 📊 DATA GLOBAL
-        // ============================================================
         let tasmiChart = null;
         let pieChart = null;
         let chartData = [];
         let detailData = {};
 
-        // ============================================================
-        // 📊 LOAD DATA
-        // ============================================================
         async function loadChartData() {
             console.log('🔄 Memuat data dari:', CHART_SHEET_URL);
-            
-            // Tampilkan loading di semua komponen
             showLoadingStates();
             
             try {
@@ -927,27 +585,17 @@
                 const csvText = await response.text();
                 const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
                 
-                console.log('📊 Jumlah baris:', lines.length);
-                
-                if (lines.length < 2) {
-                    showErrorState('Data kosong');
-                    return;
-                }
+                if (lines.length < 2) { showErrorState('Data kosong'); return; }
 
                 const headers = parseCSVLine(lines[0]);
-                console.log('📋 Headers:', headers);
 
-                // Proses untuk Chart Batang
                 const lembagaIndex = findColumnByKeywords(headers, ['lembaga']);
                 const columnIndices = [];
                 const columnLabels = [];
                 
                 for (const col of CHART_COLUMNS) {
                     const idx = findColumnByKeywords(headers, col.keywords);
-                    if (idx !== -1) {
-                        columnIndices.push(idx);
-                        columnLabels.push(col.label);
-                    }
+                    if (idx !== -1) { columnIndices.push(idx); columnLabels.push(col.label); }
                 }
 
                 if (lembagaIndex !== -1 && columnIndices.length > 0) {
@@ -972,12 +620,8 @@
                     if (chartData.length > 0) renderChart(chartData[0], columnLabels);
                 }
 
-                // Proses untuk Laporan Sertifikat
                 renderLaporan(headers, lines);
-
-                // Sembunyikan loading
                 hideLoadingStates();
-
                 console.log('✅ Semua diagram berhasil dimuat!');
                 
             } catch (error) {
@@ -986,25 +630,15 @@
             }
         }
 
-        // ============================================================
-        // 🎬 LOADING STATE HELPERS
-        // ============================================================
         function showLoadingStates() {
-            // Tabel loading
             document.getElementById('tableContainer').innerHTML = `
                 <div class="loading-container">
                     <div class="loading-spinner"></div>
                     <p>Memuat data tabel...</p>
                 </div>
             `;
-            
-            // Pie chart loading overlay
             document.getElementById('pieLoadingOverlay').classList.remove('hidden');
-            
-            // Bar chart loading overlay
             document.getElementById('barLoadingOverlay').classList.remove('hidden');
-            
-            // Summary skeleton
             const sc = document.getElementById('summaryCards');
             sc.innerHTML = `
                 <div class="skeleton-card"><div class="skeleton-item skeleton-icon"></div><div class="skeleton-item skeleton-number"></div><div class="skeleton-item skeleton-label"></div><div class="skeleton-item skeleton-note"></div></div>
@@ -1031,9 +665,6 @@
             document.getElementById('barLoadingOverlay').classList.add('hidden');
         }
 
-        // ============================================================
-        // 📊 RENDER LAPORAN SERTIFIKAT
-        // ============================================================
         function renderLaporan(headers, lines) {
             const lembagaIndex = findColumnByKeywords(headers, ['lembaga']);
             if (lembagaIndex === -1) return;
@@ -1051,7 +682,6 @@
                 const cols = parseCSVLine(lines[i]);
                 const lembaga = cols[lembagaIndex] || '';
                 if (!lembaga) continue;
-
                 const row = { lembaga };
                 laporanCols.forEach(col => {
                     const num = col.index !== -1 ? parseNumber(cols[col.index]) : 0;
@@ -1063,12 +693,10 @@
             
             detailData = { lembagaData, totals };
 
-            // RENDER SUMMARY CARDS (hanya yang TIDAK hideFromSummary)
             const summaryContainer = document.getElementById('summaryCards');
             summaryContainer.innerHTML = '';
             LAPORAN_COLUMNS.forEach((col, idx) => {
                 if (col.hideFromSummary) return;
-                
                 const card = document.createElement('div');
                 card.className = 'summary-card';
                 card.style.animationDelay = (idx * 0.1) + 's';
@@ -1081,13 +709,9 @@
                 summaryContainer.appendChild(card);
             });
 
-            // RENDER TABLE (di dalam container #tableContainer)
             const tableContainer = document.getElementById('tableContainer');
-            
             let headHtml = '<tr><th style="text-align:left;">LEMBAGA</th>';
-            LAPORAN_COLUMNS.forEach(col => {
-                headHtml += `<th>${col.label}</th>`;
-            });
+            LAPORAN_COLUMNS.forEach(col => { headHtml += `<th>${col.label}</th>`; });
             headHtml += '<th>TOTAL</th></tr>';
 
             let bodyHtml = '';
@@ -1096,7 +720,6 @@
                 bodyHtml += `<tr><td>${row.lembaga}</td>`;
                 LAPORAN_COLUMNS.forEach(col => {
                     const val = row[col.key];
-                    // ✅ MASUK TOTAL jika bukan isNonSertifikat (Jumlah Santri)
                     if (!col.isNonSertifikat) totalBaris += val;
                     const cls = col.isNonSertifikat ? 'kolom-santri' : (val > 0 ? 'nilai-besar' : 'kolom-kosong');
                     bodyHtml += `<td class="${cls}">${val}</td>`;
@@ -1108,7 +731,6 @@
             let totalSertifikatFooter = 0;
             LAPORAN_COLUMNS.forEach(col => {
                 footHtml += `<td>${totals[col.key]}</td>`;
-                // ✅ MASUK TOTAL FOOTER jika bukan isNonSertifikat
                 if (!col.isNonSertifikat) totalSertifikatFooter += totals[col.key];
             });
             footHtml += `<td>${totalSertifikatFooter}</td></tr>`;
@@ -1121,7 +743,6 @@
                 </table>
             `;
 
-            // RENDER PIE CHART (hanya yang TIDAK hideFromSummary)
             const pieCtx = document.getElementById('pieChart').getContext('2d');
             if (pieChart) pieChart.destroy();
 
@@ -1157,19 +778,14 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    animation: {
-                        duration: 1000,
-                        easing: 'easeOutQuart'
-                    },
+                    animation: { duration: 1000, easing: 'easeOutQuart' },
                     plugins: {
                         legend: {
                             position: 'bottom',
                             labels: {
                                 color: '#1a4d2e',
                                 font: { size: 11, weight: '600' },
-                                padding: 12,
-                                boxWidth: 14,
-                                boxHeight: 14
+                                padding: 12, boxWidth: 14, boxHeight: 14
                             }
                         },
                         tooltip: {
@@ -1184,13 +800,8 @@
                     }
                 }
             });
-
-            console.log('✅ Laporan sertifikat berhasil dirender!');
         }
 
-        // ============================================================
-        // 📊 RENDER CHART BATANG
-        // ============================================================
         function renderChart(data, columnLabels) {
             const canvas = document.getElementById('tasmiChart');
             const ctx = canvas.getContext('2d');
@@ -1225,18 +836,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    animation: {
-                        duration: 1000,
-                        easing: 'easeOutQuart'
-                    },
+                    animation: { duration: 1000, easing: 'easeOutQuart' },
                     plugins: {
-                        legend: {
-                            display: true,
-                            labels: { color: '#1a4d2e', font: { size: 12, weight: '600' } }
-                        },
-                        tooltip: {
-                            callbacks: { label: ctx => `${ctx.label}: ${ctx.raw}` }
-                        }
+                        legend: { display: true, labels: { color: '#1a4d2e', font: { size: 12, weight: '600' } } },
+                        tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw}` } }
                     },
                     scales: {
                         y: {
@@ -1253,14 +856,8 @@
             });
         }
 
-        // ============================================================
-        // 📤 EXPORT DETAIL TABLE - PDF
-        // ============================================================
         document.getElementById('exportDetailPdfBtn').addEventListener('click', () => {
-            if (!detailData.lembagaData || detailData.lembagaData.length === 0) {
-                alert('Data belum dimuat. Silakan tunggu beberapa saat.');
-                return;
-            }
+            if (!detailData.lembagaData || detailData.lembagaData.length === 0) { alert('Data belum dimuat.'); return; }
             
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
@@ -1298,14 +895,10 @@
             body.push(footArr);
             
             doc.autoTable({
-                startY: 25,
-                head: head,
-                body: body,
+                startY: 25, head: head, body: body,
                 styles: { font: 'helvetica', fontSize: 7, cellPadding: 1.5, halign: 'center' },
                 headStyles: { fillColor: [26, 77, 46], textColor: [232, 212, 139], fontStyle: 'bold', halign: 'center', fontSize: 7 },
-                columnStyles: {
-                    0: { halign: 'left', fontStyle: 'bold', cellWidth: 40 }
-                },
+                columnStyles: { 0: { halign: 'left', fontStyle: 'bold', cellWidth: 40 } },
                 alternateRowStyles: { fillColor: [250, 246, 237] },
                 didParseCell: function(data) {
                     if (data.row.index === body.length - 1 && data.section === 'body') {
@@ -1319,14 +912,8 @@
             doc.save('Detail-Capaian-Tasmi.pdf');
         });
 
-        // ============================================================
-        // 📤 EXPORT DETAIL TABLE - EXCEL
-        // ============================================================
         document.getElementById('exportDetailExcelBtn').addEventListener('click', () => {
-            if (!detailData.lembagaData || detailData.lembagaData.length === 0) {
-                alert('Data belum dimuat. Silakan tunggu beberapa saat.');
-                return;
-            }
+            if (!detailData.lembagaData || detailData.lembagaData.length === 0) { alert('Data belum dimuat.'); return; }
             
             const excelData = [];
             excelData.push(['DETAIL CAPAIAN PER LEMBAGA']);
@@ -1357,13 +944,7 @@
             excelData.push(footArr);
             
             const ws = XLSX.utils.aoa_to_sheet(excelData);
-            
-            ws['!cols'] = [
-                { wch: 25 },
-                ...LAPORAN_COLUMNS.map(() => ({ wch: 15 })),
-                { wch: 10 }
-            ];
-            
+            ws['!cols'] = [{ wch: 25 }, ...LAPORAN_COLUMNS.map(() => ({ wch: 15 })), { wch: 10 }];
             ws['!merges'] = [
                 { s: { r: 0, c: 0 }, e: { r: 0, c: header.length - 1 } },
                 { s: { r: 1, c: 0 }, e: { r: 1, c: header.length - 1 } }
@@ -1374,9 +955,6 @@
             XLSX.writeFile(wb, 'Detail-Capaian-Tasmi.xlsx');
         });
 
-        // ============================================================
-        // 🎯 EVENT LISTENERS
-        // ============================================================
         document.getElementById('chartLembagaSelect').addEventListener('change', function() {
             const index = parseInt(this.value);
             if (isNaN(index) || index < 0 || index >= chartData.length) return;
@@ -1392,17 +970,11 @@
             });
         });
 
-        // ============================================================
-        // 💬 WHATSAPP
-        // ============================================================
         const waButton = document.getElementById('waButton');
         const waBubble = document.getElementById('waBubble');
         setTimeout(() => waBubble.classList.add('show'), 3000);
         waButton.addEventListener('click', () => waBubble.classList.remove('show'));
 
-        // ============================================================
-        // 🚀 START
-        // ============================================================
         console.log('🌙 HAFZApp - Halaman Diagram — Barakallah!');
         document.addEventListener('DOMContentLoaded', () => {
             loadNavbar();
