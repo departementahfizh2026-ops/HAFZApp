@@ -520,6 +520,85 @@
             .hero-text h1 { font-size: 1.8rem; }
             .toolbar-btn { font-size: 0.75rem; padding: 6px 12px; }
         }
+/* ===== NAV DROPDOWN ===== */
+.nav-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.nav-dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+.nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(16px);
+    min-width: 260px;
+    border-radius: 14px;
+    box-shadow: 0 12px 40px rgba(26, 77, 46, 0.2);
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    padding: 8px;
+    z-index: 100;
+    animation: dropdownFade 0.25s ease;
+}
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown.open .nav-dropdown-menu {
+    display: block;
+}
+.nav-dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: var(--hijau-tua);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+.nav-dropdown-menu a:hover {
+    background: var(--cream);
+    color: var(--maroon, #800020);
+    padding-left: 18px;
+}
+.nav-dropdown-menu a i {
+    color: var(--emas, #c9a84c);
+    width: 16px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+@keyframes dropdownFade {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive: dropdown jadi statis di mobile */
+@media (max-width: 768px) {
+    .nav-dropdown-menu {
+        position: static;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+        padding: 0;
+        margin-left: 16px;
+        display: none;
+    }
+    .nav-dropdown.open .nav-dropdown-menu {
+        display: block;
+    }
+    .nav-dropdown-menu a {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+}
+        
     </style>
 </head>
 <body>
@@ -567,7 +646,7 @@
         <div id="contentContainer">
             <div class="loading-state">
                 <i class="fas fa-spinner"></i>
-                <p>Memuat data dari Google Sheets...</p>
+                <p>Memuat data dari Database Departemen...</p>
             </div>
         </div>
 
@@ -668,33 +747,55 @@
         }
 
         function initNavbar() {
-            const toggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            if (!toggle || !navLinks) return;
-            
-            toggle.addEventListener('click', () => {
-                navLinks.classList.toggle('open');
+    const toggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    if (!toggle || !navLinks) return;
+    
+    // Mobile menu toggle
+    toggle.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+        const icon = toggle.querySelector('i');
+        icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+    });
+    
+    // ===== DROPDOWN TOGGLE (KHUSUS MOBILE) =====
+    document.querySelectorAll('.nav-dropdown-toggle').forEach(toggleBtn => {
+        toggleBtn.addEventListener('click', (e) => {
+            // Di mobile, klik membuka dropdown
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const dropdown = toggleBtn.closest('.nav-dropdown');
+                dropdown.classList.toggle('open');
+            }
+        });
+    });
+    
+    // Tandai menu aktif
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage) link.classList.add('active');
+    });
+    
+    // Tutup menu saat link diklik (mobile)
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (!link.classList.contains('nav-dropdown-toggle')) {
+                navLinks.classList.remove('open');
                 const icon = toggle.querySelector('i');
-                icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-            });
-            
-            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                if (link.getAttribute('href') === currentPage) link.classList.add('active');
-            });
-            
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('open');
-                    const icon = toggle.querySelector('i');
-                    icon.className = 'fas fa-bars';
-                });
-            });
-            
-            document.querySelectorAll('.tentang-link').forEach(l => {
-                l.addEventListener('click', e => { e.preventDefault(); openModal('tentangModal'); });
-            });
-        }
+                icon.className = 'fas fa-bars';
+            }
+        });
+    });
+    
+    // Re-attach event listener "Tentang"
+    document.querySelectorAll('.tentang-link').forEach(l => {
+        l.addEventListener('click', e => { 
+            e.preventDefault(); 
+            openModal('tentangModal'); 
+        });
+    });
+}
 
         // ============================================================
         // 📌 MODAL
