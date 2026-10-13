@@ -748,25 +748,6 @@
         </a>
     </div>
 
-    <div class="modal-overlay" id="tentangModal">
-        <div class="modal-content">
-            <button class="modal-close" id="tentangModalClose">&times;</button>
-            <h2><i class="fas fa-info-circle"></i> Tentang Departemen Tahfizh</h2>
-            <div class="sub-title"><i class="fas fa-university"></i> Ponpes Abu Hurairah Mataram</div>
-            <p>Departemen Tahfizh memiliki peran strategis dalam merencanakan, mengoordinasikan, melaksanakan, serta mengevaluasi seluruh program pembinaan hafalan Al-Qur'an di lingkungan lembaga.</p>
-            <div class="visi-misi">
-                <h4><i class="fas fa-eye"></i> Visi</h4>
-                <p>Menjadi fasilitator pengelolaan, pemberdayaan, dan pengembangan kompetensi guru dalam mengajar, dan potensi santri Ponpes Abu Hurairah Mataram.</p>
-                <h4 style="margin-top:16px;"><i class="fas fa-tasks"></i> Misi</h4>
-                <ul>
-                    <li>Merancang program kegiatan tahfizh Al-Qur'an secara teratur.</li>
-                    <li>Memberikan pembinaan dan pelatihan pengembangan kompetensi guru.</li>
-                    <li>Menyiapkan profil lulusan pondok yang memiliki hafalan Al-Qur'an minimal 3-5 Juz Mutqin.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ============================================================
         // 📌 LOAD NAVBAR
@@ -821,14 +802,6 @@
                 const icon = toggle.querySelector('i');
                 icon.className = 'fas fa-bars';
             }
-        });
-    });
-    
-    // Re-attach event listener "Tentang"
-    document.querySelectorAll('.tentang-link').forEach(l => {
-        l.addEventListener('click', e => { 
-            e.preventDefault(); 
-            openModal('tentangModal'); 
         });
     });
 }
@@ -902,24 +875,6 @@
             const num = parseFloat(cleaned);
             return isNaN(num) ? 0 : num;
         }
-
-        // ============================================================
-        // 📌 MODAL
-        // ============================================================
-        function openModal(id) { 
-            const m = document.getElementById(id); 
-            if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; } 
-        }
-        function closeModal(id) { 
-            const m = document.getElementById(id); 
-            if (m) { m.classList.remove('active'); document.body.style.overflow = ''; } 
-        }
-        const tm = document.getElementById('tentangModal');
-        if (tm) {
-            document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
-            tm.addEventListener('click', e => { if (e.target === tm) closeModal('tentangModal'); });
-        }
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal('tentangModal'); });
 
         // ============================================================
         // 📜 SCROLL ANIMATION
