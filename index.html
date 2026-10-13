@@ -14,8 +14,7 @@
             --putih: #ffffff; --abu: #f0ebe3;
             --shadow: 0 10px 40px rgba(26, 77, 46, 0.15);
             --radius: 20px; --whatsapp: #25D366;
-            --maroon: #800020;
-            --maroon-muda: #a83248;
+            --maroon: #800020; --maroon-muda: #a83248;
         }
         html { scroll-behavior: smooth; }
         body {
@@ -120,6 +119,8 @@
             border-radius: 30px; letter-spacing: 0.5px; text-transform: uppercase;
         }
         .menu-card .card-badge.hijau { background: var(--hijau-tua); color: var(--emas-muda); }
+
+        /* ===== SUB-MENU BUTTON ===== */
         .sub-menu-btn {
             display: inline-flex; align-items: center; gap: 8px;
             background: var(--hijau-tua); color: var(--emas-muda);
@@ -130,53 +131,41 @@
         .sub-menu-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,77,46,0.3); background: #0f3d24; }
         .sub-menu-btn i { font-size: 0.7rem; }
 
-        /* ===== MENU KARTU KHUSUS (WARNA BERBEDA) ===== */
-        .menu-card.special-maroon {
+        /* ===== SUB-MENU KHUSUS (WARNA MAROON) ===== */
+        .sub-menu-btn.special-sub-maroon {
             background: linear-gradient(135deg, var(--maroon), #5c0017);
-            border: 2px solid var(--maroon);
             color: var(--emas-muda);
+            border: 1px solid var(--maroon);
         }
-        .menu-card.special-maroon:hover {
-            box-shadow: 0 20px 50px rgba(128, 0, 32, 0.35);
-            border-color: var(--emas);
+        .sub-menu-btn.special-sub-maroon:hover {
+            background: var(--maroon-muda);
+            color: white;
+            box-shadow: 0 6px 20px rgba(128, 0, 32, 0.4);
         }
-        .menu-card.special-maroon h3 { color: var(--emas-muda); }
-        .menu-card.special-maroon .card-desc { color: rgba(232, 212, 139, 0.85); }
-        .menu-card.special-maroon .card-icon {
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--emas-muda);
-        }
-        .menu-card.special-maroon .card-badge {
-            background: var(--emas);
-            color: var(--maroon);
-        }
-        .menu-card.special-maroon .sub-menu-btn {
-            background: var(--emas);
-            color: var(--maroon);
-        }
-        .menu-card.special-maroon .sub-menu-btn:hover {
-            background: var(--emas-muda);
-            color: var(--maroon);
+        .sub-menu-btn.special-sub-maroon i {
+            color: var(--emas);
         }
 
-        /* ===== TAMBAHAN: WARNA LAIN ===== */
-        .menu-card.special-biru {
+        /* Opsi warna lain (jika diperlukan nanti) */
+        .sub-menu-btn.special-sub-biru {
             background: linear-gradient(135deg, #0369a1, #075985);
-            border: 2px solid #0369a1;
             color: white;
+            border: 1px solid #0369a1;
         }
-        .menu-card.special-biru h3 { color: white; }
-        .menu-card.special-biru .card-desc { color: rgba(255,255,255,0.85); }
-        .menu-card.special-biru .card-icon { background: rgba(255,255,255,0.15); color: white; }
-        
-        .menu-card.special-oranye {
+        .sub-menu-btn.special-sub-biru:hover {
+            background: #075985;
+            box-shadow: 0 6px 20px rgba(3, 105, 161, 0.4);
+        }
+
+        .sub-menu-btn.special-sub-oranye {
             background: linear-gradient(135deg, #d97706, #92400e);
-            border: 2px solid #d97706;
             color: white;
+            border: 1px solid #d97706;
         }
-        .menu-card.special-oranye h3 { color: white; }
-        .menu-card.special-oranye .card-desc { color: rgba(255,255,255,0.85); }
-        .menu-card.special-oranye .card-icon { background: rgba(255,255,255,0.15); color: white; }
+        .sub-menu-btn.special-sub-oranye:hover {
+            background: #92400e;
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+        }
 
         /* ===== HIGHLIGHT BOX ===== */
         .highlight-box {
@@ -421,7 +410,6 @@
         function initNavbar() {
             const toggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
-            
             if (!toggle || !navLinks) return;
             
             toggle.addEventListener('click', () => {
@@ -533,33 +521,43 @@
                     data.items.sort((a, b) => (a.urutan || 999) - (b.urutan || 999))
                 );
 
-                let html = '<div class="menu-grid">';
+                // ============================================================
+                // 🎯 DAFTAR SUB-MENU KHUSUS (warna maroon)
+                // Berdasarkan KATA KUNCI — tahan variasi huruf/spasi/petik
+                // Tambahkan baris baru di sini untuk sub-menu khusus lainnya
+                // ============================================================
+                const SPECIAL_SUBMENU_KEYWORDS = [
+                    { keywords: ['capaian', 'tasmi'], class: 'special-sub-maroon' },
+                    { keywords: ['rekap', 'reward'], class: 'special-sub-maroon' },
+                    { keywords: ['rekap', 'absen'], class: 'special-sub-maroon' }
+                ];
+
+                function getSpecialSubmenuClass(subMenuName) {
+                    const lower = subMenuName.toLowerCase();
+                    for (const item of SPECIAL_SUBMENU_KEYWORDS) {
+                        const semuaAda = item.keywords.every(kw => lower.includes(kw));
+                        if (semuaAda) return item.class;
+                    }
+                    return '';
+                }
+
                 const menuIcons = {
                     'Profil Guru Tahfizh': 'fa-chalkboard-teacher',
                     'Input Nilai Tasmi\'': 'fa-clipboard-list',
                     'Pengajuan Reward Tasmi\'': 'fa-trophy',
+                    'Absensi Kegiatan Departemen': 'fa-calendar-check',
                     'Absen Kegiatan Departemen Tahfizh': 'fa-calendar-alt',
                     'Arsip Departemen Tahfizh': 'fa-archive',
-                    'Absen Kegiatan': 'fa-clipboard-check',
-                    'CAPAIAN TASMI\'': 'fa-bullhorn',
-                    'REKAP REWARD': 'fa-bullhorn'
+                    'Absen Kegiatan': 'fa-clipboard-check'
                 };
 
-                // ============================================================
-                // 🎯 DAFTAR MENU KHUSUS (warna berbeda)
-                // Nama menu harus PERSIS SAMA dengan yang ada di Google Sheets
-                // ============================================================
-                const SPECIAL_MENUS = {
-                    "CAPAIAN TASMI'": 'special-maroon',
-                    "REKAP REWARD": 'special-maroon'
-                };
-
+                let html = '<div class="menu-grid">';
+                
                 sortedMenus.forEach(([menu, data]) => {
                     const icon = menuIcons[menu] || 'fa-folder';
                     const badge = data.items.length > 0 ? data.items.length + ' Sub' : '';
-                    const specialClass = SPECIAL_MENUS[menu] || '';
                     
-                    html += `<div class="menu-card ${specialClass}">
+                    html += `<div class="menu-card">
                         <span class="card-badge ${badge ? 'hijau' : ''}">${badge || 'Menu'}</span>
                         <div class="card-icon"><i class="fas ${icon}"></i></div>
                         <h3>${menu}</h3>
@@ -568,15 +566,18 @@
                     
                     data.items.forEach(item => {
                         const isLink = item.link && item.link !== '#';
+                        const specialSubClass = getSpecialSubmenuClass(item.subMenu);
+                        
                         if (isLink) {
+                            // Deteksi link internal vs eksternal
                             const isExternal = item.link.startsWith('http://') || item.link.startsWith('https://');
                             const targetAttr = isExternal ? 'target="_blank"' : '';
                             const iconClass = isExternal ? 'fa-external-link-alt' : 'fa-arrow-right';
                             
-                            html += `<li><a href="${item.link}" ${targetAttr} class="sub-menu-btn">
+                            html += `<li><a href="${item.link}" ${targetAttr} class="sub-menu-btn ${specialSubClass}">
                                 <i class="fas ${iconClass}"></i> ${item.subMenu}</a></li>`;
                         } else {
-                            html += `<li><span class="sub-menu-btn" style="background:var(--abu);color:var(--hijau-tua);cursor:default;opacity:0.7;">
+                            html += `<li><span class="sub-menu-btn ${specialSubClass}" style="background:var(--abu);color:var(--hijau-tua);cursor:default;opacity:0.7;">
                                 <i class="fas fa-circle" style="font-size:0.4rem;color:var(--emas);"></i> ${item.subMenu}</span></li>`;
                         }
                     });
