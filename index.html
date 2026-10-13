@@ -539,14 +539,16 @@
                     'Pengajuan Reward Tasmi\'': 'fa-trophy',
                     'Absen Kegiatan Departemen Tahfizh': 'fa-calendar-alt',
                     'Arsip Departemen Tahfizh': 'fa-archive',
-                    'Absen Kegiatan': 'fa-clipboard-check'
-                    'Capaian Tasmi': 'fa-bullhorn'
+                    'Absen Kegiatan': 'fa-clipboard-check',
+                    'CAPAIAN TASMI': 'fa-bullhorn',
+                    'REKAP REWRD': 'fa-bullhorn'
                 };
 
                 //Load tambahan load menu data untuk membuat warna khusus pada tombol menu
                 const SPECIAL_MENUS = {
-    'Capaian Tasmi': 'special-maroon', // jika ada menu baru dengan warna khusus, ditambah pada bagian ini
-};
+                'CAPAIAN TASMI' : 'special-maroon',
+                'REKAP REWARD' : 'special-maroon'   // jika ada menu baru dengan warna khusus, ditambah pada bagian ini
+                 };
                 sortedMenus.forEach(([menu, data]) => {
                     const icon = menuIcons[menu] || 'fa-folder';
                     const badge = data.items.length > 0 ? data.items.length + ' Sub' : '';
