@@ -1218,7 +1218,9 @@
         waButton.addEventListener('click', () => waBubble.classList.remove('show'));
 
         console.log('🌙 HAFZApp - Halaman Diagram — Barakallah!');
-        document.addEventListener('DOMContentLoaded', loadChartData);
+        document.addEventListener('DOMContentLoaded', () => {
+    loadNavbar();
+});
     </script>
 </body>
 </html>
