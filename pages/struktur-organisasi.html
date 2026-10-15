@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struktur Organisasi - HAFZApp</title>
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --hijau-tua: #1a4d2e; --hijau-muda: #2d6a4f; --emas: #c9a84c;
+            --emas-muda: #e8d48b; --emas-glow: #f4e3a7; --cream: #faf6ed;
+            --putih: #ffffff; --abu: #f0ebe3;
+            --maroon: #800020; --maroon-muda: #a83248; --maroon-glow: #c94a6b;
+            --shadow: 0 10px 40px rgba(26, 77, 46, 0.15);
+            --radius: 20px; --whatsapp: #25D366;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            background-color: var(--cream); color: #1e2a2a; line-height: 1.7;
+            min-height: 100vh;
+            background-image: 
+                linear-gradient(45deg, rgba(128,0,32,0.02) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(128,0,32,0.02) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(128,0,32,0.02) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(128,0,32,0.02) 75%),
+                radial-gradient(circle at 20% 30%, rgba(128,0,32,0.02) 1px, transparent 1px),
+                radial-gradient(circle at 70% 80%, rgba(128,0,32,0.02) 1px, transparent 1px),
+                var(--cream);
+            background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, 30px 30px, 30px 30px;
+        }
+        .ornament {
+            background: radial-gradient(circle at 30% 30%, var(--maroon-glow), transparent 70%);
+            position: fixed; border-radius: 50%; filter: blur(80px);
+            pointer-events: none; z-index: 0;
+        }
+        .ornament-1 { width: 500px; height: 500px; top: -100px; right: -100px; opacity: 0.15; }
+        .ornament-2 { width: 400px; height: 400px; bottom: -50px; left: -100px; opacity: 0.1; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px 24px 60px; position: relative; z-index: 1; }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 28px; background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(16px); border-radius: 60px;
+            box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.2);
+            margin: 12px 0 30px; position: sticky; top: 12px; z-index: 99;
+        }
+        .navbar .logo {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 1.5rem; font-weight: 800; color: var(--hijau-tua); text-decoration: none;
+        }
+        .navbar .logo i { color: var(--emas); font-size: 2rem; }
+        .navbar .logo span { color: var(--emas); }
+        .nav-links { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .nav-links a {
+            text-decoration: none; color: var(--hijau-tua); font-weight: 600;
+            padding: 8px 18px; border-radius: 40px; transition: 0.3s;
+            font-size: 0.9rem; cursor: pointer;
+        }
+        .nav-links a:hover, .nav-links a.active { background: var(--maroon); color: var(--emas-muda); }
+        .nav-links .cta-nav { background: var(--emas); color: var(--hijau-tua); font-weight: 700; }
+        .nav-links .cta-nav:hover { background: var(--hijau-tua); color: var(--emas); }
+        .menu-toggle { display: none; font-size: 1.8rem; background: none; border: none; color: var(--hijau-tua); cursor: pointer; padding: 4px 12px; }
+
+        /* ===== NAV DROPDOWN ===== */
+        .nav-dropdown { position: relative; display: inline-block; }
+        .nav-dropdown-toggle { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+        .nav-dropdown-menu {
+            display: none; position: absolute; top: calc(100% + 8px); left: 0;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(16px);
+            min-width: 260px; border-radius: 14px;
+            box-shadow: 0 12px 40px rgba(26, 77, 46, 0.2);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            padding: 8px; z-index: 100; animation: dropdownFade 0.25s ease;
+        }
+        .nav-dropdown:hover .nav-dropdown-menu,
+        .nav-dropdown.open .nav-dropdown-menu { display: block; }
+        .nav-dropdown-menu a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; border-radius: 10px;
+            color: var(--hijau-tua); text-decoration: none;
+            font-weight: 600; font-size: 0.85rem; transition: 0.2s; white-space: nowrap;
+        }
+        .nav-dropdown-menu a:hover { background: var(--cream); color: var(--maroon); padding-left: 18px; }
+        .nav-dropdown-menu a i { color: var(--emas); width: 16px; text-align: center; font-size: 0.9rem; }
+        @keyframes dropdownFade {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== HERO ===== */
+        .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 30px 0 20px; }
+        .hero-text { max-width: 800px; }
+        .hero-text h1 { font-size: 2.6rem; font-weight: 900; line-height: 1.15; color: var(--hijau-tua); }
+        .hero-text h1 .highlight { color: var(--maroon); position: relative; }
+        .hero-text h1 .highlight::after {
+            content: ''; position: absolute; bottom: 6px; left: 0;
+            width: 100%; height: 8px;
+            background: linear-gradient(90deg, rgba(128,0,32,0.15), rgba(201,168,76,0.2));
+            border-radius: 10px; z-index: -1;
+        }
+        .hero-text .arabic-tagline {
+            font-family: 'Traditional Arabic', 'Amiri', serif;
+            font-size: 1.5rem; color: var(--hijau-muda); margin: 8px 0 12px;
+            letter-spacing: 2px; opacity: 0.85;
+        }
+        .hero-text p { font-size: 1.05rem; color: #2d3d3a; max-width: 650px; margin: 12px auto 20px; }
+
+        /* ===== STRUKTUR IMAGE ===== */
+        .struktur-wrapper {
+            background: linear-gradient(135deg, rgba(128,0,32,0.03), rgba(201,168,76,0.03));
+            border-radius: var(--radius);
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            border: 1px solid rgba(128,0,32,0.1);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .struktur-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--maroon), var(--maroon-glow), var(--emas));
+        }
+        .struktur-image {
+            max-width: 100%;
+            width: auto;
+            max-height: 600px;
+            border-radius: 14px;
+            cursor: zoom-in;
+            transition: 0.3s;
+            box-shadow: 0 8px 30px rgba(128,0,32,0.15);
+            border: 2px solid rgba(128,0,32,0.1);
+        }
+        .struktur-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(128,0,32,0.25);
+            border-color: var(--maroon);
+        }
+        .struktur-hint {
+            font-size: 0.85rem;
+            color: var(--maroon);
+            margin-top: 16px;
+            font-style: italic;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: rgba(128,0,32,0.05);
+            border-radius: 30px;
+            border: 1px dashed rgba(128,0,32,0.3);
+        }
+
+        /* ===== MODAL ZOOM GAMBAR ===== */
+        .zoom-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: zoom-out;
+            animation: fadeInZoom 0.3s ease;
+        }
+        .zoom-modal.active { display: flex; }
+        @keyframes fadeInZoom {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .zoom-modal img {
+            max-width: 95%;
+            max-height: 95%;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            animation: zoomPop 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @keyframes zoomPop {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .zoom-close {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            backdrop-filter: blur(8px);
+        }
+        .zoom-close:hover {
+            background: var(--maroon);
+            border-color: var(--maroon);
+            transform: rotate(90deg);
+        }
+
+        /* ===== SECTION ===== */
+        .section-block {
+            background: var(--putih);
+            border-radius: var(--radius);
+            padding: 40px 44px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(128,0,32,0.08);
+            position: relative;
+        }
+        .section-block::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--maroon), var(--maroon-glow), var(--emas));
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .section-block h2 {
+            font-size: 1.6rem;
+            color: var(--hijau-tua);
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid rgba(128,0,32,0.1);
+        }
+        .section-block h2 i {
+            color: var(--maroon);
+            font-size: 1.6rem;
+        }
+        .section-block p {
+            color: #2d3d3a;
+            font-size: 1rem;
+            line-height: 1.9;
+            text-align: justify;
+            margin-bottom: 14px;
+        }
+
+        /* ===== JABATAN CARD ===== */
+        .jabatan-card {
+            background: linear-gradient(135deg, #faf6ed, #ffffff);
+            border-left: 5px solid var(--maroon);
+            border-radius: 16px;
+            padding: 26px 30px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 20px rgba(128,0,32,0.08);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .jabatan-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 80px; height: 80px;
+            background: radial-gradient(circle, rgba(201,168,76,0.1), transparent 70%);
+            border-radius: 50%;
+        }
+        .jabatan-card:hover {
+            transform: translateX(6px);
+            box-shadow: 0 8px 30px rgba(128,0,32,0.15);
+            border-left-color: var(--emas);
+        }
+        .jabatan-card .jabatan-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .jabatan-card .jabatan-number {
+            background: linear-gradient(135deg, var(--maroon), var(--maroon-glow));
+            color: var(--emas-muda);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(128,0,32,0.3);
+        }
+        .jabatan-card .jabatan-title {
+            flex: 1;
+            min-width: 200px;
+        }
+        .jabatan-card .jabatan-title h3 {
+            font-size: 1.2rem;
+            color: var(--maroon);
+            font-weight: 800;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+        .jabatan-card .jabatan-title .nama {
+            font-size: 0.95rem;
+            color: var(--hijau-tua);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            background: rgba(201,168,76,0.15);
+            border-radius: 30px;
+            border: 1px solid rgba(201,168,76,0.3);
+        }
+        .jabatan-card .jabatan-title .nama i {
+            color: var(--emas);
+            font-size: 0.85rem;
+        }
+        .jabatan-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .jabatan-card ul li {
+            padding: 8px 0 8px 32px;
+            position: relative;
+            color: #2d3d3a;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            border-bottom: 1px dashed rgba(128,0,32,0.08);
+        }
+        .jabatan-card ul li:last-child {
+            border-bottom: none;
+        }
+        .jabatan-card ul li::before {
+            content: '◆';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            color: var(--maroon);
+            font-size: 0.7rem;
+        }
+
+        /* ===== KOORDINATOR GRID ===== */
+        .koordinator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+        }
+        .koordinator-item {
+            background: linear-gradient(135deg, rgba(128,0,32,0.03), rgba(201,168,76,0.05));
+            border-radius: 12px;
+            padding: 14px 18px;
+            border-left: 3px solid var(--emas);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .koordinator-item:hover {
+            background: linear-gradient(135deg, rgba(128,0,32,0.08), rgba(201,168,76,0.1));
+            transform: translateX(4px);
+            border-left-color: var(--maroon);
+        }
+        .koordinator-item .icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--maroon), var(--maroon-glow));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--emas-muda);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .koordinator-item .info {
+            flex: 1;
+        }
+        .koordinator-item .info .lembaga {
+            font-size: 0.85rem;
+            color: var(--maroon);
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+        .koordinator-item .info .nama {
+            font-size: 0.85rem;
+            color: var(--hijau-tua);
+            font-weight: 600;
+        }
+
+        /* ===== HIGHLIGHT BOX ===== */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--maroon), #5c0017);
+            border-radius: var(--radius);
+            padding: 40px 44px;
+            margin: 50px 0 20px;
+            color: var(--emas-muda);
+            border: 1px solid rgba(201,168,76,0.3);
+            box-shadow: 0 12px 40px rgba(128,0,32,0.25);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        .highlight-box .text h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        .highlight-box .text h3 i {
+            color: var(--emas);
+            margin-right: 10px;
+        }
+        .highlight-box .text p {
+            opacity: 0.9;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .highlight-box .text strong {
+            color: var(--emas);
+            font-weight: 700;
+        }
+        .map-container {
+            position: relative;
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            aspect-ratio: 4/3;
+        }
+        .map-container iframe { width: 100%; height: 100%; border: none; }
+        .map-label {
+            position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.7); color: white; padding: 6px 18px;
+            border-radius: 30px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;
+        }
+        .map-label i { color: var(--emas); margin-right: 6px; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 60px; padding: 30px 0 20px;
+            border-top: 2px solid rgba(201,168,76,0.15);
+            display: flex; flex-wrap: wrap; justify-content: space-between;
+            align-items: center; gap: 16px;
+            color: #3d5550; font-size: 0.9rem;
+        }
+        .footer .footer-logo { font-weight: 700; color: var(--hijau-tua); font-size: 1.1rem; }
+        .footer .footer-logo i { color: var(--emas); }
+        .footer .footer-links { display: flex; gap: 20px; }
+        .footer .footer-links a { color: var(--hijau-tua); text-decoration: none; font-weight: 500; cursor: pointer; }
+        .footer .footer-links a:hover { color: var(--maroon); }
+
+        /* ===== WHATSAPP ===== */
+        .whatsapp-float {
+            position: fixed; bottom: 28px; right: 28px; z-index: 999;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+        }
+        .whatsapp-float .bubble {
+            background: rgba(0,0,0,0.75); color: white; padding: 8px 16px; border-radius: 12px;
+            font-size: 0.8rem; opacity: 0; transform: translateX(20px);
+            transition: all 0.4s ease; pointer-events: none; white-space: nowrap;
+        }
+        .whatsapp-float .bubble.show { opacity: 1; transform: translateX(0); }
+        .whatsapp-float .bubble i { color: var(--whatsapp); margin-right: 6px; }
+        .whatsapp-btn {
+            width: 64px; height: 64px; border-radius: 50%; background: var(--whatsapp);
+            color: white; border: none; font-size: 2.2rem; cursor: pointer;
+            box-shadow: 0 6px 30px rgba(37,211,102,0.4); transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; text-decoration: none;
+            position: relative;
+        }
+        .whatsapp-btn:hover { transform: scale(1.08); }
+        .whatsapp-btn .notification-dot {
+            position: absolute; top: -2px; right: -2px; width: 16px; height: 16px;
+            background: #ff3b30; border-radius: 50%; border: 2px solid white;
+        }
+
+        /* ===== MODAL TENTANG ===== */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); z-index: 1000;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: var(--putih); border-radius: var(--radius);
+            max-width: 750px; width: 100%; max-height: 90vh; overflow-y: auto;
+            padding: 40px 44px; box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            border: 1px solid rgba(201,168,76,0.2); position: relative;
+        }
+        .modal-close {
+            position: sticky; top: 0; float: right; background: none; border: none;
+            font-size: 2rem; color: var(--hijau-tua); cursor: pointer; padding: 0 8px;
+        }
+        .modal-close:hover { color: var(--maroon); transform: rotate(90deg); }
+        .modal-content h2 {
+            font-size: 2rem; color: var(--hijau-tua); margin-bottom: 6px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .modal-content h2 i { color: var(--emas); font-size: 1.8rem; }
+        .modal-content .sub-title {
+            color: var(--hijau-muda); font-size: 0.95rem;
+            border-bottom: 2px solid rgba(201,168,76,0.2);
+            padding-bottom: 16px; margin-bottom: 20px;
+        }
+        .modal-content p { color: #2d3d3a; margin-bottom: 16px; font-size: 0.98rem; line-height: 1.8; }
+        .modal-content .visi-misi {
+            background: var(--cream); border-radius: 14px; padding: 20px 24px;
+            margin-top: 16px; border-left: 4px solid var(--emas);
+        }
+        .modal-content .visi-misi h4 {
+            color: var(--hijau-tua); font-size: 1.05rem; margin-bottom: 4px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .modal-content .visi-misi h4 i { color: var(--emas); }
+        .modal-content .visi-misi p { margin-bottom: 6px; font-size: 0.95rem; }
+        .modal-content .visi-misi ul { list-style: none; padding: 0; margin: 6px 0 0; }
+        .modal-content .visi-misi ul li { padding: 4px 0 4px 24px; position: relative; font-size: 0.95rem; }
+        .modal-content .visi-misi ul li::before {
+            content: '▸'; position: absolute; left: 0; color: var(--emas); font-weight: 700;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .highlight-box { grid-template-columns: 1fr; gap: 30px; padding: 30px 28px; text-align: center; }
+        }
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                display: none; flex-direction: column; width: 100%; padding: 16px 0 8px;
+                gap: 6px; background: rgba(255,255,255,0.95); border-radius: 30px; margin-top: 12px;
+            }
+            .nav-links.open { display: flex; }
+            .navbar { flex-wrap: wrap; padding: 12px 20px; }
+            .nav-dropdown-menu {
+                position: static; box-shadow: none; border: none;
+                background: transparent; padding: 0; margin-left: 16px; display: none;
+            }
+            .nav-dropdown.open .nav-dropdown-menu { display: block; }
+            .nav-dropdown-menu a { font-size: 0.8rem; padding: 6px 12px; }
+            .hero-text h1 { font-size: 1.9rem; }
+            .section-block { padding: 30px 24px; }
+            .section-block h2 { font-size: 1.3rem; }
+            .jabatan-card { padding: 20px 18px; }
+            .jabatan-card .jabatan-title h3 { font-size: 1.05rem; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 12px 14px 40px; }
+            .hero-text h1 { font-size: 1.6rem; }
+            .section-block { padding: 24px 16px; }
+            .struktur-wrapper { padding: 16px; }
+            .jabatan-card { padding: 18px 14px; }
+            .jabatan-card .jabatan-header { gap: 12px; }
+            .jabatan-card .jabatan-number { width: 36px; height: 36px; font-size: 1rem; }
+            .jabatan-card ul li { font-size: 0.88rem; padding-left: 26px; }
+            .koordinator-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ornament ornament-1"></div>
+    <div class="ornament ornament-2"></div>
+
+    <div class="container">
+        <!-- ===== NAVBAR (dari navbar.html) ===== -->
+        <div id="navbar-container"></div>
+
+        <!-- ===== HERO ===== -->
+        <section class="hero">
+            <div class="hero-text">
+                <div class="arabic-tagline">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+                <h1>Struktur <span class="highlight">Organisasi</span> Departemen Tahfizh</h1>
+                <p>Susunan kepengurusan dan tanggung jawab dalam pengelolaan program tahfizh Al-Qur'an.</p>
+            </div>
+        </section>
+
+        <!-- ===== GAMBAR STRUKTUR ===== -->
+        <div class="struktur-wrapper fade-up">
+            <img 
+                src="../assets/images/struktur.png" 
+                alt="Struktur Organisasi Departemen Tahfizh" 
+                class="struktur-image"
+                id="strukturImage"
+                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 600%22><rect fill=%22%23f0ebe3%22 width=%22800%22 height=%22600%22/><text x=%22400%22 y=%22300%22 font-family=%22Arial%22 font-size=%2224%22 fill=%22%23800020%22 text-anchor=%22middle%22>Struktur Organisasi Belum Di-upload</text></svg>'"
+            >
+            <div class="struktur-hint">
+                <i class="fas fa-search-plus"></i> Klik gambar untuk memperbesar
+            </div>
+        </div>
+
+        <!-- ===== DESKRIPSI ===== -->
+        <div class="section-block fade-up">
+            <h2><i class="fas fa-info-circle"></i> Deskripsi</h2>
+            <p>Dalam rangka mewujudkan pengelolaan program tahfizh Al-Qur'an yang terarah, terkoordinasi, dan berkesinambungan di seluruh lembaga pendidikan, Departemen Tahfizh memiliki struktur organisasi yang terdiri atas Kepala Departemen, Wakil Kepala Departemen, dan Staf Tata Usaha, serta didukung oleh para Koordinator Tahfizh di masing-masing lembaga.</p>
+            <p>Setiap unsur dalam struktur organisasi memiliki tugas dan tanggung jawab sesuai dengan bidangnya masing-masing serta saling bersinergi dalam pelaksanaan, pengawasan, evaluasi, dan pengembangan program tahfizh. Melalui koordinasi yang baik antara Departemen Tahfizh dan seluruh Koordinator Tahfizh, diharapkan pelaksanaan program tahfizh di setiap lembaga dapat berjalan secara optimal dan mencapai target yang telah ditetapkan.</p>
+        </div>
+
+        <!-- ===== TUGAS & TANGGUNG JAWAB ===== -->
+        <div class="section-block fade-up">
+            <h2><i class="fas fa-tasks"></i> Tugas & Tanggung Jawab</h2>
+
+            <!-- 1. Kepala Departemen -->
+            <div class="jabatan-card">
+                <div class="jabatan-header">
+                    <div class="jabatan-number">1</div>
+                    <div class="jabatan-title">
+                        <h3>Kepala Departemen Tahfizh</h3>
+                        <span class="nama"><i class="fas fa-user-tie"></i> Ust. Sahirman, Lc., M.Pd.I.</span>
+                    </div>
+                </div>
+                <ul>
+                    <li>Memimpin dan bertanggung jawab atas seluruh pelaksanaan program tahfizh di setiap lembaga pendidikan.</li>
+                    <li>Menetapkan kebijakan, target, standar, dan arah pengembangan program tahfizh.</li>
+                    <li>Mengoordinasikan dan mengawasi kinerja Wakil Kepala Departemen, Staf Tata Usaha, dan seluruh Koordinator Tahfizh.</li>
+                    <li>Memimpin rapat koordinasi dan evaluasi program tahfizh secara berkala.</li>
+                    <li>Mengevaluasi capaian hafalan santri, kinerja guru tahfizh, serta efektivitas pelaksanaan program.</li>
+                    <li>Menetapkan tindak lanjut atas hasil evaluasi dan menyetujui laporan serta administrasi penting Departemen Tahfizh.</li>
+                </ul>
+            </div>
+
+            <!-- 2. Wakil Kepala Departemen -->
+            <div class="jabatan-card">
+                <div class="jabatan-header">
+                    <div class="jabatan-number">2</div>
+                    <div class="jabatan-title">
+                        <h3>Wakil Departemen Tahfizh</h3>
+                        <span class="nama"><i class="fas fa-user-tie"></i> Ust. Ahmad Fazlurrahman</span>
+                    </div>
+                </div>
+                <ul>
+                    <li>Membantu Kepala Departemen dalam merencanakan, melaksanakan, dan mengawasi program tahfizh.</li>
+                    <li>Mengoordinasikan pelaksanaan program bersama para Koordinator Tahfizh di setiap lembaga.</li>
+                    <li>Memantau perkembangan capaian hafalan santri dan pelaksanaan target tahfizh.</li>
+                    <li>Membantu menyelesaikan kendala teknis dan operasional yang dihadapi oleh Koordinator Tahfizh.</li>
+                    <li>Melaksanakan evaluasi program dan menyusun rekomendasi perbaikan.</li>
+                    <li>Mewakili Kepala Departemen dalam menjalankan tugas apabila mendapat pendelegasian.</li>
+                </ul>
+            </div>
+
+            <!-- 3. Staf Tata Usaha -->
+            <div class="jabatan-card">
+                <div class="jabatan-header">
+                    <div class="jabatan-number">3</div>
+                    <div class="jabatan-title">
+                        <h3>Staf Tata Usaha</h3>
+                        <span class="nama"><i class="fas fa-user-cog"></i> Fikry Hamzah, S.Kom.</span>
+                    </div>
+                </div>
+                <ul>
+                    <li>Mengelola administrasi dan dokumentasi seluruh kegiatan Departemen Tahfizh.</li>
+                    <li>Menghimpun, menginput, dan merekap data guru tahfizh, santri, nilai tasmi', serta capaian hafalan dari setiap lembaga.</li>
+                    <li>Mengelola administrasi penerbitan sertifikat tahfizh, pengajuan penghargaan (reward), dan dokumen pendukung lainnya.</li>
+                    <li>Menyiapkan surat, formulir, notulen rapat, berita acara, dan laporan administrasi.</li>
+                    <li>Mengelola arsip digital, spreadsheet, dan sistem informasi administrasi tahfizh.</li>
+                    <li>Mengoordinasikan pengumpulan dan penyerahan dokumen dengan Staf Tata Usaha lembaga melalui Koordinator Tahfizh.</li>
+                    <li>Menyampaikan laporan administrasi kepada Kepala Departemen dan Wakil Kepala Departemen secara berkala.</li>
+                </ul>
+            </div>
+
+            <!-- 4. Koordinator Tahfizh -->
+            <div class="jabatan-card">
+                <div class="jabatan-header">
+                    <div class="jabatan-number">4</div>
+                    <div class="jabatan-title">
+                        <h3>Koordinator Tahfizh Setiap Lembaga</h3>
+                        <span class="nama"><i class="fas fa-users"></i> 10 Lembaga Pendidikan</span>
+                    </div>
+                </div>
+                <p style="margin-bottom: 12px; font-size: 0.95rem;">Koordinator Tahfizh bertanggung jawab atas pelaksanaan program tahfizh di lembaga masing-masing, meliputi:</p>
+                
+                <div class="koordinator-grid">
+                    <div class="koordinator-item">
+                        <div class="icon"><i class="fas fa-school"></i></div>
+                        <div class="info">
+                            <div class="lembaga">SD IT Putra</div>
+                            <div class="nama">Ust. Lukmanul Hakim, S.Pd.</div>
+                        </div>
+                    </div>
+                    <div class="koordinator-item">
+                        <div class="icon"><i class="fas fa-school"></i></div>
+                        <div class="info">
+                            <div class="lembaga">SD IT Putri</div>
+                            <div class="nama">Usth. Nurul Hikmah</div>
+                        </div>
+                    </div>
+                    <div class="koordinator-item">
+                        <div class="icon"><i class="fas fa-school"></i></div>
+                        <div class="info">
+                            <div class="lembaga">SMP IT Putra</div>
+                            <div class="nama">Ust. Abdul Hanan</div>
+                        </div>
+                    </div>
+                    <div class="koordinator-item">
+                        <div class="icon"><i class="fas fa-school"></i></div>
+                        <div class="info">
+                            <div class="lembaga">SMP IT Putri</div>
+                            <div class="nama">Usth. Uswatun Hasanah</div>
+                        </div>
+                    </div>
+                    <div class="koordinator-item">
+                        <div class="icon"><i class="fas fa-school"></i></div>
+                        <div class="info">
+                            <div class="lembaga">MA Plus</div>
+                            <div class="nama">Ust. Ahmad Tzauqi, S.S.</div>
+                        </div>
+                    </div>
+                    <div class="koordinator-item">
+                        <div class="icon"><i class="fas fa-school"></i></div>
+                        <div class="info">
+                            <div class="lembaga">SMA IT Putri</div>
+                            <div class="nama">Usth. Helmina</div>
+                        </div>
+                    </div>
+                    <div class="koordinator-item">
+                        <div class="icon"><i class="fas fa-school"></i></div>
+                        <div class="info">
+                            <div class="lembaga">SMP/SMA IT Putra (Non Asrama)</div>
+                            <div class="nama">Ust. Lalu Jaozi Abrozi</div>
+                        </div>
+                    </div>
+                    <div class="koordinator-item">
+                        <div class="icon"><i class="fas fa-school"></i></div>
+                        <div class="info">
+                            <div class="lembaga">SD IT Sembalun</div>
+                            <div class="nama">Ust. Muhammad Ihsan</div>
+                        </div>
+                    </div>
+                    <div class="koordinator-item">
+                        <div class="icon"><i class="fas fa-school"></i></div>
+                        <div class="info">
+                            <div class="lembaga">SMP IT Sumbawa</div>
+                            <div class="nama">Ust. Akbar Hidayat, S.Ag.</div>
+                        </div>
+                    </div>
+                    <div class="koordinator-item">
+                        <div class="icon"><i class="fas fa-school"></i></div>
+                        <div class="info">
+                            <div class="lembaga">IBS Bali</div>
+                            <div class="nama">Ust. Made Bagus Nabil</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p style="margin-top: 24px; margin-bottom: 12px; font-weight: 700; color: var(--maroon); font-size: 0.95rem;">
+                    <i class="fas fa-clipboard-check"></i> Tugas dan Tanggung Jawab Koordinator Tahfizh:
+                </p>
+                <ul>
+                    <li>Mengoordinasikan guru tahfizh dalam melaksanakan program dan target hafalan yang telah ditetapkan.</li>
+                    <li>Memantau pelaksanaan halaqah, setoran hafalan, murajaah, tasmi', dan evaluasi hafalan santri.</li>
+                    <li>Memantau perkembangan capaian hafalan santri serta pencapaian target masing-masing guru tahfizh.</li>
+                    <li>Menghimpun dan memverifikasi data nilai tasmi', capaian hafalan, serta data pendukung lainnya sebelum disampaikan kepada Departemen Tahfizh.</li>
+                    <li>Mengidentifikasi kendala yang dihadapi guru tahfizh dan santri serta mengusulkan solusi dan tindak lanjut.</li>
+                    <li>Mengoordinasikan pelaksanaan program, termasuk tasmi', UTHQ, Itqon Guru, dan program tahfizh lainnya sesuai kebijakan Departemen.</li>
+                    <li>Menyampaikan laporan perkembangan dan hasil evaluasi tahfizh secara berkala kepada Departemen Tahfizh.</li>
+                    <li>Menindaklanjuti arahan dan kebijakan Departemen Tahfizh serta menyosialisasikannya kepada guru tahfizh di lembaga masing-masing.</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- ===== CONTACT ===== -->
+        <div class="highlight-box fade-up">
+            <div class="text">
+                <h3><i class="fas fa-link"></i> DEPARTEMEN TAHFIZH</h3>
+                <p>
+                    <strong>PONPES ABU HURAIRAH MATARAM</strong><br>
+                    Jl. Majapahit No.54B, Kekalik Jaya,<br>
+                    Kec. Sekarbela, Kota Mataram,<br>
+                    Nusa Tenggara Barat. 83115
+                    <br><br>
+                    E-Mail      : departemen.tahfizh2026@gmail.com<br>
+                    Admin      : 082340530283 (Chat Only)<br>
+                    Jam Kerja : 08:00 - 13:45 WITA
+                </p>
+            </div>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.553056798127!2d116.09877731484864!3d-8.591937192124524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcdbf58c7f4e239%3A0x48a746765b76db3e!2sPonpes%20Abu%20Hurairah%20Mataram!5e0!3m2!1sid!2sid!4v1728020456789!5m2!1sid!2sid" allowfullscreen="" loading="lazy"></iframe>
+                <div class="map-label"><i class="fas fa-map-pin"></i> Ponpes Abu Hurairah Mataram</div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <div class="footer-logo"><i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span></div>
+            <div class="footer-links">
+                <a href="../index.html">Menu</a>
+                <a href="diagram.html">Diagram</a>
+                <a href="reward.html">Reward</a>
+                <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
+            </div>
+            <div style="font-size:0.8rem;opacity:0.6;">© 2026 · Departemen Tahfizh</div>
+        </footer>
+    </div>
+
+    <!-- ===== ZOOM MODAL GAMBAR ===== -->
+    <div class="zoom-modal" id="zoomModal">
+        <button class="zoom-close" id="zoomClose" aria-label="Tutup">&times;</button>
+        <img src="" alt="Struktur Organisasi" id="zoomImage">
+    </div>
+
+    <!-- ===== WHATSAPP ===== -->
+    <div class="whatsapp-float">
+        <div class="bubble" id="waBubble"><i class="fab fa-whatsapp"></i> Chat Admin</div>
+        <a href="https://wa.me/6282340530283" target="_blank" class="whatsapp-btn" id="waButton">
+            <i class="fab fa-whatsapp"></i>
+            <span class="notification-dot"></span>
+        </a>
+    </div>
+
+    <!-- ===== MODAL TENTANG ===== -->
+    <div class="modal-overlay" id="tentangModal">
+        <div class="modal-content">
+            <button class="modal-close" id="tentangModalClose">&times;</button>
+            <h2><i class="fas fa-info-circle"></i> Tentang Departemen Tahfizh</h2>
+            <div class="sub-title"><i class="fas fa-university"></i> Ponpes Abu Hurairah Mataram</div>
+            <p>Departemen Tahfizh memiliki peran strategis dalam merencanakan, mengoordinasikan, melaksanakan, serta mengevaluasi seluruh program pembinaan hafalan Al-Qur'an di lingkungan lembaga.</p>
+            <div class="visi-misi">
+                <h4><i class="fas fa-eye"></i> Visi</h4>
+                <p>Menjadi fasilitator pengelolaan, pemberdayaan, dan pengembangan kompetensi guru dalam mengajar, dan potensi santri Ponpes Abu Hurairah Mataram.</p>
+                <h4 style="margin-top:16px;"><i class="fas fa-tasks"></i> Misi</h4>
+                <ul>
+                    <li>Merancang program kegiatan tahfizh Al-Qur'an secara teratur.</li>
+                    <li>Memberikan pembinaan dan pelatihan pengembangan kompetensi guru.</li>
+                    <li>Menyiapkan profil lulusan pondok yang memiliki hafalan Al-Qur'an minimal 3-5 Juz Mutqin.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 📌 LOAD NAVBAR
+        // ============================================================
+        async function loadNavbar() {
+            try {
+                const response = await fetch('../components/navbar.html');
+                const html = await response.text();
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+                console.log('✅ Navbar berhasil dimuat');
+            } catch (error) {
+                console.error('❌ Gagal memuat navbar:', error);
+                document.getElementById('navbar-container').innerHTML = 
+                    '<p style="text-align:center;color:#e74c3c;">Gagal memuat navbar</p>';
+            }
+        }
+
+        function initNavbar() {
+            const toggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            if (!toggle || !navLinks) return;
+            
+            toggle.addEventListener('click', () => {
+                navLinks.classList.toggle('open');
+                const icon = toggle.querySelector('i');
+                icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+            });
+            
+            document.querySelectorAll('.nav-dropdown-toggle').forEach(toggleBtn => {
+                toggleBtn.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768) {
+                        e.preventDefault();
+                        const dropdown = toggleBtn.closest('.nav-dropdown');
+                        dropdown.classList.toggle('open');
+                    }
+                });
+            });
+            
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPage) link.classList.add('active');
+            });
+            
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!link.classList.contains('nav-dropdown-toggle')) {
+                        navLinks.classList.remove('open');
+                        const icon = toggle.querySelector('i');
+                        icon.className = 'fas fa-bars';
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.tentang-link').forEach(l => {
+                l.addEventListener('click', e => { 
+                    e.preventDefault(); 
+                    openModal('tentangModal'); 
+                });
+            });
+        }
+
+        // ============================================================
+        // 📌 MODAL TENTANG
+        // ============================================================
+        function openModal(id) { 
+            const m = document.getElementById(id); 
+            if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; } 
+        }
+        function closeModal(id) { 
+            const m = document.getElementById(id); 
+            if (m) { m.classList.remove('active'); document.body.style.overflow = ''; } 
+        }
+
+        const tm = document.getElementById('tentangModal');
+        if (tm) {
+            document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
+            tm.addEventListener('click', e => { if (e.target === tm) closeModal('tentangModal'); });
+        }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal('tentangModal');
+        });
+
+        // ============================================================
+        // 🔍 ZOOM GAMBAR STRUKTUR
+        // ============================================================
+        const strukturImage = document.getElementById('strukturImage');
+        const zoomModal = document.getElementById('zoomModal');
+        const zoomImage = document.getElementById('zoomImage');
+        const zoomClose = document.getElementById('zoomClose');
+
+        strukturImage.addEventListener('click', () => {
+            zoomImage.src = strukturImage.src;
+            zoomModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeZoom() {
+            zoomModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        zoomClose.addEventListener('click', closeZoom);
+        zoomModal.addEventListener('click', (e) => {
+            if (e.target === zoomModal || e.target === zoomImage) {
+                closeZoom();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && zoomModal.classList.contains('active')) {
+                closeZoom();
+            }
+        });
+
+        // ============================================================
+        // 📜 SCROLL ANIMATION (Fade Up)
+        // ============================================================
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // ============================================================
+        // 💬 WHATSAPP
+        // ============================================================
+        const waButton = document.getElementById('waButton');
+        const waBubble = document.getElementById('waBubble');
+        setTimeout(() => waBubble.classList.add('show'), 3000);
+        waButton.addEventListener('click', () => waBubble.classList.remove('show'));
+
+        // ============================================================
+        // 🚀 START
+        // ============================================================
+        console.log('🌙 HAFZApp - Struktur Organisasi — Barakallah!');
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNavbar();
+        });
+    </script>
+</body>
+</html>
