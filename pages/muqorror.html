@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alur Muqorror - HAFZApp</title>
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --hijau-tua: #1a4d2e; --hijau-muda: #2d6a4f; --emas: #c9a84c;
+            --emas-muda: #e8d48b; --emas-glow: #f4e3a7; --cream: #faf6ed;
+            --putih: #ffffff; --abu: #f0ebe3;
+            --maroon: #800020; --maroon-muda: #a83248; --maroon-glow: #c94a6b;
+            --shadow: 0 10px 40px rgba(26, 77, 46, 0.15);
+            --radius: 20px; --whatsapp: #25D366;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            background-color: var(--cream); color: #1e2a2a; line-height: 1.7;
+            min-height: 100vh;
+            background-image: 
+                linear-gradient(45deg, rgba(128,0,32,0.02) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(128,0,32,0.02) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(128,0,32,0.02) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(128,0,32,0.02) 75%),
+                radial-gradient(circle at 20% 30%, rgba(128,0,32,0.02) 1px, transparent 1px),
+                radial-gradient(circle at 70% 80%, rgba(128,0,32,0.02) 1px, transparent 1px),
+                var(--cream);
+            background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, 30px 30px, 30px 30px;
+        }
+        .ornament {
+            background: radial-gradient(circle at 30% 30%, var(--maroon-glow), transparent 70%);
+            position: fixed; border-radius: 50%; filter: blur(80px);
+            pointer-events: none; z-index: 0;
+        }
+        .ornament-1 { width: 500px; height: 500px; top: -100px; right: -100px; opacity: 0.15; }
+        .ornament-2 { width: 400px; height: 400px; bottom: -50px; left: -100px; opacity: 0.1; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px 24px 60px; position: relative; z-index: 1; }
+
+        /* ===== NAVBAR ===== */
+        /* CSS Navbar sudah dipindahkan ke components/navbar.html */
+
+        /* ===== HERO ===== */
+        .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 30px 0 20px; }
+        .hero-text { max-width: 800px; }
+        .hero-text h1 { font-size: 2.6rem; font-weight: 900; line-height: 1.15; color: var(--hijau-tua); }
+        .hero-text h1 .highlight { color: var(--maroon); position: relative; }
+        .hero-text h1 .highlight::after {
+            content: ''; position: absolute; bottom: 6px; left: 0;
+            width: 100%; height: 8px;
+            background: linear-gradient(90deg, rgba(128,0,32,0.15), rgba(201,168,76,0.2));
+            border-radius: 10px; z-index: -1;
+        }
+        .hero-text .arabic-tagline {
+            font-family: 'Traditional Arabic', 'Amiri', serif;
+            font-size: 1.5rem; color: var(--hijau-muda); margin: 8px 0 12px;
+            letter-spacing: 2px; opacity: 0.85;
+        }
+        .hero-text p { font-size: 1.05rem; color: #2d3d3a; max-width: 650px; margin: 12px auto 20px; }
+
+        /* ===== GAMBAR ALUR ===== */
+        .struktur-wrapper {
+            background: linear-gradient(135deg, rgba(128,0,32,0.03), rgba(201,168,76,0.03));
+            border-radius: var(--radius);
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            border: 1px solid rgba(128,0,32,0.1);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .struktur-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--maroon), var(--maroon-glow), var(--emas));
+        }
+        .struktur-image {
+            max-width: 100%;
+            width: auto;
+            max-height: 650px;
+            border-radius: 14px;
+            cursor: zoom-in;
+            transition: 0.3s;
+            box-shadow: 0 8px 30px rgba(128,0,32,0.15);
+            border: 2px solid rgba(128,0,32,0.1);
+        }
+        .struktur-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(128,0,32,0.25);
+            border-color: var(--maroon);
+        }
+        .struktur-hint {
+            font-size: 0.85rem;
+            color: var(--maroon);
+            margin-top: 16px;
+            font-style: italic;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: rgba(128,0,32,0.05);
+            border-radius: 30px;
+            border: 1px dashed rgba(128,0,32,0.3);
+        }
+
+        /* ===== MODAL ZOOM GAMBAR ===== */
+        .zoom-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: zoom-out;
+            animation: fadeInZoom 0.3s ease;
+        }
+        .zoom-modal.active { display: flex; }
+        @keyframes fadeInZoom {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .zoom-modal img {
+            max-width: 95%;
+            max-height: 95%;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            animation: zoomPop 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @keyframes zoomPop {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .zoom-close {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            backdrop-filter: blur(8px);
+        }
+        .zoom-close:hover {
+            background: var(--maroon);
+            border-color: var(--maroon);
+            transform: rotate(90deg);
+        }
+
+        /* ===== SECTION ===== */
+        .section-block {
+            background: var(--putih);
+            border-radius: var(--radius);
+            padding: 40px 44px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(128,0,32,0.08);
+            position: relative;
+        }
+        .section-block::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--maroon), var(--maroon-glow), var(--emas));
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .section-block h2 {
+            font-size: 1.6rem;
+            color: var(--hijau-tua);
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid rgba(128,0,32,0.1);
+        }
+        .section-block h2 i {
+            color: var(--maroon);
+            font-size: 1.6rem;
+        }
+        .section-block p {
+            color: #2d3d3a;
+            font-size: 1rem;
+            line-height: 1.9;
+            text-align: justify;
+            margin-bottom: 14px;
+        }
+
+        /* ===== ALUR CARD (STEP) ===== */
+        .alur-card {
+            background: linear-gradient(135deg, #faf6ed, #ffffff);
+            border-left: 5px solid var(--maroon);
+            border-radius: 16px;
+            padding: 26px 30px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 20px rgba(128,0,32,0.08);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .alur-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 80px; height: 80px;
+            background: radial-gradient(circle, rgba(201,168,76,0.1), transparent 70%);
+            border-radius: 50%;
+        }
+        .alur-card:hover {
+            transform: translateX(6px);
+            box-shadow: 0 8px 30px rgba(128,0,32,0.15);
+            border-left-color: var(--emas);
+        }
+        .alur-card .alur-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .alur-card .alur-number {
+            background: linear-gradient(135deg, var(--maroon), var(--maroon-glow));
+            color: var(--emas-muda);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(128,0,32,0.3);
+        }
+        .alur-card .alur-title {
+            flex: 1;
+            min-width: 200px;
+        }
+        .alur-card .alur-title h3 {
+            font-size: 1.15rem;
+            color: var(--maroon);
+            font-weight: 800;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+        .alur-card .alur-title .tahap-badge {
+            font-size: 0.75rem;
+            color: var(--hijau-tua);
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            background: rgba(201,168,76,0.15);
+            border-radius: 30px;
+            border: 1px solid rgba(201,168,76,0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .alur-card .alur-title .tahap-badge i {
+            color: var(--emas);
+            font-size: 0.7rem;
+        }
+        .alur-card p {
+            color: #2d3d3a;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            text-align: justify;
+            margin: 0;
+        }
+        .alur-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0 0;
+        }
+        .alur-card ul li {
+            padding: 8px 0 8px 32px;
+            position: relative;
+            color: #2d3d3a;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            border-bottom: 1px dashed rgba(128,0,32,0.08);
+        }
+        .alur-card ul li:last-child {
+            border-bottom: none;
+        }
+        .alur-card ul li::before {
+            content: '◆';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            color: var(--maroon);
+            font-size: 0.7rem;
+        }
+        .alur-card ul li strong {
+            color: var(--maroon);
+            font-weight: 800;
+        }
+
+        /* ===== TAHAP HEADER ===== */
+        .tahap-header {
+            background: linear-gradient(135deg, var(--maroon), #5c0017);
+            color: var(--emas-muda);
+            border-radius: 14px;
+            padding: 16px 24px;
+            margin: 30px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 6px 20px rgba(128,0,32,0.2);
+        }
+        .tahap-header i {
+            font-size: 1.4rem;
+            color: var(--emas);
+            background: rgba(232, 212, 139, 0.15);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .tahap-header h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            margin: 0;
+        }
+
+        /* ===== HIGHLIGHT BOX ===== */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--maroon), #5c0017);
+            border-radius: var(--radius);
+            padding: 40px 44px;
+            margin: 50px 0 20px;
+            color: var(--emas-muda);
+            border: 1px solid rgba(201,168,76,0.3);
+            box-shadow: 0 12px 40px rgba(128,0,32,0.25);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        .highlight-box .text h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        .highlight-box .text h3 i {
+            color: var(--emas);
+            margin-right: 10px;
+        }
+        .highlight-box .text p {
+            opacity: 0.9;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .highlight-box .text strong {
+            color: var(--emas);
+            font-weight: 700;
+        }
+        .map-container {
+            position: relative;
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            aspect-ratio: 4/3;
+        }
+        .map-container iframe { width: 100%; height: 100%; border: none; }
+        .map-label {
+            position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.7); color: white; padding: 6px 18px;
+            border-radius: 30px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;
+        }
+        .map-label i { color: var(--emas); margin-right: 6px; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 60px; padding: 30px 0 20px;
+            border-top: 2px solid rgba(201,168,76,0.15);
+            display: flex; flex-wrap: wrap; justify-content: space-between;
+            align-items: center; gap: 16px;
+            color: #3d5550; font-size: 0.9rem;
+        }
+        .footer .footer-logo { font-weight: 700; color: var(--hijau-tua); font-size: 1.1rem; }
+        .footer .footer-logo i { color: var(--emas); }
+        .footer .footer-links { display: flex; gap: 20px; }
+        .footer .footer-links a { color: var(--hijau-tua); text-decoration: none; font-weight: 500; cursor: pointer; }
+        .footer .footer-links a:hover { color: var(--maroon); }
+
+        /* ===== WHATSAPP ===== */
+        .whatsapp-float {
+            position: fixed; bottom: 28px; right: 28px; z-index: 999;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+        }
+        .whatsapp-float .bubble {
+            background: rgba(0,0,0,0.75); color: white; padding: 8px 16px; border-radius: 12px;
+            font-size: 0.8rem; opacity: 0; transform: translateX(20px);
+            transition: all 0.4s ease; pointer-events: none; white-space: nowrap;
+        }
+        .whatsapp-float .bubble.show { opacity: 1; transform: translateX(0); }
+        .whatsapp-float .bubble i { color: var(--whatsapp); margin-right: 6px; }
+        .whatsapp-btn {
+            width: 64px; height: 64px; border-radius: 50%; background: var(--whatsapp);
+            color: white; border: none; font-size: 2.2rem; cursor: pointer;
+            box-shadow: 0 6px 30px rgba(37,211,102,0.4); transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; text-decoration: none;
+            position: relative;
+        }
+        .whatsapp-btn:hover { transform: scale(1.08); }
+        .whatsapp-btn .notification-dot {
+            position: absolute; top: -2px; right: -2px; width: 16px; height: 16px;
+            background: #ff3b30; border-radius: 50%; border: 2px solid white;
+        }
+
+        /* ===== MODAL TENTANG ===== */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); z-index: 1000;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: var(--putih); border-radius: var(--radius);
+            max-width: 750px; width: 100%; max-height: 90vh; overflow-y: auto;
+            padding: 40px 44px; box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            border: 1px solid rgba(201,168,76,0.2); position: relative;
+        }
+        .modal-close {
+            position: sticky; top: 0; float: right; background: none; border: none;
+            font-size: 2rem; color: var(--hijau-tua); cursor: pointer; padding: 0 8px;
+        }
+        .modal-close:hover { color: var(--maroon); transform: rotate(90deg); }
+        .modal-content h2 {
+            font-size: 2rem; color: var(--hijau-tua); margin-bottom: 6px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .modal-content h2 i { color: var(--emas); font-size: 1.8rem; }
+        .modal-content .sub-title {
+            color: var(--hijau-muda); font-size: 0.95rem;
+            border-bottom: 2px solid rgba(201,168,76,0.2);
+            padding-bottom: 16px; margin-bottom: 20px;
+        }
+        .modal-content p { color: #2d3d3a; margin-bottom: 16px; font-size: 0.98rem; line-height: 1.8; }
+        .modal-content .visi-misi {
+            background: var(--cream); border-radius: 14px; padding: 20px 24px;
+            margin-top: 16px; border-left: 4px solid var(--emas);
+        }
+        .modal-content .visi-misi h4 {
+            color: var(--hijau-tua); font-size: 1.05rem; margin-bottom: 4px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .modal-content .visi-misi h4 i { color: var(--emas); }
+        .modal-content .visi-misi p { margin-bottom: 6px; font-size: 0.95rem; }
+        .modal-content .visi-misi ul { list-style: none; padding: 0; margin: 6px 0 0; }
+        .modal-content .visi-misi ul li { padding: 4px 0 4px 24px; position: relative; font-size: 0.95rem; }
+        .modal-content .visi-misi ul li::before {
+            content: '▸'; position: absolute; left: 0; color: var(--emas); font-weight: 700;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .highlight-box { grid-template-columns: 1fr; gap: 30px; padding: 30px 28px; text-align: center; }
+        }
+        @media (max-width: 768px) {
+            .hero-text h1 { font-size: 1.9rem; }
+            .section-block { padding: 30px 24px; }
+            .section-block h2 { font-size: 1.3rem; }
+            .alur-card { padding: 20px 18px; }
+            .alur-card .alur-title h3 { font-size: 1.05rem; }
+            .tahap-header { padding: 14px 18px; }
+            .tahap-header h3 { font-size: 1rem; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 12px 14px 40px; }
+            .hero-text h1 { font-size: 1.6rem; }
+            .section-block { padding: 24px 16px; }
+            .struktur-wrapper { padding: 16px; }
+            .alur-card { padding: 18px 14px; }
+            .alur-card .alur-header { gap: 12px; }
+            .alur-card .alur-number { width: 36px; height: 36px; font-size: 1rem; }
+            .alur-card ul li { font-size: 0.88rem; padding-left: 26px; }
+            .tahap-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ornament ornament-1"></div>
+    <div class="ornament ornament-2"></div>
+
+    <div class="container">
+        <!-- ===== NAVBAR ===== -->
+        <div id="navbar-container"></div>
+
+        <!-- ===== HERO ===== -->
+        <section class="hero">
+            <div class="hero-text">
+                <div class="arabic-tagline">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+                <h1>Alur <span class="highlight">Muqorror</span> Tahfizh</h1>
+                <p>Ketentuan target hafalan Al-Qur'an santri berdasarkan jenjang pendidikan dan jalur program.</p>
+            </div>
+        </section>
+
+        <!-- ===== GAMBAR ALUR ===== -->
+        <div class="struktur-wrapper fade-up">
+            <img 
+                src="../assets/images/muqorror.png" 
+                alt="Bagan Alur Muqorror Santri" 
+                class="struktur-image"
+                id="strukturImage"
+                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 600%22><rect fill=%22%23f0ebe3%22 width=%22800%22 height=%22600%22/><text x=%22400%22 y=%22300%22 font-family=%22Arial%22 font-size=%2224%22 fill=%22%23800020%22 text-anchor=%22middle%22>Bagan Muqorror Belum Di-upload</text></svg>'"
+            >
+            <div class="struktur-hint">
+                <i class="fas fa-search-plus"></i> Klik gambar untuk memperbesar
+            </div>
+        </div>
+
+        <!-- ===== DESKRIPSI ===== -->
+        <div class="section-block fade-up">
+            <h2><i class="fas fa-info-circle"></i> Deskripsi</h2>
+            <p>Muqorror merupakan ketentuan target hafalan Al-Qur'an yang harus dicapai oleh santri pada setiap jenjang pendidikan sesuai dengan program dan jalur pendidikan yang diikuti. Penetapan muqorror ini bertujuan untuk memberikan standar capaian hafalan yang terarah, terukur, dan berkesinambungan, mulai dari jenjang SD hingga SMA.</p>
+            <p>Bagan berikut menjelaskan alur pembagian target hafalan santri berdasarkan jenjang pendidikan, jalur SD Umum atau SD Pondok, serta program SMP dan SMA Pondok maupun Fullday. Melalui pembagian ini, setiap santri diharapkan memiliki target hafalan yang jelas sebagai pedoman dalam pelaksanaan pembelajaran tahfizh, pencapaian target setoran, dan evaluasi perkembangan hafalan di setiap jenjang.</p>
+        </div>
+
+        <!-- ===== ALUR MUQORROR ===== -->
+        <div class="section-block fade-up">
+            <h2><i class="fas fa-route"></i> Penjelasan Detail Alur Muqorror</h2>
+
+            <!-- ===== TAHAP A ===== -->
+            <div class="tahap-header">
+                <i class="fas fa-university"></i>
+                <h3>A. Penetapan Muqorror Departemen Tahfizh</h3>
+            </div>
+
+            <div class="alur-card">
+                <p>Departemen Tahfizh Ponpes Abu Hurairah Mataram menjadi penanggung jawab dalam menetapkan standar muqorror atau target hafalan Al-Qur'an bagi santri. Target tersebut dibagi berdasarkan jenjang pendidikan dan jalur program yang diikuti agar capaian hafalan santri dapat disesuaikan dengan program pendidikan masing-masing.</p>
+                <p style="margin-top: 12px;">Berdasarkan bagan, pembagian muqorror dimulai dari dua jalur utama, yaitu <strong>SD Umum</strong> dan <strong>SD Pondok</strong>, yang selanjutnya memiliki pembagian target berbeda pada jenjang berikutnya.</p>
+            </div>
+
+            <!-- ===== TAHAP B ===== -->
+            <div class="tahap-header">
+                <i class="fas fa-school"></i>
+                <h3>B. Jalur SD Umum</h3>
+            </div>
+
+            <div class="alur-card" style="border-left-color: var(--emas);">
+                <p>Santri yang mengikuti jalur SD Umum melanjutkan program tahfizh ke jenjang SMP Pondok atau SMP Fullday. Target hafalan pada jenjang SMP tersebut menjadi dasar bagi pembagian target pada jenjang SMA.</p>
+                
+                <h4 style="color: var(--maroon); margin-top: 16px; margin-bottom: 8px;"><i class="fas fa-caret-right"></i> 1. Jenjang SMP</h4>
+                <ul>
+                    <li><strong>SMP Pondok:</strong> Target hafalan sebanyak 5 juz, yaitu juz 26–30.</li>
+                    <li><strong>SMP Fullday:</strong> Target hafalan sebanyak 3 juz, yaitu juz 28–30.</li>
+                </ul>
+
+                <h4 style="color: var(--maroon); margin-top: 16px; margin-bottom: 8px;"><i class="fas fa-caret-right"></i> 2. Jenjang SMA</h4>
+                <p>Setelah menyelesaikan target pada jenjang SMP, santri mengikuti pembagian muqorror sesuai dengan program yang dipilih.</p>
+                <ul>
+                    <li><strong>SMA Pondok:</strong> Target hafalan sebanyak 5 juz, yaitu juz 1–5.</li>
+                    <li><strong>SMA Fullday:</strong> Target hafalan sebanyak 3 juz, yaitu juz 1–3.</li>
+                </ul>
+                <p style="margin-top: 12px;">Dengan demikian, pada jalur SD Umum, target hafalan dibedakan berdasarkan program Pondok dan Fullday, baik pada jenjang SMP maupun SMA.</p>
+            </div>
+
+            <!-- ===== TAHAP C ===== -->
+            <div class="tahap-header">
+                <i class="fas fa-mosque"></i>
+                <h3>C. Jalur SD Pondok</h3>
+            </div>
+
+            <div class="alur-card" style="border-left-color: var(--emas);">
+                <p>Santri yang mengikuti jalur SD Pondok memiliki target awal hafalan sebanyak 3 juz, yaitu juz 28, 29, dan 30. Selanjutnya, santri melanjutkan program tahfizh ke jenjang SMP Pondok atau SMP Fullday.</p>
+                
+                <h4 style="color: var(--maroon); margin-top: 16px; margin-bottom: 8px;"><i class="fas fa-caret-right"></i> 1. Jenjang SMP</h4>
+                <ul>
+                    <li><strong>SMP Pondok:</strong> Target hafalan sebanyak 5 juz, yaitu juz 1–5.</li>
+                    <li><strong>SMP Fullday:</strong> Target hafalan sebanyak 3 juz, yaitu juz 1–3.</li>
+                </ul>
+
+                <h4 style="color: var(--maroon); margin-top: 16px; margin-bottom: 8px;"><i class="fas fa-caret-right"></i> 2. Jenjang SMA</h4>
+                <p>Pada jenjang SMA, target hafalan dibagi kembali berdasarkan program Pondok atau Fullday serta kesinambungan target yang telah ditetapkan.</p>
+                <ul>
+                    <li><strong>SMA Pondok setelah SMP Pondok:</strong> Target hafalan sebanyak 5 juz, yaitu juz 6–10.</li>
+                    <li><strong>SMA Fullday setelah SMP Pondok:</strong> Target hafalan sebanyak 3 juz, yaitu juz 6–8.</li>
+                    <li><strong>SMA Pondok setelah SMP Fullday:</strong> Target hafalan sebanyak 3 juz, yaitu juz 4–8, sebagaimana tercantum pada bagan.</li>
+                    <li><strong>SMA Fullday setelah SMP Fullday:</strong> Target hafalan sebanyak 3 juz, yaitu juz 4–6.</li>
+                </ul>
+                <p style="margin-top: 12px;">Pembagian tersebut menunjukkan bahwa target hafalan pada jenjang SMA tidak hanya ditentukan oleh jenjang pendidikan, tetapi juga mengikuti jalur pendidikan sebelumnya.</p>
+            </div>
+
+            <p style="margin-top: 24px;">Penyusunan alur muqorror ini diharapkan dapat menjadi pedoman bersama bagi Departemen Tahfizh, koordinator lembaga, dan guru tahfizh dalam melaksanakan program hafalan Al-Qur'an secara terarah dan berkesinambungan. Dengan adanya standar target yang jelas pada setiap jenjang, pencapaian hafalan santri dapat dipantau dan dievaluasi secara lebih sistematis sesuai dengan program pendidikan masing-masing.</p>
+
+        </div>
+
+        <!-- ===== CONTACT ===== -->
+        <div class="highlight-box fade-up">
+            <div class="text">
+                <h3><i class="fas fa-link"></i> DEPARTEMEN TAHFIZH</h3>
+                <p>
+                    <strong>PONPES ABU HURAIRAH MATARAM</strong><br>
+                    Jl. Majapahit No.54B, Kekalik Jaya,<br>
+                    Kec. Sekarbela, Kota Mataram,<br>
+                    Nusa Tenggara Barat. 83115
+                    <br><br>
+                    E-Mail      : departemen.tahfizh2026@gmail.com<br>
+                    Admin      : 082340530283 (Chat Only)<br>
+                    Jam Kerja : 08:00 - 13:45 WITA
+                </p>
+            </div>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.553056798127!2d116.09877731484864!3d-8.591937192124524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcdbf58c7f4e239%3A0x48a746765b76db3e!2sPonpes%20Abu%20Hurairah%20Mataram!5e0!3m2!1sid!2sid!4v1728020456789!5m2!1sid!2sid" allowfullscreen="" loading="lazy"></iframe>
+                <div class="map-label"><i class="fas fa-map-pin"></i> Ponpes Abu Hurairah Mataram</div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <div class="footer-logo"><i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span></div>
+            <div class="footer-links">
+                <a href="/index.html">Menu</a>
+                <a href="/pages/diagram.html">Diagram</a>
+                <a href="/pages/reward.html">Reward</a>
+                <a href="#" class="tentang-link" data-target="tentangModal">Tentang</a>
+            </div>
+            <div style="font-size:0.8rem;opacity:0.6;">© 2026 · Departemen Tahfizh</div>
+        </footer>
+    </div>
+
+    <!-- ===== ZOOM MODAL GAMBAR ===== -->
+    <div class="zoom-modal" id="zoomModal">
+        <button class="zoom-close" id="zoomClose" aria-label="Tutup">&times;</button>
+        <img src="" alt="Alur Muqorror" id="zoomImage">
+    </div>
+
+    <!-- ===== WHATSAPP ===== -->
+    <div class="whatsapp-float">
+        <div class="bubble" id="waBubble"><i class="fab fa-whatsapp"></i> Chat Admin</div>
+        <a href="https://wa.me/6282340530283" target="_blank" class="whatsapp-btn" id="waButton">
+            <i class="fab fa-whatsapp"></i>
+            <span class="notification-dot"></span>
+        </a>
+    </div>
+
+    <!-- ===== MODAL TENTANG ===== -->
+    <div class="modal-overlay" id="tentangModal">
+        <div class="modal-content">
+            <button class="modal-close" id="tentangModalClose">&times;</button>
+            <h2><i class="fas fa-info-circle"></i> Tentang Departemen Tahfizh</h2>
+            <div class="sub-title"><i class="fas fa-university"></i> Ponpes Abu Hurairah Mataram</div>
+            <p>Departemen Tahfizh memiliki peran strategis dalam merencanakan, mengoordinasikan, melaksanakan, serta mengevaluasi seluruh program pembinaan hafalan Al-Qur'an di lingkungan lembaga.</p>
+            <div class="visi-misi">
+                <h4><i class="fas fa-eye"></i> Visi</h4>
+                <p>Menjadi fasilitator pengelolaan, pemberdayaan, dan pengembangan kompetensi guru dalam mengajar, dan potensi santri Ponpes Abu Hurairah Mataram.</p>
+                <h4 style="margin-top:16px;"><i class="fas fa-tasks"></i> Misi</h4>
+                <ul>
+                    <li>Merancang program kegiatan tahfizh Al-Qur'an secara teratur.</li>
+                    <li>Memberikan pembinaan dan pelatihan pengembangan kompetensi guru.</li>
+                    <li>Menyiapkan profil lulusan pondok yang memiliki hafalan Al-Qur'an minimal 3-5 Juz Mutqin.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 📌 LOAD NAVBAR
+        // ============================================================
+        async function loadNavbar() {
+            try {
+                const response = await fetch('../components/navbar.html');
+                const html = await response.text();
+                const container = document.getElementById('navbar-container');
+                container.innerHTML = html;
+                
+                // Re-execute script navbar
+                container.querySelectorAll('script').forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = oldScript.textContent;
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+                
+                console.log('✅ Navbar berhasil dimuat');
+            } catch (error) {
+                console.error('❌ Gagal memuat navbar:', error);
+                document.getElementById('navbar-container').innerHTML = 
+                    '<p style="text-align:center;color:#e74c3c;">Gagal memuat navbar</p>';
+            }
+        }
+
+        // ============================================================
+        // 📌 MODAL TENTANG
+        // ============================================================
+        function openModal(id) { 
+            const m = document.getElementById(id); 
+            if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; } 
+        }
+        function closeModal(id) { 
+            const m = document.getElementById(id); 
+            if (m) { m.classList.remove('active'); document.body.style.overflow = ''; } 
+        }
+
+        // Ekspos ke global scope agar bisa dipanggil dari navbar.html
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+
+        const tm = document.getElementById('tentangModal');
+        if (tm) {
+            document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
+            tm.addEventListener('click', e => { if (e.target === tm) closeModal('tentangModal'); });
+        }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal('tentangModal');
+        });
+
+        // ============================================================
+        // 🔍 ZOOM GAMBAR MUQORROR
+        // ============================================================
+        const strukturImage = document.getElementById('strukturImage');
+        const zoomModal = document.getElementById('zoomModal');
+        const zoomImage = document.getElementById('zoomImage');
+        const zoomClose = document.getElementById('zoomClose');
+
+        strukturImage.addEventListener('click', () => {
+            zoomImage.src = strukturImage.src;
+            zoomModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeZoom() {
+            zoomModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        zoomClose.addEventListener('click', closeZoom);
+        zoomModal.addEventListener('click', (e) => {
+            if (e.target === zoomModal || e.target === zoomImage) {
+                closeZoom();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && zoomModal.classList.contains('active')) {
+                closeZoom();
+            }
+        });
+
+        // ============================================================
+        // 📜 SCROLL ANIMATION (Fade Up)
+        // ============================================================
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // ============================================================
+        // 💬 WHATSAPP
+        // ============================================================
+        const waButton = document.getElementById('waButton');
+        const waBubble = document.getElementById('waBubble');
+        setTimeout(() => waBubble.classList.add('show'), 3000);
+        waButton.addEventListener('click', () => waBubble.classList.remove('show'));
+
+        // ============================================================
+        // 🚀 START
+        // ============================================================
+        console.log('🌙 HAFZApp - Alur Muqorror — Barakallah!');
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNavbar();
+        });
+    </script>
+</body>
+</html>
