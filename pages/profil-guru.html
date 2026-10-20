@@ -136,22 +136,15 @@
         }
         .guru-card .btn-lihat:hover { background: var(--hijau-tua); color: var(--emas-muda); border-color: var(--hijau-tua); }
 
-        /* ===== FIX BUG 3: TAMBAHKAN ATURAN MODAL OVERLAY ===== */
+        /* ===== MODAL OVERLAY & PROFIL ===== */
         .modal-overlay {
-            display: none; /* Sembunyikan secara default */
-            position: fixed; top: 0; left: 0; 
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); 
-            backdrop-filter: blur(6px); 
-            z-index: 9999; /* Pastikan menutupi navbar */
-            justify-content: center; align-items: center; 
-            padding: 20px;
+            display: none; position: fixed; top: 0; left: 0; 
+            width: 100%; height: 100%; background: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(6px); z-index: 9999; 
+            justify-content: center; align-items: center; padding: 20px;
         }
-        .modal-overlay.active {
-            display: flex; /* Tampilkan sebagai flexbox saat aktif */
-        }
+        .modal-overlay.active { display: flex; }
 
-        /* ===== MODAL PROFIL ===== */
         .modal-profile {
             background: var(--putih); border-radius: var(--radius);
             max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto;
@@ -198,6 +191,45 @@
         .modal-profile .data-item .label { font-weight: 800; color: var(--hijau-tua); min-width: 110px; display: inline-block; }
         .modal-profile .data-item .value { color: #2d3d3a; word-break: break-word; }
 
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 60px; padding: 30px 0 20px;
+            border-top: 2px solid rgba(201,168,76,0.15);
+            display: flex; flex-wrap: wrap; justify-content: space-between;
+            align-items: center; gap: 16px;
+            color: #3d5550; font-size: 0.9rem;
+        }
+        .footer .footer-logo { font-weight: 700; color: var(--hijau-tua); font-size: 1.1rem; }
+        .footer .footer-logo i { color: var(--emas); }
+        .footer .footer-links { display: flex; gap: 20px; }
+        .footer .footer-links a { color: var(--hijau-tua); text-decoration: none; font-weight: 500; cursor: pointer; transition: 0.3s; }
+        .footer .footer-links a:hover { color: var(--maroon); }
+
+        /* ===== WHATSAPP ===== */
+        .whatsapp-float {
+            position: fixed; bottom: 28px; right: 28px; z-index: 999;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+        }
+        .whatsapp-float .bubble {
+            background: rgba(0,0,0,0.75); color: white; padding: 8px 16px; border-radius: 12px;
+            font-size: 0.8rem; opacity: 0; transform: translateX(20px);
+            transition: all 0.4s ease; pointer-events: none; white-space: nowrap;
+        }
+        .whatsapp-float .bubble.show { opacity: 1; transform: translateX(0); }
+        .whatsapp-float .bubble i { color: var(--whatsapp); margin-right: 6px; }
+        .whatsapp-btn {
+            width: 64px; height: 64px; border-radius: 50%; background: var(--whatsapp);
+            color: white; border: none; font-size: 2.2rem; cursor: pointer;
+            box-shadow: 0 6px 30px rgba(37,211,102,0.4); transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; text-decoration: none;
+            position: relative;
+        }
+        .whatsapp-btn:hover { transform: scale(1.08); }
+        .whatsapp-btn .notification-dot {
+            position: absolute; top: -2px; right: -2px; width: 16px; height: 16px;
+            background: #ff3b30; border-radius: 50%; border: 2px solid white;
+        }
+
         /* ===== LOADING & EMPTY ===== */
         .loading-state, .empty-state { text-align: center; padding: 60px 20px; color: var(--hijau-tua); }
         .loading-state i, .empty-state i { font-size: 3rem; color: var(--emas); margin-bottom: 12px; }
@@ -211,6 +243,7 @@
             .filter-box { flex-direction: column; }
             .filter-box select { width: 100%; }
             .modal-profile .data-list { grid-template-columns: 1fr; }
+            .footer { flex-direction: column; text-align: center; }
         }
         @media (max-width: 480px) {
             .container { padding: 12px 14px 40px; }
@@ -233,9 +266,6 @@
                 <div class="arabic-tagline">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
                 <h1>Profil <span class="highlight">Guru Tahfizh</span></h1>
                 <p>Direktori data pendidik dan pengajar Al-Qur'an di lingkungan Departemen Tahfizh Ponpes Abu Hurairah Mataram.</p>
-                <a href="/index.html" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 24px; background: var(--putih); color: var(--hijau-tua); border: 2px solid var(--emas); border-radius: 30px; font-weight: 700; text-decoration: none; transition: 0.3s;" onmouseover="this.style.background='var(--emas)'" onmouseout="this.style.background='var(--putih)'">
-                    <i class="fas fa-arrow-left"></i> Kembali ke Menu Utama
-                </a>
             </div>
         </section>
 
@@ -259,6 +289,18 @@
                 <p>Memuat data profil guru...</p>
             </div>
         </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <div class="footer-logo"><i class="fas fa-quran"></i> HAFZ<span style="color:var(--emas);">App</span></div>
+            <div class="footer-links">
+                <a href="/index.html">Menu Utama</a>
+                <a href="/pages/diagram.html">Diagram</a>
+                <a href="/pages/reward.html">Reward</a>
+                <a href="#" class="tentang-link">Tentang</a>
+            </div>
+            <div style="font-size:0.8rem;opacity:0.6;">© 2026 · Departemen Tahfizh</div>
+        </footer>
     </div>
 
     <!-- MODAL PROFIL LENGKAP -->
@@ -278,7 +320,7 @@
         </div>
     </div>
 
-    <!-- WHATSAPP -->
+    <!-- ===== WHATSAPP FLOAT ===== -->
     <div class="whatsapp-float">
         <div class="bubble" id="waBubble"><i class="fab fa-whatsapp"></i> Chat Admin</div>
         <a href="https://wa.me/6282340530283" target="_blank" class="whatsapp-btn" id="waButton">
@@ -534,7 +576,6 @@
                     html += `<div class="subgroup-title"><i class="fas fa-mars"></i> Guru Putra (${dataL.length})</div>`;
                     html += `<div class="card-grid">`;
                     dataL.forEach(g => {
-                        // Ambil index asli dari allGuruData
                         const originalIndex = allGuruData.indexOf(g);
                         html += generateCardHTML(g, originalIndex);
                     });
@@ -561,7 +602,6 @@
             const defaultFoto = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23f0ebe3"/><circle cx="50" cy="40" r="20" fill="%23c9a84c"/><ellipse cx="50" cy="90" rx="35" ry="20" fill="%23c9a84c"/></svg>`;
             const fotoUrl = guru.foto ? guru.foto : defaultFoto;
 
-            // Gunakan data-index (angka murni) agar tidak error saat di-klik
             return `
                 <div class="guru-card">
                     <div class="foto-wrapper">
@@ -581,7 +621,6 @@
         // ============================================================
         // 🎯 EVENT LISTENER UNTUK TOMBOL LIHAT LENGKAP
         // ============================================================
-        // Kita gunakan Event Delegation untuk menangkap klik dari tombol yang baru dirender
         document.getElementById('contentContainer').addEventListener('click', function(e) {
             const btn = e.target.closest('.btn-lihat');
             if (!btn) return;
