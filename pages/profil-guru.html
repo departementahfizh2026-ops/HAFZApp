@@ -54,12 +54,11 @@
         }
         .hero-text p { font-size: 1.05rem; color: #2d3d3a; max-width: 650px; margin: 12px auto 20px; }
 
-        /* ===== TOOLBAR (SEARCH & FILTER) - BUG 1 FIXED (HAPUS STICKY) ===== */
+        /* ===== TOOLBAR (SEARCH & FILTER) ===== */
         .toolbar {
             background: var(--putih); border-radius: 16px; padding: 16px 20px;
             margin: 20px 0; box-shadow: var(--shadow); border: 1px solid rgba(201,168,76,0.12);
             display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
-            /* position: sticky; top: 80px; z-index: 90; <-- DIHAPUS */
         }
         .search-box { flex: 1; min-width: 250px; position: relative; }
         .search-box input {
@@ -136,6 +135,21 @@
             font-family: inherit;
         }
         .guru-card .btn-lihat:hover { background: var(--hijau-tua); color: var(--emas-muda); border-color: var(--hijau-tua); }
+
+        /* ===== FIX BUG 3: TAMBAHKAN ATURAN MODAL OVERLAY ===== */
+        .modal-overlay {
+            display: none; /* Sembunyikan secara default */
+            position: fixed; top: 0; left: 0; 
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(6px); 
+            z-index: 9999; /* Pastikan menutupi navbar */
+            justify-content: center; align-items: center; 
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex; /* Tampilkan sebagai flexbox saat aktif */
+        }
 
         /* ===== MODAL PROFIL ===== */
         .modal-profile {
@@ -297,7 +311,7 @@
         // ============================================================
         // 🔧 KONFIGURASI
         // ============================================================
-        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCPW4ASdl-AMvzlvG-aqAt7ae3YvP5gRPg2QLtBjxiD9bkK7pNajD4kf8lHODQ2Tq6c1FsoFU9fke-/pub?output=csv';
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQtcUnWuW83ACf_wEccbl-HUapE0h1dkcNXo4Tec41qVGJeOPDjysL46gVXtu8jqCFAgK01cKipJPp2/pub?gid=0&single=true&output=csv';
 
         let allGuruData = [];
 
@@ -378,7 +392,6 @@
 
                 const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().trim());
                 
-                // 🔥 MAPPING KOLOM
                 const idx = {
                     nupy: headers.findIndex(h => h.includes('nupy')),
                     nama: headers.findIndex(h => h.includes('nama')),
@@ -427,14 +440,13 @@
                 const uniqueLembaga = [...new Set(allGuruData.map(g => g.lembaga))];
                 const filterSelect = document.getElementById('filterLembaga');
                 
-                // BUG 2 FIXED: Urutkan dropdown sesuai urutan array, bukan abjad
                 const urutanLembaga = [
                     'SD IT PUTRA', 'SD IT PUTRI', 
                     'SMP IT PUTRA', 'SMP IT PUTRI', 
                     'MA PLUS', 'SMA IT PUTRI', 
                     'SMP/SMA IT PUTRA (Non Asrama)'
                 ];
-                // Sort array uniqueLembaga berdasarkan index di urutanLembaga
+                
                 uniqueLembaga.sort((a, b) => {
                     let indexA = urutanLembaga.findIndex(l => a.toUpperCase().includes(l.toUpperCase()));
                     let indexB = urutanLembaga.findIndex(l => b.toUpperCase().includes(l.toUpperCase()));
@@ -465,7 +477,6 @@
             const searchQuery = document.getElementById('searchInput').value.toLowerCase();
             const filterLembaga = document.getElementById('filterLembaga').value;
 
-            // Filter data
             let filteredData = allGuruData.filter(g => {
                 const matchSearch = g.nama.toLowerCase().includes(searchQuery) || 
                                     g.nupy.toLowerCase().includes(searchQuery) || 
@@ -479,7 +490,6 @@
                 return;
             }
 
-            // Grouping: Lembaga -> Jenis Kelamin
             const grouped = {};
             filteredData.forEach(g => {
                 if (!grouped[g.lembaga]) grouped[g.lembaga] = { L: [], P: [] };
@@ -488,19 +498,19 @@
                 if (jk.includes('perempuan') || jk.includes('putri') || jk === 'p') {
                     grouped[g.lembaga].P.push(g);
                 } else {
-                    grouped[g.lembaga].L.push(g); // Default Laki-laki/Putra
+                    grouped[g.lembaga].L.push(g); 
                 }
             });
 
             let html = '';
             
-            // BUG 2 FIXED: Terapkan urutan Lembaga yang sudah ditentukan
             const urutanLembaga = [
                 'SD IT PUTRA', 'SD IT PUTRI', 
                 'SMP IT PUTRA', 'SMP IT PUTRI', 
                 'MA PLUS', 'SMA IT PUTRI', 
                 'SMP/SMA IT PUTRA (Non Asrama)'
             ];
+            
             let sortedKeys = Object.keys(grouped).sort((a, b) => {
                 let indexA = urutanLembaga.findIndex(l => a.toUpperCase().includes(l.toUpperCase()));
                 let indexB = urutanLembaga.findIndex(l => b.toUpperCase().includes(l.toUpperCase()));
@@ -514,31 +524,28 @@
                 const dataP = grouped[lembaga].P;
                 const total = dataL.length + dataP.length;
 
-                // BUG 4 FIXED: Menghapus class 'fade-up visible' agar tidak transparan/lambat muncul
                 html += `<div class="group-section">`;
                 html += `<div class="group-header">
                             <h2><i class="fas fa-building"></i> ${lembaga}</h2>
                             <div class="count-badge">${total} Guru</div>
                          </div>`;
 
-                // Render Laki-laki
                 if (dataL.length > 0) {
                     html += `<div class="subgroup-title"><i class="fas fa-mars"></i> Guru Putra (${dataL.length})</div>`;
                     html += `<div class="card-grid">`;
-                    dataL.forEach((g, index) => {
-                        // Ambil index asli dari allGuruData agar id-nya unik
-                        const originalIndex = allGuruData.findIndex(item => item.nupy === g.nupy && item.nama === g.nama);
+                    dataL.forEach(g => {
+                        // Ambil index asli dari allGuruData
+                        const originalIndex = allGuruData.indexOf(g);
                         html += generateCardHTML(g, originalIndex);
                     });
                     html += `</div>`;
                 }
 
-                // Render Perempuan
                 if (dataP.length > 0) {
                     html += `<div class="subgroup-title"><i class="fas fa-venus"></i> Guru Putri (${dataP.length})</div>`;
                     html += `<div class="card-grid">`;
-                    dataP.forEach((g, index) => {
-                        const originalIndex = allGuruData.findIndex(item => item.nupy === g.nupy && item.nama === g.nama);
+                    dataP.forEach(g => {
+                        const originalIndex = allGuruData.indexOf(g);
                         html += generateCardHTML(g, originalIndex);
                     });
                     html += `</div>`;
@@ -554,7 +561,7 @@
             const defaultFoto = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23f0ebe3"/><circle cx="50" cy="40" r="20" fill="%23c9a84c"/><ellipse cx="50" cy="90" rx="35" ry="20" fill="%23c9a84c"/></svg>`;
             const fotoUrl = guru.foto ? guru.foto : defaultFoto;
 
-            // BUG 3 FIXED: Menggunakan data-index, bukan melempar objek JSON ke onclick
+            // Gunakan data-index (angka murni) agar tidak error saat di-klik
             return `
                 <div class="guru-card">
                     <div class="foto-wrapper">
@@ -564,7 +571,7 @@
                     <h3>${guru.nama}</h3>
                     <div class="jabatan">${guru.jabatan || 'Guru Tahfizh'}</div>
                     <div class="lembaga"><i class="fas fa-map-marker-alt"></i> ${guru.lembaga}</div>
-                    <button class="btn-lihat" data-index="${index}" onclick="bukaProfilByIndex(this)">
+                    <button class="btn-lihat" data-index="${index}">
                         <i class="fas fa-id-card"></i> Lihat Lengkap
                     </button>
                 </div>
@@ -572,12 +579,14 @@
         }
 
         // ============================================================
-        // 🎯 MODAL PROFIL LENGKAP
+        // 🎯 EVENT LISTENER UNTUK TOMBOL LIHAT LENGKAP
         // ============================================================
-        
-        // BUG 3 FIXED: Fungsi baru yang aman dari karakter aneh
-        function bukaProfilByIndex(btnElement) {
-            const index = btnElement.getAttribute('data-index');
+        // Kita gunakan Event Delegation untuk menangkap klik dari tombol yang baru dirender
+        document.getElementById('contentContainer').addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn-lihat');
+            if (!btn) return;
+
+            const index = btn.getAttribute('data-index');
             const guru = allGuruData[index];
             if (!guru) return;
 
@@ -619,7 +628,7 @@
             document.getElementById('modalDataList').innerHTML = dataHtml;
             document.getElementById('profileModal').classList.add('active');
             document.body.style.overflow = 'hidden';
-        }
+        });
 
         // Modal Close
         document.getElementById('closeProfileBtn').addEventListener('click', () => {
