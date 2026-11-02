@@ -810,7 +810,7 @@
         // ============================================================
         // 📊 LOAD DATA (Realisasi Anggaran)
         // ============================================================
-             async function loadAnggaranData() {
+                     async function loadAnggaranData() {
             const url = getCsvUrl('anggaran');
             console.log('🔄 Memuat anggaran dari:', url);
             const response = await fetch(url);
@@ -823,19 +823,14 @@
             const row1 = parseCSVLine(lines[0]);
             const row2 = parseCSVLine(lines[1]);
             
-            // Bangun struktur kategori
             let currentCat = null;
             const categories = [];
             
-            // Mulai dari index 2 (setelah NO dan LEMBAGA)
             for (let i = 2; i < row2.length; i++) {
-                // Jika di Row 1 ada teks (kategori baru), kita buat kategori baru
                 if (row1[i] && row1[i].trim()) {
                     currentCat = { name: row1[i].trim(), startIdx: i, cols: [] };
                     categories.push(currentCat);
                 }
-                
-                // Jika sub-kolom ada isinya, masukkan ke kategori yang sedang aktif
                 if (currentCat && row2[i] && row2[i].trim()) {
                     currentCat.cols.push({
                         index: i,
@@ -853,20 +848,21 @@
                 const cols = parseCSVLine(lines[i]);
                 if (cols.length === 0 || cols.every(c => !c)) continue;
                 
-                const no = cols[0] || '';
-                const lembaga = cols[1] || '';
+                const no = cols[0] ? cols[0].trim() : '';
+                const lembaga = cols[1] ? cols[1].trim() : '';
                 
-                // Deteksi baris lembaga baru (ada nomor dan nama lembaga)
-                if (no && lembaga && !isNaN(parseInt(no))) {
+                // PERBAIKAN: Deteksi baris lembaga baru cukup dengan melihat apakah kolom LEMBAGA ada isinya
+                // (Tidak lagi memaksa kolom NO harus berupa angka)
+                if (lembaga && !lembaga.toLowerCase().includes('lembaga')) {
                     if (currentEntry) anggaranData.push(currentEntry);
                     
                     currentEntry = {
-                        no: no,
-                        lembaga: lembaga.trim(),
+                        no: no || anggaranData.length + 1, // Jika NO kosong, buat otomatis
+                        lembaga: lembaga,
                         categories: categories.map(cat => ({
                             name: cat.name,
                             cols: cat.cols,
-                            data: [{}] // Inisialisasi baris pertama
+                            data: [{}]
                         }))
                     };
                     
@@ -880,7 +876,8 @@
                         });
                     });
                 } else if (currentEntry && cols.some(c => c)) {
-                    // Baris lanjutan (jika ada pencairan lebih dari 1 baris)
+                    // Jika ini baris lanjutan tapi kolom LEMBAGA kosong, 
+                    // pastikan itu bukan baris header yang terbawa.
                     categories.forEach((cat, catIdx) => {
                         const rowData = {};
                         let hasData = false;
@@ -899,10 +896,13 @@
             }
             if (currentEntry) anggaranData.push(currentEntry);
             
-            console.log('✅ Anggaran:', anggaranData.length, 'lembaga');
+            console.log('✅ Anggaran:', anggaranData.length, 'lembaga berhasil dimuat');
+            if (anggaranData.length > 0) {
+                console.log('Contoh data lembaga pertama:', anggaranData[0]);
+            }
+            
             anggaranHeaders = { categories };
         }
-
         // ============================================================
         // 📊 LOAD DATA berdasarkan sumber aktif
         // ============================================================
