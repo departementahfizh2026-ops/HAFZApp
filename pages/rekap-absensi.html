@@ -614,40 +614,38 @@
         let allData = [];
         let filteredData = [];
 
-        // ============================================================
+               // ============================================================
         // 📌 LOAD NAVBAR
         // ============================================================
         async function loadNavbar() {
-    try {
-        const response = await fetch('../components/navbar.html');
-        const html = await response.text();
-        const container = document.getElementById('navbar-container');
-        container.innerHTML = html;
-        
-        // ⚠️ Re-execute <script> di dalam navbar.html
-        container.querySelectorAll('script').forEach(oldScript => {
-            const newScript = document.createElement('script');
-            newScript.textContent = oldScript.textContent;
-            oldScript.parentNode.replaceChild(newScript, oldScript);
-        });
-        
-        console.log('✅ Navbar berhasil dimuat');
-    } catch (error) {
-        console.error('❌ Gagal memuat navbar:', error);
-        document.getElementById('navbar-container').innerHTML = 
-            '<p style="text-align:center;color:#e74c3c;">Gagal memuat navbar</p>';
-    }
-}
-        
-    
-    // Re-attach event listener "Tentang"
-    document.querySelectorAll('.tentang-link').forEach(l => {
-        l.addEventListener('click', e => { 
-            e.preventDefault(); 
-            openModal('tentangModal'); 
-        });
-    });
-        }
+            try {
+                const response = await fetch('../components/navbar.html');
+                const html = await response.text();
+                const container = document.getElementById('navbar-container');
+                container.innerHTML = html;
+                
+                // Re-execute <script> di dalam navbar.html
+                container.querySelectorAll('script').forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = oldScript.textContent;
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+                
+                console.log('✅ Navbar berhasil dimuat');
+            } catch (error) {
+                console.error('❌ Gagal memuat navbar:', error);
+                document.getElementById('navbar-container').innerHTML = 
+                    '<p style="text-align:center;color:#e74c3c;">Gagal memuat navbar</p>';
+            }
+
+            // Re-attach event listener "Tentang"
+            document.querySelectorAll('.tentang-link').forEach(l => {
+                l.addEventListener('click', e => { 
+                    e.preventDefault(); 
+                    openModal('tentangModal'); 
+                });
+            });
+        } // <--- PASTIKAN HANYA ADA SATU KURUNG KURAWAL PENUTUP DI SINI
 
 // ============================================================
 // 📌 MODAL TENTANG
