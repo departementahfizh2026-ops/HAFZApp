@@ -597,15 +597,39 @@
 
             container.innerHTML = html;
         }
+        // ============================================================
+        // 🖼️ FUNGSI UNTUK MENGUBAH LINK DRIVE MENJADI LINK GAMBAR
+        // ============================================================
+        function getDirectImageUrl(url) {
+            if (!url) return '';
+            
+            // Jika link sudah berupa direct image (.jpg, .png, dll), langsung kembalikan
+            if (url.match(/\.(jpeg|jpg|gif|png|webp)$/i) != null) {
+                return url;
+            }
 
-        function generateCardHTML(guru, index) {
+            // Ekstrak ID dari link Google Drive (mendukung format /d/ dan ?id=)
+            const driveRegex = /(?:drive\.google\.com\/(?:file\/d\/|open\?id=))([a-zA-Z0-9_-]+)/;
+            const match = url.match(driveRegex);
+            
+            if (match && match[1]) {
+                // Gunakan format thumbnail Google Drive agar bisa tampil di <img>
+                return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w500`;
+            }
+
+            // Jika menggunakan Google Sheets / Docs / Forms, atau link lain
+            return url; 
+        }
+                        function generateCardHTML(guru, index) {
             const defaultFoto = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23f0ebe3"/><circle cx="50" cy="40" r="20" fill="%23c9a84c"/><ellipse cx="50" cy="90" rx="35" ry="20" fill="%23c9a84c"/></svg>`;
-            const fotoUrl = guru.foto ? guru.foto : defaultFoto;
+            
+            // Ambil link gambar yang sudah dibersihkan
+            const fotoUrl = guru.foto ? getDirectImageUrl(guru.foto) : defaultFoto;
 
             return `
                 <div class="guru-card">
                     <div class="foto-wrapper">
-                        <img src="${fotoUrl}" alt="Foto" onerror="this.src='${defaultFoto}'">
+                        <img src="${fotoUrl}" alt="Foto" onerror="this.onerror=null; this.src='${defaultFoto}'">
                     </div>
                     <div class="nupy-badge">NUPY: ${guru.nupy || '-'}</div>
                     <h3>${guru.nama}</h3>
