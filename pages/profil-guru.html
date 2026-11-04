@@ -166,8 +166,9 @@
             width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--putih);
             background: var(--cream); position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
             overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 2;
+            display: flex; align-items: center; justify-content: center;
         }
-        .modal-profile .foto-large img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-profile .foto-large img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
         .modal-profile .close-btn {
             position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.2);
@@ -355,6 +356,13 @@
         // ============================================================
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCPW4ASdl-AMvzlvG-aqAt7ae3YvP5gRPg2QLtBjxiD9bkK7pNajD4kf8lHODQ2Tq6c1FsoFU9fke-/pub?output=csv';
 
+        // Link Foto Default (Sudah diubah ke format thumbnail agar bisa tampil)
+        const DEFAULT_FOTO_L = 'https://drive.google.com/thumbnail?id=11fxSvNbLbvFWgQHtDtrRWa3fmHxaenaU&sz=w500';
+        const DEFAULT_FOTO_P = 'https://drive.google.com/thumbnail?id=14SpZa_0n5twam6Tm8SYT57ev9WX_SSpH&sz=w500';
+        
+        // Gambar Fallback (Jika link foto dari Spreadsheet error/rusak)
+        const FOTO_ERROR = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+
         let allGuruData = [];
 
         // ============================================================
@@ -394,6 +402,28 @@
         if (tm) {
             document.getElementById('tentangModalClose').addEventListener('click', () => closeModal('tentangModal'));
             tm.addEventListener('click', e => { if (e.target === tm) closeModal('tentangModal'); });
+        }
+
+        // ============================================================
+        // 🖼️ FUNGSI MENGUBAH LINK DRIVE JADI LINK GAMBAR
+        // ============================================================
+        function getDirectImageUrl(url) {
+            if (!url || url.trim() === '') return '';
+            
+            // Jika link sudah berupa direct image (.jpg, .png, dll)
+            if (url.match(/\.(jpeg|jpg|gif|png|webp)$/i) != null) {
+                return url;
+            }
+
+            // Ekstrak ID dari link Google Drive
+            const driveRegex = /(?:drive\.google\.com\/(?:file\/d\/|open\?id=))([a-zA-Z0-9_-]+)/;
+            const match = url.match(driveRegex);
+            
+            if (match && match[1]) {
+                return 'https://drive.google.com/thumbnail?id=' + match[1] + '&sz=w500';
+            }
+
+            return url; 
         }
 
         // ============================================================
@@ -597,39 +627,27 @@
 
             container.innerHTML = html;
         }
+
         // ============================================================
-        // 🖼️ FUNGSI UNTUK MENGUBAH LINK DRIVE MENJADI LINK GAMBAR
+        // 🃏 GENERATE KARTU HTML (LOGIKA FOTO L/P)
         // ============================================================
-        function getDirectImageUrl(url) {
-            if (!url) return '';
-            
-            // Jika link sudah berupa direct image (.jpg, .png, dll), langsung kembalikan
-            if (url.match(/\.(jpeg|jpg|gif|png|webp)$/i) != null) {
-                return url;
+        function generateCardHTML(guru, index) {
+            // Tentukan foto default berdasarkan jenis kelamin
+            const jk = (guru.jenis_kelamin || '').toLowerCase();
+            let defaultFoto = DEFAULT_FOTO_L;
+            if (jk.includes('perempuan') || jk.includes('putri') || jk === 'p') {
+                defaultFoto = DEFAULT_FOTO_P;
             }
 
-            // Ekstrak ID dari link Google Drive (mendukung format /d/ dan ?id=)
-            const driveRegex = /(?:drive\.google\.com\/(?:file\/d\/|open\?id=))([a-zA-Z0-9_-]+)/;
-            const match = url.match(driveRegex);
-            
-            if (match && match[1]) {
-                // Gunakan format thumbnail Google Drive agar bisa tampil di <img>
-                return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w500`;
-            }
-
-            // Jika menggunakan Google Sheets / Docs / Forms, atau link lain
-            return url; 
-        }
-                        function generateCardHTML(guru, index) {
-            const defaultFoto = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23f0ebe3"/><circle cx="50" cy="40" r="20" fill="%23c9a84c"/><ellipse cx="50" cy="90" rx="35" ry="20" fill="%23c9a84c"/></svg>`;
-            
-            // Ambil link gambar yang sudah dibersihkan
-            const fotoUrl = guru.foto ? getDirectImageUrl(guru.foto) : defaultFoto;
+            // Jika ada foto dari Spreadsheet, gunakan. Jika tidak, pakai default.
+            const fotoUrl = (guru.foto && guru.foto.trim() !== '' && guru.foto !== '-') 
+                            ? getDirectImageUrl(guru.foto) 
+                            : defaultFoto;
 
             return `
                 <div class="guru-card">
                     <div class="foto-wrapper">
-                        <img src="${fotoUrl}" alt="Foto" onerror="this.onerror=null; this.src='${defaultFoto}'">
+                        <img src="${fotoUrl}" alt="Foto" onerror="this.onerror=null; this.src='${FOTO_ERROR}'">
                     </div>
                     <div class="nupy-badge">NUPY: ${guru.nupy || '-'}</div>
                     <h3>${guru.nama}</h3>
@@ -643,7 +661,7 @@
         }
 
         // ============================================================
-        // 🎯 EVENT LISTENER UNTUK TOMBOL LIHAT LENGKAP
+        // 🎯 EVENT LISTENER UNTUK TOMBOL LIHAT LENGKAP (MODAL)
         // ============================================================
         document.getElementById('contentContainer').addEventListener('click', function(e) {
             const btn = e.target.closest('.btn-lihat');
@@ -653,10 +671,18 @@
             const guru = allGuruData[index];
             if (!guru) return;
 
-            const defaultFoto = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23f0ebe3"/><circle cx="50" cy="40" r="20" fill="%23c9a84c"/><ellipse cx="50" cy="90" rx="35" ry="20" fill="%23c9a84c"/></svg>`;
-            const fotoUrl = guru.foto ? guru.foto : defaultFoto;
+            // Logika Foto untuk Modal
+            const jk = (guru.jenis_kelamin || '').toLowerCase();
+            let defaultFoto = DEFAULT_FOTO_L;
+            if (jk.includes('perempuan') || jk.includes('putri') || jk === 'p') {
+                defaultFoto = DEFAULT_FOTO_P;
+            }
+            
+            const fotoUrl = (guru.foto && guru.foto.trim() !== '' && guru.foto !== '-') 
+                            ? getDirectImageUrl(guru.foto) 
+                            : defaultFoto;
 
-            document.getElementById('modalFoto').innerHTML = `<img src="${fotoUrl}" alt="Foto" onerror="this.src='${defaultFoto}'">`;
+            document.getElementById('modalFoto').innerHTML = `<img src="${fotoUrl}" alt="Foto" onerror="this.onerror=null; this.src='${FOTO_ERROR}'">`;
             document.getElementById('modalNama').textContent = guru.nama;
             document.getElementById('modalJabatan').textContent = guru.jabatan || 'Guru Tahfizh';
 
